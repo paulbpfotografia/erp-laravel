@@ -11,7 +11,13 @@
 <body>
     <div class="d-flex" style="min-height: 100vh;">
         <!-- Menú lateral -->
-        @include('partials.nav') <!-- Aquí se incluye el menú lateral -->
+
+
+        {{-- Con esta condición decimos que si hidenav es true, se oculte la barra lateral. Lo incluimos en Login y register --}}
+        @if(!isset($hidenav))
+    @include('partials.nav')  <!-- Aquí se incluye el menú lateral -->
+        @endif
+
 
         <!-- Contenido principal -->
         <div class="flex-grow-1 p-3">
