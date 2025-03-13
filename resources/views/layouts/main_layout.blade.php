@@ -9,14 +9,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
+
+
+      <!-- Barra superior -->
+      @if(!isset($hidenav))
+      @include('partials.topbar')
+          @endif
+
+
     <div class="d-flex" style="min-height: 100vh;">
         <!-- Menú lateral -->
-
-
         {{-- Con esta condición decimos que si hidenav es true, se oculte la barra lateral. Lo incluimos en Login y register --}}
         @if(!isset($hidenav))
     @include('partials.nav')  <!-- Aquí se incluye el menú lateral -->
         @endif
+
 
 
         <!-- Contenido principal -->
