@@ -9,19 +9,19 @@
         </li>
         <!-- Opción de menú-->
         <li class="nav-item">
-            <a class="nav-link text-white" href="{{ route('producto') }}">
+            <a class="nav-link text-white" href="{{ route('producto.vista') }}">
                 <i class="bi bi-box-fill"></i> PRODUCTO <!-- Icono + nombre -->
             </a>
         </li>
         <!-- Opción de menú-->
         <li class="nav-item">
-            <a class="nav-link text-white" href="{{ route('cliente') }}">
+            {{-- <a class="nav-link text-white" href="{{ route('modulos.clientes.cliente') }}"> --}}
                 <i class="bi bi-person-fill"></i> CLIENTE <!-- Icono + nombre -->
             </a>
         </li>
         <!-- Opción de menú-->
         <li class="nav-item">
-            <a class="nav-link text-white" href="{{ route('pedido') }}">
+            {{-- <a class="nav-link text-white" href="{{ route('modulos.pedidos.pedido') }}"> --}}
                 <i class="bi bi-file-earmark-binary-fill"></i> PEDIDO <!-- Icono + nombre -->
             </a>
         </li>
