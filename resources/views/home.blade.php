@@ -1,6 +1,10 @@
 @extends('layouts.main_layout')
 
 @section('content')
+
+
+AQUI PODEMOS HACER UNA PANTALLA DE INICIO PERZONALIZADA PARA EL USUARIO. DONDE PONGA BIENVENIDO + NOMBRE O ALGO ASI
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
