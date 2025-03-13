@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class LoginController extends Controller
 {
@@ -25,7 +28,9 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/pedido';
+    
+     //Redireción después de hacer login
+     protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -37,4 +42,22 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
+
+
+    
+    //creamos función logout, ya que debemos sobreescribir la que viene por defecto en AuthenticateUsers para redirigir donde queremos.
+    public function logout(Request $request) {
+        Auth::logout();
+
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
+
+    }
+
+
+
+
 }
