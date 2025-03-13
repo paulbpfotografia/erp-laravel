@@ -43,7 +43,15 @@ class LoginController extends Controller
         $this->middleware('auth')->only('logout');
     }
 
+    //Como hemos creado una nueva vista para el login, sobreescribo el método para redirigir a esta nueva vista
+    public function showLoginForm()
+    {
+        return view('modulos.usuarios.ingresar');
+    }
+    
 
+
+    
     
     //creamos función logout, ya que debemos sobreescribir la que viene por defecto en AuthenticateUsers para redirigir donde queremos.
     public function logout(Request $request) {

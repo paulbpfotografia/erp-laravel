@@ -7,6 +7,7 @@
 @php
     $hidenav = true;
 @endphp
+ESTA ES LA VISTA MODULOS.USUARIOS.INGRESAR
 
 
 @section('content')
@@ -21,6 +22,11 @@
                         <div class="mb-3">
                             <label for="email" class="form-label">Correo Electrónico</label>
                             <input type="email" id="email" class="form-control" name="email" required>
+                                    {{-- MENSAJE DE ERROR EN EL LOGIN --}}
+                                        @error('email')
+                                        <br>
+                                        <div class="alert alert-danger text-center">Error al intorducir email o contraseña</div>
+                                    @enderror
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Contraseña</label>
