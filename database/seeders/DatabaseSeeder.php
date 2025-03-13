@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
         // LLamamos a todos los seeders para que se ejecuten de una
         $this->call([
             UsersTableSeeder::class,
-            ClientsTableSeeder::class,
+            CostumerTableSeeder::class,
             CategoryTableSeeder::class,
             ProductsTableSeeder::class,
             StockTableSeeder::class,

@@ -15,9 +15,9 @@ class OrdersTableSeeder extends Seeder
     {
         //Prueba
         DB::table('orders')->insert([
-            ['client_id' => 1, 'order_date' => now(), 'status' => 'Preparado', 'total' => 799.99],
-            ['client_id' => 2, 'order_date' => now(), 'status' => 'Enviado', 'total' => 199.99],
-            ['client_id' => 3, 'order_date' => now(), 'status' => 'Pendiente', 'total' => 299.99],
+            ['costumer_id' => 1, 'order_date' => now(), 'status' => 'Preparado', 'total' => 799.99],
+            ['costumer_id' => 2, 'order_date' => now(), 'status' => 'Enviado', 'total' => 199.99],
+            ['costumer_id' => 3, 'order_date' => now(), 'status' => 'Pendiente', 'total' => 299.99],
         ]);
     }
 }
