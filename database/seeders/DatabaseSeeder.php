@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         // LLamamos a todos los seeders para que se ejecuten de una
         $this->call([
+            RolSeeder::class,
             UsersTableSeeder::class,
             CostumerTableSeeder::class,
             CategoryTableSeeder::class,
