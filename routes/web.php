@@ -4,6 +4,7 @@ use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PruebaController;
 use App\Http\Controllers\Auth\LoginController; // 👈 Agrega esta línea
+use App\Http\Controllers\AdminController;
 
 
 
@@ -30,3 +31,18 @@ Route::get('producto/vista', [ProductController::class, 'producto'])->name('prod
 
 Route::resource('producto', ProductController::class);
 
+
+
+
+
+
+//RUTAS PROTEGIDAS PARA ADMINISTRADORES
+Route::group(['middleware' => ['role:Admin']], function () {
+
+    // Ruta para mostrar el formulario de registro
+Route::get('/admin/registrar', [AdminController::class, 'showRegisterForm'])->name('admin.registrar');
+
+// Ruta para procesar el registro de usuario
+Route::post('/admin/registrar', [AdminController::class, 'register'])->name('admin.registrar.store');
+
+});
