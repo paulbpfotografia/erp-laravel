@@ -18,6 +18,7 @@ AQUI PODEMOS HACER UNA PANTALLA DE INICIO PERZONALIZADA PARA EL USUARIO. DONDE P
                         </div>
                     @endif
 
+                    
                     {{ __('You are logged in!') }}
                 </div>
             </div>

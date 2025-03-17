@@ -45,4 +45,9 @@ Route::get('/admin/registrar', [AdminController::class, 'showRegisterForm'])->na
 // Ruta para procesar el registro de usuario
 Route::post('/admin/registrar', [AdminController::class, 'register'])->name('admin.registrar.store');
 
+// Ruta para mostrar usuarios
+
+Route::get('/usuarios', [AdminController::class, 'usersList'])->name('admin.listar');
+
+
 });

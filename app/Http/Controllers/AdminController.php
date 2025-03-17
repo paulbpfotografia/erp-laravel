@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash; // Importa Hash para cifrar contraseñas
 use Illuminate\Validation\Rules; // Importa reglas de validación para la contraseña
 use Spatie\Permission\Models\Role; // Importa Role para asignar roles a usuarios
 
+
 class AdminController extends Controller
 {
     // Método para mostrar el formulario de registro
@@ -41,4 +42,17 @@ class AdminController extends Controller
         // REDIRECCIÓN CON MENSAJE DE ÉXITO
         return redirect()->route('admin.registrar')->with('success', 'Usuario registrado correctamente.');
     }
+
+
+    //Función para mostrar la vista usuarios con la lista de usuarios y roles
+    public function usersList (Request $reques) {
+
+        $users = User::all();
+
+        return view ('modulos.admin.usuarios',compact('users'));
+
+    }
+
+
+
 }

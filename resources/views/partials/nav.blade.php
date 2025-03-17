@@ -37,6 +37,14 @@
                 <i class="bi bi-people-fill"></i> REGISTRAR USUARIOS <!-- Icono + nombre -->
             </a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-white" href="{{ route('admin.listar') }}">
+                <i class="bi bi-people-fill"></i> LISTAR USUARIOS <!-- Icono + nombre -->
+            </a>
+        </li>
+
+
         @endrole
     </ul>
 </div>

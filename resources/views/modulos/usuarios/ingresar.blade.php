@@ -35,6 +35,15 @@ ESTA ES LA VISTA MODULOS.USUARIOS.INGRESAR
                         <button type="submit" class="btn btn-primary w-100">Ingresar</button>
                     </form>
                 </div>
+                
+                {{-- Mensaje de Sesión cerrada. --}}
+                    @if (session('message')) 
+
+                        <div class="alert alert-danger">
+                            {{ session('message') }}
+                        </div>
+                        
+                    @endif
             </div>
         </div>
     </div>
