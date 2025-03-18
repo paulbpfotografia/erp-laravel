@@ -9,6 +9,9 @@
     <!--Iconos Bootstrap -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
+    {{-- Sweet Alert --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
 
@@ -33,5 +36,24 @@
             @yield('content') <!-- Aquí se inyecta el contenido de cada vista -->
         </div>
     </div>
+
+
+
+    @if(session('message') && session('icono'))
+    <script>
+        Swal.fire({
+            position: "top-end",
+            icon: @json(session('icono')),
+            title: @json(session('message')),
+            showConfirmButton: false,
+            timer: 1500
+        });
+    </script>
+    @endif
+
+
+
+
+
 </body>
 </html>

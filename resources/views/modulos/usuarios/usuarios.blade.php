@@ -9,6 +9,9 @@
 
 
 
+
+
+
 <div class="container mt-4">
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover text-center align-middle">
@@ -29,17 +32,20 @@
 
                     <!-- Acciones -->
                     <td>
+                    <!-- Botón Eliminar -->
                         <div class="d-flex justify-content-center gap-2">
                             <button type="button" class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash3-fill"></i> <!-- Icono de eliminar -->
+                                <i class="bi bi-trash3-fill"></i>
                             </button>
 
+                    <!-- Botón Editar -->
                             <button type="button" class="btn btn-sm btn-warning">
-                                <i class="bi bi-pencil-fill"></i> <!-- Icono de editar -->
+                                <i class="bi bi-pencil-fill"></i>
                             </button>
 
+                    <!-- Botón Ver Usuario -->
                             <button type="button" class="btn btn-sm btn-primary">
-                                <i class="bi bi-eye-fill"></i> <!-- Icono de ver -->
+                                <i class="bi bi-eye-fill"></i>
                             </button>
                         </div>
                     </td>
