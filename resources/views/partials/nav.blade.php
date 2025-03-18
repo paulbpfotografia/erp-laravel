@@ -1,7 +1,7 @@
 <div class="bg-dark text-white p-3" style="width: 250px; height: 100vh;">
     <h4 class="text-center mb-4">ERP</h4> <!-- Título centrado del sistema -->
     <ul class="nav flex-column"> <!-- Lista de navegación vertical -->
-        
+
         <!-- Opción de menú para inicio -->
         <li class="nav-item">
             <a class="nav-link text-white" href="#"> <!-- Enlace con ícono -->
@@ -43,8 +43,6 @@
                 <i class="bi bi-people-fill"></i> LISTAR USUARIOS <!-- Icono + nombre -->
             </a>
         </li>
-
-
         @endrole
     </ul>
 </div>

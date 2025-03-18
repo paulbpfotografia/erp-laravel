@@ -32,7 +32,7 @@ class AdminController extends Controller
         // CREACIÓN DEL USUARIO
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email, 
+            'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
@@ -47,11 +47,17 @@ class AdminController extends Controller
     //Función para mostrar la vista usuarios con la lista de usuarios y roles
     public function usersList (Request $reques) {
 
-        $users = User::all();
+        $users = User::with('roles')->get(); //Se pasan los usuarios a la vista
 
         return view ('modulos.admin.usuarios',compact('users'));
 
     }
+
+
+
+
+
+
 
 
 

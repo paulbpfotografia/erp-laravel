@@ -27,15 +27,16 @@
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>FALTA ROL</td>
+                  <td>{{ $user->roles->first()->name}}</td> {{-- Recuperamos el rol, que lo hemos traido previamente usando HasRoles en el modelo user y en la función UserList --}}
+                                                            {{-- Lo que hacemos es acceder a la tabla pivot, y extraer el primer nombre de la colección. En caso de ser varios
+                                                            podríamos usar pluck. --}}
 
-                    
-                </tr>  
-                    
+                </tr>
+
                 @endforeach
 
-              
-             
+
+
             </tbody>
         </table>
     </div>

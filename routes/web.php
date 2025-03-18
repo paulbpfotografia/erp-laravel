@@ -40,14 +40,14 @@ Route::resource('producto', ProductController::class);
 Route::group(['middleware' => ['role:Admin']], function () {
 
     // Ruta para mostrar el formulario de registro
-Route::get('/admin/registrar', [AdminController::class, 'showRegisterForm'])->name('admin.registrar');
+Route::get('/admin/registrar-usuarios', [AdminController::class, 'showRegisterForm'])->name('admin.registrar');
 
 // Ruta para procesar el registro de usuario
 Route::post('/admin/registrar', [AdminController::class, 'register'])->name('admin.registrar.store');
 
 // Ruta para mostrar usuarios
 
-Route::get('/usuarios', [AdminController::class, 'usersList'])->name('admin.listar');
+Route::get('/admin/usuarios', [AdminController::class, 'usersList'])->name('admin.listar');
 
 
 });
