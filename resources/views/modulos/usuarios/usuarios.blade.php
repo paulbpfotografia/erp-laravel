@@ -41,16 +41,18 @@
                                             <div class="d-flex justify-content-center gap-2">
                                                 
                                                 <!-- Botón Eliminar -->
-                                                <button type="button" class="btn btn-sm btn-danger">
+                                                <button type="button" class="btn btn-sm btn-danger eliminarUsuarioBtn"
+                                                data-id="{{ $user->id }}">
                                                     <i class="bi bi-trash3-fill"></i>
-                                                </button>
-
+                                                 </button>
+                                            
                                                 <!-- Botón Editar -->
                                                 <button type="button" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil-fill"></i>
                                                 </button>
 
                                                 <!-- Botón Ver Usuario -->
+                    
                                                 <a href="{{ route('usuarios.show', $user->id) }}" class="btn btn-sm btn-primary">
                                                     <i class="bi bi-eye-fill"></i>
                                                 </a>

@@ -40,9 +40,11 @@
             <form action="{{ route('usuarios.changeActive', $user->id) }}" method="POST">
                 @csrf
                 @method('PATCH')
+                @can('activar usuarios')
                 <button type="submit" class="btn btn-{{ $user->active ? 'danger' : 'success' }}">
                     {{ $user->active ? 'Deshabilitar' : 'Habilitar' }}
                 </button>
+                @endcan
             </form>
         </div>
         <div class="card-footer text-end">
