@@ -41,10 +41,13 @@
                                             <div class="d-flex justify-content-center gap-2">
                                                 
                                                 <!-- Botón Eliminar -->
-                                                <button type="button" class="btn btn-sm btn-danger eliminarUsuarioBtn"
-                                                data-id="{{ $user->id }}">
+                                                <button type="button" class="btn btn-sm btn-danger eliminarRegistroBtn"
+                                                    data-id="{{ $user->id }}"
+                                                    data-url="{{ route('usuarios.destroy', $user->id) }}"
+                                                    data-entidad="Usuario">
                                                     <i class="bi bi-trash3-fill"></i>
-                                                 </button>
+                                                </button>
+
                                             
                                                 <!-- Botón Editar -->
                                                 <button type="button" class="btn btn-sm btn-warning">

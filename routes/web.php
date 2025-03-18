@@ -46,4 +46,8 @@ Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.sh
 
 Route::patch('/usuarios/{id}/active' , [UserController::class, 'changeActive'])->name('usuarios.changeActive');
 
+
+//Ruta para eliminar usuario
+Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy');
+
 });

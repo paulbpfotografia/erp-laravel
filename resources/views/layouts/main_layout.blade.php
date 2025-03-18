@@ -26,6 +26,16 @@
       @include('partials.topbar')
           @endif
 
+      <!-- Condicional para mostrar mensajes -->
+          @if(session('message'))
+          <script>
+              Toast.fire({
+                  icon: {!! json_encode(session('icono', 'success')) !!},
+                  title: {!! json_encode(session('message')) !!}
+              });
+          </script>
+      @endif
+      
 
     <div class="d-flex" style="min-height: 100vh;">
         <!-- Menú lateral -->
@@ -44,8 +54,11 @@
 
 
 
+{{-- Scripts --}}
 
 
+
+{{-- Script para las alertas con mensajes --}}
 <script>
     const Toast = Swal.mixin({
     toast: true,
@@ -61,14 +74,64 @@
 </script>
 
 
-@if(session('message'))
-    <script>
-        Toast.fire({
-            icon: {!! json_encode(session('icono', 'success')) !!},
-            title: {!! json_encode(session('message')) !!}
+
+
+
+{{-- Script para alertas de confirmación de borrado. Recoge los datos cuando le das al botón eliminar --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".eliminarRegistroBtn").forEach(boton => {
+            boton.addEventListener("click", function() {
+                let registroId = this.getAttribute("data-id");
+                let url = this.getAttribute("data-url"); 
+                let registro = this.getAttribute("data-entidad"); 
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: `Vas a eliminar este ${registro}. No podrás revertir esto.`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "green",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Crearemos un formulario dinámico para enviar el DELETE con la URL que capturamos en el botón
+                        let form = document.createElement("form");
+                        form.method = "POST";
+                        form.action = url;
+                        form.style.display = "none";
+
+                        // Agregamos el token
+                        let csrfInput = document.createElement("input");
+                        csrfInput.type = "hidden";
+                        csrfInput.name = "_token";
+                        csrfInput.value = "{{ csrf_token() }}";
+
+                        // Agregamos el método DELETE
+                        let methodInput = document.createElement("input");
+                        methodInput.type = "hidden";
+                        methodInput.name = "_method";
+                        methodInput.value = "DELETE";
+
+                        form.appendChild(csrfInput);
+                        form.appendChild(methodInput);
+                        document.body.appendChild(form);
+                        form.submit(); // Enviamos el formulario automaticamente
+
+                        Swal.fire({
+                            title: "Eliminado!",
+                            text: `El ${registro} ha sido eliminado correctamente.`,
+                            icon: "success"
+                        });
+                    }
+                });
+            });
         });
-    </script>
-@endif
+    });
+</script>
+
+
 
 
 
