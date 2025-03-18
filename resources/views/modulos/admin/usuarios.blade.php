@@ -1,6 +1,6 @@
 @extends('layouts.main_layout')
 
-@section('title', 'Iniciar sesión')
+@section('title', 'Gestión Usuarios')
 
 
 
@@ -9,37 +9,46 @@
 
 
 
-<div class="container">
+<div class="container mt-4">
     <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Rol</th>
+        <table class="table table-striped table-bordered table-hover text-center align-middle">
+            <thead class="thead-light">
+                <tr class="bg-primary text-white">
+                    <th class="fw-bold">Nombre</th>
+                    <th class="fw-bold">Email</th>
+                    <th class="fw-bold">Rol</th>
+                    <th class="fw-bold">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-
-                @foreach ($users as $user )
-
+                @foreach ($users as $user)
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                  <td>{{ $user->roles->first()->name}}</td> {{-- Recuperamos el rol, que lo hemos traido previamente usando HasRoles en el modelo user y en la función UserList --}}
-                                                            {{-- Lo que hacemos es acceder a la tabla pivot, y extraer el primer nombre de la colección. En caso de ser varios
-                                                            podríamos usar pluck. --}}
+                    <td>{{ $user->roles->first()->name }}</td>
 
+                    <!-- Acciones -->
+                    <td>
+                        <div class="d-flex justify-content-center gap-2">
+                            <button type="button" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash3-fill"></i> <!-- Icono de eliminar -->
+                            </button>
+
+                            <button type="button" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil-fill"></i> <!-- Icono de editar -->
+                            </button>
+
+                            <button type="button" class="btn btn-sm btn-primary">
+                                <i class="bi bi-eye-fill"></i> <!-- Icono de ver -->
+                            </button>
+                        </div>
+                    </td>
                 </tr>
-
                 @endforeach
-
-
-
             </tbody>
         </table>
     </div>
-
+</div>
 
 
    <!-- Botón Registrar Usuario para abrir el modal -->
