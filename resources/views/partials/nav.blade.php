@@ -4,7 +4,7 @@
 
         <!-- Opción de menú para inicio -->
         <li class="nav-item">
-            <a class="nav-link text-white" href="#"> <!-- Enlace con ícono -->
+            <a class="nav-link text-white" href="#">
                 <i class="bi bi-house-door-fill"></i> PANEL DE CONTROL
             </a>
         </li>
@@ -12,35 +12,35 @@
         <!-- Opción de menú para Productos -->
         <li class="nav-item">
             <a class="nav-link text-white" href="{{ route('producto.vista') }}">
-                <i class="bi bi-box-fill"></i> PRODUCTO <!-- Icono + nombre -->
+                <i class="bi bi-box-fill"></i> PRODUCTO
             </a>
         </li>
 
         <!-- Opción de menú para Clientes -->
         <li class="nav-item">
-            {{-- <a class="nav-link text-white" href="{{ route('modulos.clientes.cliente') }}"> --}}
-                <i class="bi bi-person-fill"></i> CLIENTE <!-- Icono + nombre -->
-            {{-- </a> --}}
+            <a class="nav-link text-white disabled">
+                <i class="bi bi-person-fill"></i> CLIENTE
+            </a>
         </li>
 
         <!-- Opción de menú para Pedidos -->
         <li class="nav-item">
-            {{-- <a class="nav-link text-white" href="{{ route('modulos.pedidos.pedido') }}"> --}}
-                <i class="bi bi-file-earmark-binary-fill"></i> PEDIDO <!-- Icono + nombre -->
-            {{-- </a> --}}
+            <a class="nav-link text-white disabled">
+                <i class="bi bi-file-earmark-binary-fill"></i> PEDIDO
+            </a>
         </li>
 
         <!-- Opción de menú para crear usuarios-->
         @role('Admin')
         <li class="nav-item">
             <a class="nav-link text-white" href="{{ route('usuarios.registrar') }}">
-                <i class="bi bi-people-fill"></i> REGISTRAR USUARIOS <!-- Icono + nombre -->
+                <i class="bi bi-people-fill"></i> REGISTRAR USUARIOS
             </a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link text-white" href="{{ route('usuarios.listar') }}">
-                <i class="bi bi-people-fill"></i> LISTAR USUARIOS <!-- Icono + nombre -->
+                <i class="bi bi-people-fill"></i> LISTAR USUARIOS
             </a>
         </li>
         @endrole
