@@ -11,7 +11,7 @@ use Spatie\Permission\Models\Role; // Importa Role para asignar roles a usuarios
 
 class AdminController extends Controller
 {
-    // Método para mostrar el formulario de registro
+    // Método para mostrar el formulario de registro. ELIMINAR SI NOS QUEDAMOS CON MODALES
     public function showRegisterForm()
     {
         $roles = Role::all(); // Aquí obtenemos todos los roles para pasarlos a la vista
@@ -43,13 +43,12 @@ class AdminController extends Controller
         return redirect()->route('admin.registrar')->with('success', 'Usuario registrado correctamente.');
     }
 
-
     //Función para mostrar la vista usuarios con la lista de usuarios y roles
     public function usersList (Request $reques) {
 
         $users = User::with('roles')->get(); //Se pasan los usuarios a la vista
-
-        return view ('modulos.admin.usuarios',compact('users'));
+        $roles = Role::all(); // Aquí obtenemos todos los roles para pasarlos a la vistaç
+        return view ('modulos.admin.usuarios',compact('users', 'roles'));
 
     }
 
