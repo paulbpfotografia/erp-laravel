@@ -69,7 +69,7 @@
 
             <!-- Modal Body -->
             <div class="modal-body p-4">
-                <form method="POST" action="{{ route('admin.registrar.store') }}">
+                <form method="POST" action="{{ route('usuarios.registrar.store') }}">
                     @csrf
 
                     <!-- Nombre -->

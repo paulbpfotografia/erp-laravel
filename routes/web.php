@@ -4,25 +4,19 @@ use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PruebaController;
 use App\Http\Controllers\Auth\LoginController; // 👈 Agrega esta línea
-use App\Http\Controllers\AdminController;
-
-
-
-
-
-
-
-// Route::get('cliente', [PruebaController::class,'cliente'])->name('cliente'); // RUTA DE PRUEBA PARA COMPROBAR VISTA
-
-// Route::get('pedido', [PruebaController::class,'pedido'])->name('pedido'); // RUTA DE PRUEBA PARA COMPROBAR VISTA
+use App\Http\Controllers\UserController;
 
 
 Auth::routes();
 
+//Ruta Login. Página principal "/"
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('ingresar');
+
+//Ruta página home. Página a la que el usuario es redirigido tras el login
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::get('/', [LoginController::class, 'showLoginForm'])->name('ingresar');
+
 
 
 
@@ -36,18 +30,17 @@ Route::resource('producto', ProductController::class);
 
 
 
-//RUTAS PROTEGIDAS PARA ADMINISTRADORES
+//Rutas Gestión de Usuarios del ERP. Protegida para rol ADMIN
 Route::group(['middleware' => ['role:Admin']], function () {
 
     // Ruta para mostrar el formulario de registro
-Route::get('/admin/registrar-usuarios', [AdminController::class, 'showRegisterForm'])->name('admin.registrar');
+Route::get('/usuarios/registrar', [UserController::class, 'showRegisterForm'])->name('usuarios.registrar');
 
 // Ruta para procesar el registro de usuario
-Route::post('/admin/registrar', [AdminController::class, 'register'])->name('admin.registrar.store');
+Route::post('/usuarios/registrar', [UserController::class, 'register'])->name('usuarios.registrar.store');
 
 // Ruta para mostrar usuarios
-
-Route::get('/admin/usuarios', [AdminController::class, 'usersList'])->name('admin.listar');
+Route::get('/usuarios', [UserController::class, 'usersList'])->name('usuarios.listar');
 
 
 });

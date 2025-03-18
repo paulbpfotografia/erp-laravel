@@ -33,13 +33,13 @@
         <!-- Opción de menú para crear usuarios-->
         @role('Admin')
         <li class="nav-item">
-            <a class="nav-link text-white" href="{{ route('admin.registrar') }}">
+            <a class="nav-link text-white" href="{{ route('usuarios.registrar') }}">
                 <i class="bi bi-people-fill"></i> REGISTRAR USUARIOS <!-- Icono + nombre -->
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-white" href="{{ route('admin.listar') }}">
+            <a class="nav-link text-white" href="{{ route('usuarios.listar') }}">
                 <i class="bi bi-people-fill"></i> LISTAR USUARIOS <!-- Icono + nombre -->
             </a>
         </li>

@@ -31,14 +31,14 @@
                     @endif
 
                     {{-- Formulario de Registro --}}
-                    <form method="POST" action="{{ route('admin.registrar.store') }}">
+                    <form method="POST" action="{{ route('usuarios.registrar.store') }}">
                         @csrf
 
                         {{-- Nombre --}}
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">Nombre</label>
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" 
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
                                        name="name" value="{{ old('name') }}" required autofocus>
 
                                 @error('name')
@@ -53,7 +53,7 @@
                         <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-end">Correo Electrónico</label>
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
                                        name="email" value="{{ old('email') }}" required>
 
                                 @error('email')
@@ -68,7 +68,7 @@
                         <div class="row mb-3">
                             <label for="password" class="col-md-4 col-form-label text-md-end">Contraseña</label>
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
                                        name="password" required>
 
                                 @error('password')
@@ -83,7 +83,7 @@
                         <div class="row mb-3">
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-end">Confirmar Contraseña</label>
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" 
+                                <input id="password-confirm" type="password" class="form-control"
                                        name="password_confirmation" required>
                             </div>
                         </div>

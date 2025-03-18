@@ -9,13 +9,13 @@ use Illuminate\Validation\Rules; // Importa reglas de validación para la contra
 use Spatie\Permission\Models\Role; // Importa Role para asignar roles a usuarios
 
 
-class AdminController extends Controller
+class UserController extends Controller
 {
     // Método para mostrar el formulario de registro. ELIMINAR SI NOS QUEDAMOS CON MODALES
     public function showRegisterForm()
     {
         $roles = Role::all(); // Aquí obtenemos todos los roles para pasarlos a la vista
-        return view('modulos.admin.registro', compact('roles'));
+        return view('modulos.usuarios.registro', compact('roles'));
     }
 
     // Método para registrar usuarios
@@ -40,7 +40,7 @@ class AdminController extends Controller
         $user->assignRole($request->role); // Asigna el rol seleccionado
 
         // REDIRECCIÓN CON MENSAJE DE ÉXITO
-        return redirect()->route('admin.registrar')->with('success', 'Usuario registrado correctamente.');
+        return redirect()->route('usuarios.registrar')->with('success', 'Usuario registrado correctamente.');
     }
 
     //Función para mostrar la vista usuarios con la lista de usuarios y roles
@@ -48,7 +48,7 @@ class AdminController extends Controller
 
         $users = User::with('roles')->get(); //Se pasan los usuarios a la vista
         $roles = Role::all(); // Aquí obtenemos todos los roles para pasarlos a la vistaç
-        return view ('modulos.admin.usuarios',compact('users', 'roles'));
+        return view ('modulos.usuarios.usuarios',compact('users', 'roles'));
 
     }
 
