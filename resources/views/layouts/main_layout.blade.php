@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title')</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@yield('title')</title>
 
-    <!--Iconos Bootstrap -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+        {{-- Carga de estilos y scripts con Vite --}}
+        @vite(['resources/css/app.css', 'resources/css/styles.css', 'resources/js/app.js'])
 
-    {{-- Sweet Alert --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- Iconos de Bootstrap -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
-</head>
+        {{-- SweetAlert2 (CDN) --}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+
 <body>
 
 
@@ -39,19 +41,44 @@
 
 
 
-    @if(session('message') && session('icono'))
+    {{-- @if(session('message'))
     <script>
         Swal.fire({
+            toast: true,  // Aparece en la esquina en lugar de ser modal
             position: "top-end",
-            icon: @json(session('icono')),
-            title: @json(session('message')),
+            icon: {!! json_encode(session('icono', 'success')) !!},
+            title: {!! json_encode(session('message')) !!},
             showConfirmButton: false,
-            timer: 1500
+            timer: 3500,
+            customClass: {
+                popup: "colored-toast"
+            }
         });
     </script>
-    @endif
+@endif --}}
 
+<script>
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: "center",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  customClass: {
+            popup: "colored-toast",  // Aplica la clase personalizada para los estilos
+        }
+});
+
+</script>
+@if(session('message'))
+    <script>
+        Toast.fire({
+            icon: {!! json_encode(session('icono', 'success')) !!},
+            title: {!! json_encode(session('message')) !!}
+        });
+    </script>
+@endif
 
 
 
