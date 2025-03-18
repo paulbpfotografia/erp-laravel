@@ -24,7 +24,7 @@ class UserController extends Controller
 
           // Comprobamos que no se repita el correo
             if (User::where('email', $request->email)->exists()) {
-                return redirect()->route('usuarios.listar')
+                return redirect()->route('usuarios.index')
                     ->with('message', 'Error al crear usuario. El correo ya está registrado.')
                     ->with('icono', 'error');
             }
@@ -49,14 +49,14 @@ class UserController extends Controller
         $user->assignRole($request->role); // Asigna el rol seleccionado
 
         // REDIRECCIÓN CON MENSAJE DE ÉXITO
-        return redirect()->route('usuarios.listar')
+        return redirect()->route('usuarios.index')
         ->with('message', 'Usuario registrado correctamente.')
         ->with('icono', 'success');
 
     }
 
     //Función para mostrar la vista usuarios con la lista de usuarios y roles
-    public function usersList (Request $request) {
+    public function index (Request $request) {
 
         $users = User::with('roles')->get(); //Se pasan los usuarios a la vista
         $roles = Role::all(); // Aquí obtenemos todos los roles para pasarlos a la vistaç
@@ -70,9 +70,26 @@ class UserController extends Controller
 
 
 
+    public function show ($id) {
+
+        $user = User::findOrFail($id);
+        return view('modulos.usuarios.usuario-datos', compact('user'));
+
+    }
 
 
 
+    //Función para actualizar el estado booleano de la columna active del usuario
+    public function changeActive ($id) {
+        $user = User::findOrFail($id);
+        $user->active = !$user->active;
+        $user->save();
+
+        return redirect()->back()
+        ->with('message', 'El estado del usuario ha cambiado.')
+        ->with('icono', 'info');	
+
+    }
 
 
 

@@ -2,67 +2,124 @@
 
 @section('title', 'Gestión Usuarios')
 
-
-
-
 @section('content')
 
+<section class="content">
+    <div class="box">
+        <div class="box-header with-border">
+            <!-- Botón Registrar Usuario con margen para dar espacio -->
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalUsuarios">
+                Registrar Usuario
+            </button>
+        </div>
 
+        <div class="box-body">
+            <div class="container mt-4">
+                
+                <!-- Usuarios Activos -->
+                <h2 class="mb-3">Usuarios Activos</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover text-center align-middle">
+                        <thead class="thead-light">
+                            <tr class="bg-primary text-white">
+                                <th class="fw-bold">Nombre</th>
+                                <th class="fw-bold">Email</th>
+                                <th class="fw-bold">Rol</th>
+                                <th class="fw-bold">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($users as $user)
+                                @if($user->active)
+                                    <tr>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>{{ $user->roles->first()->name }}</td>
 
+                                        <!-- Acciones -->
+                                        <td>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                
+                                                <!-- Botón Eliminar -->
+                                                <button type="button" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash3-fill"></i>
+                                                </button>
 
+                                                <!-- Botón Editar -->
+                                                <button type="button" class="btn btn-sm btn-warning">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </button>
 
+                                                <!-- Botón Ver Usuario -->
+                                                <a href="{{ route('usuarios.show', $user->id) }}" class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-eye-fill"></i>
+                                                </a>
 
-<div class="container mt-4">
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover text-center align-middle">
-            <thead class="thead-light">
-                <tr class="bg-primary text-white">
-                    <th class="fw-bold">Nombre</th>
-                    <th class="fw-bold">Email</th>
-                    <th class="fw-bold">Rol</th>
-                    <th class="fw-bold">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($users as $user)
-                <tr>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->roles->first()->name }}</td>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div> <!-- Fin de table-responsive -->
 
-                    <!-- Acciones -->
-                    <td>
-                    <!-- Botón Eliminar -->
-                        <div class="d-flex justify-content-center gap-2">
-                            <button type="button" class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash3-fill"></i>
-                            </button>
+                <hr class="my-4">
 
-                    <!-- Botón Editar -->
-                            <button type="button" class="btn btn-sm btn-warning">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
+                <!-- Usuarios Inactivos -->
+                <h2 class="mb-3">Usuarios Inactivos</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover text-center align-middle">
+                        <thead class="thead-light">
+                            <tr class="bg-secondary text-white">
+                                <th class="fw-bold">Nombre</th>
+                                <th class="fw-bold">Email</th>
+                                <th class="fw-bold">Rol</th>
+                                <th class="fw-bold">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($users as $user)
+                                @if(!$user->active)
+                                    <tr>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>{{ $user->roles->first()->name }}</td>
 
-                    <!-- Botón Ver Usuario -->
-                            <button type="button" class="btn btn-sm btn-primary">
-                                <i class="bi bi-eye-fill"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                                        <!-- Acciones -->
+                                        <td>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                
+                                                <!-- Botón Eliminar -->
+                                                <button type="button" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash3-fill"></i>
+                                                </button>
+
+                                                <!-- Botón Editar -->
+                                                <button type="button" class="btn btn-sm btn-warning">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </button>
+
+                                                <!-- Botón Ver Usuario -->
+                                                <a href="{{ route('usuarios.show', $user->id) }}" class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-eye-fill"></i>
+                                                </a>
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div> <!--FIN DE LA TABLA-->
+            </div>
+        </div>
     </div>
-</div>
+</section>
 
 
-   <!-- Botón Registrar Usuario para abrir el modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalUsuarios">
-    Registrar Usuario
- </button>
-
-<!-- Inicio del Modal -->
+<!-- MODAL AGREGAR USUARIO -->
 <div class="modal fade" id="modalUsuarios" tabindex="-1" aria-labelledby="modalUsuariosLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content shadow-lg border-0 rounded-4">
@@ -154,6 +211,12 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
 
 
 

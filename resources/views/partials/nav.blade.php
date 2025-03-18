@@ -29,18 +29,15 @@
                 <i class="bi bi-file-earmark-binary-fill"></i> PEDIDO
             </a>
         </li>
-
+     
+     
         <!-- Opción de menú para crear usuarios-->
         @role('Admin')
-        <li class="nav-item">
-            <a class="nav-link text-white" href="{{ route('usuarios.registrar') }}">
-                <i class="bi bi-people-fill"></i> REGISTRAR USUARIOS
-            </a>
-        </li>
+      
 
         <li class="nav-item">
-            <a class="nav-link text-white" href="{{ route('usuarios.listar') }}">
-                <i class="bi bi-people-fill"></i> LISTAR USUARIOS
+            <a class="nav-link text-white" href="{{ route('usuarios.index') }}">
+                <i class="bi bi-people-fill"></i> GESTIÓN DE USUARIOS
             </a>
         </li>
         @endrole

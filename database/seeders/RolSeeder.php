@@ -18,7 +18,7 @@ class RolSeeder extends Seeder
             'ver usuarios', 'crear usuarios', 'editar usuarios', 'eliminar usuarios',
             'ver informes',
             'ver categorías', 'crear categorías', 'editar categorías', 'eliminar categorías',
-            'ver stock', 'actualizar stock'
+            'ver stock', 'actualizar stock','desactivar usuarios', 'activar usuarios'
         ];
 
         foreach ($permisos as $permiso) {

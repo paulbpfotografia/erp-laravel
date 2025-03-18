@@ -33,14 +33,17 @@ Route::resource('producto', ProductController::class);
 //Rutas Gestión de Usuarios del ERP. Protegida para rol ADMIN
 Route::group(['middleware' => ['role:Admin']], function () {
 
-    // Ruta para mostrar el formulario de registro
-Route::get('/usuarios/registrar', [UserController::class, 'showRegisterForm'])->name('usuarios.registrar');
-
 // Ruta para procesar el registro de usuario
 Route::post('/usuarios/registrar', [UserController::class, 'register'])->name('usuarios.registrar.store');
 
 // Ruta para mostrar usuarios
-Route::get('/usuarios', [UserController::class, 'usersList'])->name('usuarios.listar');
+Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
 
+//Ruta para ver usuarios
+Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.show');
+
+//Ruta para cambiar estado del usuario
+
+Route::patch('/usuarios/{id}/active' , [UserController::class, 'changeActive'])->name('usuarios.changeActive');
 
 });

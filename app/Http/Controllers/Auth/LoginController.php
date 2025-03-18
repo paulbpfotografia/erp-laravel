@@ -49,6 +49,29 @@ class LoginController extends Controller
         return view('modulos.usuarios.ingresar');
     }
     
+    public function login(Request $request)
+    {
+        // Validación personalizada
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
+        // Intentar autenticación con los datos del request
+        if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
+            
+            // Verifica si el usuario está activo antes de permitir el login
+            if (!Auth::user()->active) {
+                Auth::logout(); // Cierra la sesión si el usuario está inactivo
+                return redirect()->back()->withErrors(['message' => 'Tu cuenta está deshabilitada. Contacte con un administrador']);
+            }
+
+            return redirect()->intended('/home'); // Redirigir a una ruta personalizada
+        }
+
+        // Si falla el login, volver con un error
+        return redirect()->back()->withErrors(['message' => 'Las credenciales no son correctas.']);
+    }
 
 
     

@@ -22,6 +22,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'active',
+    ];
+
+    protected $casts = [
+        'active' => 'boolean', //Convertimos esta parte en un booleano
     ];
 
     /**
