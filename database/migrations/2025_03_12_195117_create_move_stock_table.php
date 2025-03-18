@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('reason');
             $table->timestamp('move_date');
             $table->foreignId('product_id')->constrained('products');
-            $table->foreignId('order_id')->constrained('orders');
+            $table->foreignId('order_id')->nullable()->constrained('orders');
             $table->timestamps();
         });
     }

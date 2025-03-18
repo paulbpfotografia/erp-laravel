@@ -13,11 +13,40 @@ class MoveStockTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //Prueba
-        DB::table('move_stock')->insert([
-            ['product_id' => 1, 'move_type' => 'Salida', 'quantity' => 5, 'reason' => 'Venta', 'order_id' => 1, 'move_date' => now()],
-            ['product_id' => 2, 'move_type' => 'Salida', 'quantity' => 2, 'reason' => 'Venta', 'order_id' => 2, 'move_date' => now()],
-            ['product_id' => 3, 'move_type' => 'Salida', 'quantity' => 10, 'reason' => 'Venta', 'order_id' => 3, 'move_date' => now()],
-        ]);
+
+        // Datos de prueba
+        $movimientos = [];
+
+        // Obtener pedidos existentes
+        $orders = DB::table('orders')->pluck('id')->toArray();
+        $products = DB::table('products')->pluck('id')->toArray();
+
+        foreach ($orders as $orderId) {
+            $numProducts = rand(1, 5);
+            for ($i = 0; $i < $numProducts; $i++) {
+                $movimientos[] = [
+                    'product_id' => $products[array_rand($products)],
+                    'move_type' => 'Salida',
+                    'quantity' => rand(1, 5),
+                    'reason' => 'Venta',
+                    'order_id' => $orderId,
+                    'move_date' => date('Y-m-d H:i:s', strtotime('-' . rand(1, 90) . ' days')),
+                ];
+            }
+        }
+
+        // Generar movimientos de entrada sin order_id
+        for ($i = 0; $i < 50; $i++) {
+            $movimientos[] = [
+                'product_id' => $products[array_rand($products)],
+                'move_type' => 'Entrada',
+                'quantity' => rand(5, 20),
+                'reason' => collect(['Reposición', 'Devolución', 'Nuevo stock'])->random(),
+                'order_id' => null,
+                'move_date' => date('Y-m-d H:i:s', strtotime('-' . rand(1, 90) . ' days')),
+            ];
+        }
+
+        DB::table('move_stock')->insert($movimientos);
     }
 }
