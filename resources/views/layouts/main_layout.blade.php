@@ -26,15 +26,7 @@
       @include('partials.topbar')
           @endif
 
-      <!-- Condicional para mostrar mensajes -->
-          @if(session('message'))
-          <script>
-              Toast.fire({
-                  icon: {!! json_encode(session('icono', 'success')) !!},
-                  title: {!! json_encode(session('message')) !!}
-              });
-          </script>
-      @endif
+   
       
 
     <div class="d-flex" style="min-height: 100vh;">
@@ -73,7 +65,25 @@
 
 </script>
 
+   <!-- Condicional para mostrar alertas mensajes -->
+   @if(session('message'))
+   <script>
+       Toast.fire({
+           icon: {!! json_encode(session('icono', 'success')) !!},
+           title: {!! json_encode(session('message')) !!}
+       });
+   </script>
+@endif
 
+   <!-- Condicional para mostrar alertas errores -->
+@if(session('error'))
+<script>
+    Toast.fire({
+        icon: {!! json_encode(session('icono', 'error')) !!},
+        title: {!! json_encode(session('error')) !!}
+    });
+</script>
+@endif
 
 
 

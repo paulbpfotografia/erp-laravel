@@ -14,6 +14,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
 
+
+   
     /**
      * The attributes that are mass assignable.
      *
@@ -52,4 +54,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
 }

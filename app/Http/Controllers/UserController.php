@@ -92,6 +92,7 @@ class UserController extends Controller
     }
 
 
+    //Borra al usuario
     public function destroy ($id) {
         $user = User::findOrFail($id);
         $user->delete();
@@ -102,8 +103,32 @@ class UserController extends Controller
     }
 
 
+    //Devuelve la vista para la edición de usuario con los datos del usuario y los roles para el desplegable
+    public function showEditForm ($id) {
+
+        $user = User::findOrFail($id);
+        $rol = $user->getRoleNames()->first() ?? ``; //Envio el rol con el usuario. Con ?? '' 
+        return view('modulos.usuarios.usuarios-editar', compact('user', 'rol'));
+
+    }
 
 
 
-
+    public function update (Request $request, $id) {
+            $request->validate([
+                'nombre' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $id,
+                'rol' => 'required|string',
+            ]);
+        
+            $user = User::findOrFail($id);
+            $user->update([
+                'name' => $request->nombre,
+                'email' => $request->email,
+                'rol' => $request->rol,
+            ]);
+        
+            return redirect()->route('usuarios.index')->with('message', 'Usuario actualizado correctamente.');
+        }
+        
 }

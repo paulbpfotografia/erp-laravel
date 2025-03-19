@@ -43,11 +43,17 @@ Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index'
 Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.show');
 
 //Ruta para cambiar estado del usuario
-
 Route::patch('/usuarios/{id}/active' , [UserController::class, 'changeActive'])->name('usuarios.changeActive');
 
 
 //Ruta para eliminar usuario
 Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy');
+
+
+//Ruta para editar información de usuario
+Route::get('/usuarios/{id}/editar', [UserController::class, 'showEditForm'])->name('usuarios.edit');
+
+//Ruta para editar información de usuario
+Route::put('/usuarios/{id}/editar', [UserController::class, 'update'])->name('usuarios.update');
 
 });

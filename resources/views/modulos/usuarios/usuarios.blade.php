@@ -8,7 +8,7 @@
     <div class="box">
         <div class="box-header with-border">
             <!-- Botón Registrar Usuario con margen para dar espacio -->
-            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalUsuarios">
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarUsuarios">
                 Registrar Usuario
             </button>
         </div>
@@ -50,9 +50,10 @@
 
                                             
                                                 <!-- Botón Editar -->
-                                                <button type="button" class="btn btn-sm btn-warning">
+                                                <a href="{{ route('usuarios.edit', $user->id) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil-fill"></i>
-                                                </button>
+                                                </a>
+                                                
 
                                                 <!-- Botón Ver Usuario -->
                     
@@ -67,7 +68,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div> <!-- Fin de table-responsive -->
+                </div> <!-- Fin de tabla -->
 
                 <hr class="my-4">
 
@@ -125,13 +126,13 @@
 
 
 <!-- MODAL AGREGAR USUARIO -->
-<div class="modal fade" id="modalUsuarios" tabindex="-1" aria-labelledby="modalUsuariosLabel" aria-hidden="true">
+<div class="modal fade" id="modalAgregarUsuarios" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content shadow-lg border-0 rounded-4">
 
             <!-- Modal Header -->
             <div class="modal-header bg-primary text-white rounded-top">
-                <h4 class="modal-title" id="modalUsuariosLabel">Registro de Usuario</h4>
+                <h4 class="modal-title" id="modalUsuariosAgregarLabel">Registro de Usuario</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
