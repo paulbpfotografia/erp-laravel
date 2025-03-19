@@ -125,9 +125,11 @@ class UserController extends Controller
             $user->update([
                 'name' => $request->nombre,
                 'email' => $request->email,
-                'rol' => $request->rol,
             ]);
-        
+            
+            //Al estar en una tabla intermedia, actualizo los roles así.
+            $user->syncRoles([$request->rol]);
+
             return redirect()->route('usuarios.index')->with('message', 'Usuario actualizado correctamente.');
         }
         

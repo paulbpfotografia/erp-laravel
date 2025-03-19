@@ -22,6 +22,7 @@
                     <table class="table table-striped table-bordered table-hover text-center align-middle">
                         <thead class="thead-light">
                             <tr class="bg-primary text-white">
+                                <th class="fw-bold">Foto</th> 
                                 <th class="fw-bold">Nombre</th>
                                 <th class="fw-bold">Email</th>
                                 <th class="fw-bold">Rol</th>
@@ -32,6 +33,14 @@
                             @foreach ($users as $user)
                                 @if($user->active)
                                     <tr>
+                                        <!-- Mostrar la imagen del usuario -->
+                                        <td>
+                                            @if($user->foto)
+                                                <img src="{{ asset($user->foto) }}" alt="Foto de {{ $user->name }}" class="img-thumbnail" width="50">
+                                            @else
+                                                <i class="bi bi-person-circle text-secondary" style="font-size: 1.5rem;"></i>
+                                            @endif
+                                        </td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->roles->first()->name }}</td>
@@ -48,19 +57,15 @@
                                                     <i class="bi bi-trash3-fill"></i>
                                                 </button>
 
-                                            
                                                 <!-- Botón Editar -->
                                                 <a href="{{ route('usuarios.edit', $user->id) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil-fill"></i>
                                                 </a>
-                                                
 
                                                 <!-- Botón Ver Usuario -->
-                    
                                                 <a href="{{ route('usuarios.show', $user->id) }}" class="btn btn-sm btn-primary">
                                                     <i class="bi bi-eye-fill"></i>
                                                 </a>
-
                                             </div>
                                         </td>
                                     </tr>
@@ -78,6 +83,7 @@
                     <table class="table table-striped table-bordered table-hover text-center align-middle">
                         <thead class="thead-light">
                             <tr class="bg-secondary text-white">
+                                <th class="fw-bold">Foto</th>
                                 <th class="fw-bold">Nombre</th>
                                 <th class="fw-bold">Email</th>
                                 <th class="fw-bold">Rol</th>
@@ -88,6 +94,14 @@
                             @foreach ($users as $user)
                                 @if(!$user->active)
                                     <tr>
+                                        <!-- Mostrar la imagen del usuario -->
+                                        <td>
+                                            @if($user->foto)
+                                                <img src="{{ asset($user->foto) }}" alt="Foto de {{ $user->name }}" class="img-thumbnail" width="50">
+                                            @else
+                                                <i class="bi bi-person-circle text-secondary" style="font-size: 1.5rem;"></i>
+                                            @endif
+                                        </td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->roles->first()->name }}</td>
@@ -123,6 +137,7 @@
         </div>
     </div>
 </section>
+
 
 
 <!-- MODAL AGREGAR USUARIO -->
