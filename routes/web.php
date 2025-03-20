@@ -3,69 +3,61 @@
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PruebaController;
-use App\Http\Controllers\Auth\LoginController; // 👈 Agrega esta línea
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 
+  // Ruta Login. Página principal "/"
+  Route::get('/', [LoginController::class, 'showLoginForm'])->name('ingresar');
 
-Auth::routes();
+//No eliminar. Con esto se cargan rutas de login y logout
+  Auth::routes();
+  
 
-//Ruta Login. Página principal "/"
-Route::get('/', [LoginController::class, 'showLoginForm'])->name('ingresar');
+Route::middleware(['auth'])->group(function () {
 
-//Ruta página home. Página a la que el usuario es redirigido tras el login
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    // Ruta página home. Página a la que el usuario es redirigido tras el login
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+    // RUTA DE PEDIDO
+    Route::get('/pedidos', [OrderController::class, 'index'])
+        ->middleware('permission:ver pedidos')->name('pedidos.index');
 
+    Route::get('/pedidos/{id}/editar', [OrderController::class, 'edit'])
+        ->middleware('permission:editar pedidos')->name('pedidos.edit');
 
+    Route::get('/pedidos/{order}', [OrderController::class, 'show'])
+        ->middleware('permission:ver pedidos')->name('pedidos.show');
 
-//RUTA DE PEDIDO
-Route::get('/pedidos', [OrderController::class, 'index'])->name('pedidos.index');
+    Route::delete('/pedidos/{order}', [OrderController::class, 'destroy'])
+        ->middleware('permission:eliminar pedidos')->name('pedidos.destroy');
 
+    // RUTA DE PRODUCTO
+    Route::get('/productos', [ProductController::class, 'index'])
+        ->name('productos.index');
 
+    // Rutas Gestión de Usuarios del ERP. Protegida para rol ADMIN
+    Route::group(['middleware' => ['role:Admin']], function () {
+        Route::post('/usuarios/registrar', [UserController::class, 'register'])
+            ->name('usuarios.registrar.store');
 
+        Route::get('/usuarios', [UserController::class, 'index'])
+            ->name('usuarios.index');
 
+        Route::get('/usuarios/{user}', [UserController::class, 'show'])
+            ->name('usuarios.show');
 
-//RUTA DE PRODUCTO
-Route::get('/productos', [ProductController::class, 'index'])->name('productos.index');
+        Route::patch('/usuarios/{user}/active', [UserController::class, 'changeActive'])
+            ->name('usuarios.changeActive');
 
+        Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])
+            ->name('usuarios.destroy');
 
+        Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])
+            ->name('usuarios.edit');
 
-
-
-
-
-
-
-
-
-
-
-
-//Rutas Gestión de Usuarios del ERP. Protegida para rol ADMIN
-Route::group(['middleware' => ['role:Admin']], function () {
-
-// Ruta para procesar el registro de usuario
-Route::post('/usuarios/registrar', [UserController::class, 'register'])->name('usuarios.registrar.store');
-
-// Ruta para mostrar usuarios
-Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
-
-//Ruta para ver usuarios
-Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.show');
-
-//Ruta para cambiar estado del usuario
-Route::patch('/usuarios/{id}/active' , [UserController::class, 'changeActive'])->name('usuarios.changeActive');
-
-
-//Ruta para eliminar usuario
-Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy');
-
-
-//Ruta para editar información de usuario. Accedo a vista con formulario
-Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('usuarios.edit');
-
-//Ruta para editar información de usuario
-Route::put('/usuarios/{id}/editar', [UserController::class, 'update'])->name('usuarios.update');
+        Route::put('/usuarios/{user}/editar', [UserController::class, 'update'])
+            ->name('usuarios.update');
+    });
 
 });

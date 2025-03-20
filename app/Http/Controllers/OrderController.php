@@ -13,7 +13,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        
+        $this->authorize('ver pedidos');
         $orders = Order::all();
         return view('modulos.pedidos.pedidos',compact('orders'));
     }
@@ -23,14 +23,17 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        //COMO USAMOS MODAL PARA CREAR, NO HACE FALTA COMPLETARLA
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
+    
     {
+        $this->authorize('crear pedidos');
+
         //
     }
 
@@ -39,15 +42,19 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
-    }
+        $this->authorize('ver pedidos');
 
+        return view('modulos.pedidos.pedidos-datos', compact('order'));
+    }
+    
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Order $order)
     {
-        //
+        $this->authorize('editar pedidos');
+
+        return view('modulos.pedidos.pedidos-editar',compact('order'));
     }
 
     /**
@@ -55,6 +62,8 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
+        $this->authorize('editar pedidos');
+
         //
     }
 
@@ -63,6 +72,8 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
+        $this->authorize('eliminar pedidos');
+
         //
     }
 }

@@ -8,8 +8,8 @@
     <div class="box">
         <div class="box-header with-border">
             <!-- Botón Registrar Usuario con margen para dar espacio -->
-            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarUsuarios">
-                Registrar Usuario
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarPedido">
+                Crear Pedido
             </button>
         </div>
 
@@ -63,23 +63,32 @@
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">
                                                 
-                                                {{-- <!-- Botón Eliminar -->
+                                                <!-- Botón Eliminar -->
+                                                @can('eliminar pedidos')
                                                 <button type="button" class="btn btn-sm btn-danger eliminarRegistroBtn"
-                                                    data-id="{{ $user->id }}"
-                                                    data-url="{{ route('usuarios.destroy', $user->id) }}"
-                                                    data-entidad="Usuario">
+                                                    data-id="{{ $order->id }}"
+                                                    data-url="{{ route('pedidos.destroy', $order->id) }}"
+                                                    data-entidad="Pedido">
                                                     <i class="bi bi-trash3-fill"></i>
-                                                </button>
+                                                </button>    
+                                                @endcan
+                                                
 
                                                 <!-- Botón Editar -->
-                                                <a href="{{ route('usuarios.edit', $user->id) }}" class="btn btn-sm btn-warning">
+                                                @can('editar pedidos')
+                                                <a href="{{ route( 'pedidos.edit',$order) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil-fill"></i>
-                                                </a>
+                                                </a>     
+                                                @endcan
+                                               
 
                                                 <!-- Botón Ver Usuario -->
-                                                <a href="{{ route('usuarios.show', $user->id) }}" class="btn btn-sm btn-primary">
+                                                @can('ver pedidos')
+                                                <a href="{{ route('pedidos.show', $order) }}" class="btn btn-sm btn-primary">
                                                     <i class="bi bi-eye-fill"></i>
-                                                </a> --}}
+                                                </a>      
+                                                @endcan
+                                                
                                             </div>
                                         </td>
                                     </tr>

@@ -9,129 +9,134 @@ use Illuminate\Validation\Rules;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Storage;
 
-
 class UserController extends Controller
 {
-            // Método para mostrar el formulario de registro. ELIMINAR SI NOS QUEDAMOS CON MODALES
-            public function register(Request $request)
-            {
-                // Comprobamos que no se repita el correo
-                if (User::where('email', $request->email)->exists()) {
-                    return redirect()->route('usuarios.index')
-                        ->with('message', 'Error al crear usuario. El correo ya está registrado.')
-                        ->with('icono', 'error');
-                }
-            
-                // VALIDACIÓN DE DATOS
-                $request->validate([
-                    'name' => ['required', 'string', 'max:255'],
-                    'email' => ['required', 'string', 'email', 'max:255', 'unique:users'], // Email único
-                    'password' => ['required', 'confirmed', Rules\Password::defaults()], // Contraseña segura
-                    'role' => ['required', 'string', 'exists:roles,name'], // El rol debe existir en la tabla roles
-                    'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'] // Validación para la imagen
-                ]);
-            
-                // GUARDAR LA IMAGEN SI SE HA SUBIDO
-                if ($request->hasFile('image')) {
-                    $rutaImagen = $request->file('image')->store('imagenes_usuarios', 'public'); 
-                } else {
-                    $rutaImagen = null;
-                }
-            
-                // CREACIÓN DEL USUARIO
-                $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'image' => $rutaImagen
-                ]);
-            
-                // ASIGNAR ROL AL USUARIO
-                $user->assignRole($request->role); // Asigna el rol que se selecciona
-            
-                // REDIRECCIÓN CON MENSAJE DE ÉXITO
-                return redirect()->route('usuarios.index')
-                    ->with('message', 'Usuario registrado correctamente.')
-                    ->with('icono', 'success');
-            }
+
+    //Aplicamos capa de seguridad con el rol Admin.
+    public function __construct()
+    {
+        $this->middleware('role:Admin');
+    }
 
 
+    // Método para registrar un usuario
+    public function register(Request $request)
+    {
+        //Verificamos permisos
+        $this->authorize('crear usuarios');
 
-    //Función para mostrar la vista usuarios con la lista de usuarios y roles
-    public function index (Request $request) {
+        // Comprobamos que no se repita el correo
+        if (User::where('email', $request->email)->exists()) {
+            return redirect()->route('usuarios.index')
+                ->with('message', 'Error al crear usuario. El correo ya está registrado.')
+                ->with('icono', 'error');
+        }
 
-        $users = User::with('roles')->get(); //Se pasan los usuarios a la vista
-        $roles = Role::all(); // Aquí obtenemos todos los roles para pasarlos a la vistaç
-        //Redirijimos con el mensaje que viene desde la función de registro. P
+        // Validación de datos
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'string', 'exists:roles,name'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048']
+        ]);
+
+        // Guardar la imagen si se ha subido
+        $rutaImagen = $request->hasFile('image') 
+            ? $request->file('image')->store('imagenes_usuarios', 'public') 
+            : null;
+
+        // Creación del usuario
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'image' => $rutaImagen
+        ]);
+
+        // Asignar rol al usuario
+        $user->assignRole($request->role);
+
+        return redirect()->route('usuarios.index')
+            ->with('message', 'Usuario registrado correctamente.')
+            ->with('icono', 'success');
+    }
+
+    // Método para mostrar la lista de usuarios
+    public function index()
+    {
+        $this->authorize('ver usuarios');
+
+        $users = User::with('roles')->get(); // Carga los usuarios con sus roles
+        $roles = Role::all(); // Obtiene todos los roles
+
         return view('modulos.usuarios.usuarios', compact('users', 'roles'))
-        ->with('message', session('message'))
-        ->with('icono', session('icono'));
-
-
+            ->with('message', session('message'))
+            ->with('icono', session('icono'));
     }
 
+    // Método para ver un usuario en detalle
+    public function show(User $user)
+    {
+        $this->authorize('ver usuarios');
 
-
-    public function show ($id) {
-
-        $user = User::findOrFail($id);
         return view('modulos.usuarios.usuario-datos', compact('user'));
-
     }
 
+    // Método para cambiar el estado activo/inactivo de un usuario
+    public function changeActive(User $user)
+    {
+        $this->authorize('editar usuarios');
 
-
-    //Función para actualizar el estado booleano de la columna active del usuario
-    public function changeActive ($id) {
-        $user = User::findOrFail($id);
         $user->active = !$user->active;
         $user->save();
 
         return redirect()->back()
-        ->with('message', 'El estado del usuario ha cambiado.')
-        ->with('icono', 'info');	
-
+            ->with('message', 'El estado del usuario ha cambiado.')
+            ->with('icono', 'info');
     }
 
+    // Método para eliminar un usuario
+    public function destroy(User $user)
+    {
+        $this->authorize('eliminar usuarios');
 
-    //Borra al usuario
-    public function destroy ($id) {
-        $user = User::findOrFail($id);
         $user->delete();
         return redirect()->back()
-        ->with('message', 'Usuario eliminado correctamente.')
-        ->with('icono', 'success');
-
+            ->with('message', 'Usuario eliminado correctamente.')
+            ->with('icono', 'success');
     }
 
+    // Método para mostrar el formulario de edición de usuario
+    public function edit(User $user)
+    {
+        $this->authorize('editar usuarios');
 
-    //Devuelve la vista para la edición de usuario con los datos del usuario y los roles para el desplegable
-    public function edit ($id) {
-
-        $user = User::findOrFail($id);
-        $rol = $user->getRoleNames()->first() ?? ``; //Envio el rol con el usuario.
+        $rol = $user->getRoleNames()->first() ?? ''; // Obtiene el rol del usuario
         $roles = Role::all();
-        return view('modulos.usuarios.usuarios-editar', compact('user', 'rol', 'roles'));
 
+        return view('modulos.usuarios.usuarios-editar', compact('user', 'rol', 'roles'));
     }
 
+    // Método para actualizar la información de un usuario
+    public function update(Request $request, User $user)
+    {
+        $this->authorize('editar usuarios');
 
-    public function update(Request $request, $id) {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'required|email|unique:users,email,' . $user->id,
             'rol' => 'required|string',
         ]);
-    
-        $user = User::findOrFail($id);
+
         $user->name = $request->name;
         $user->email = $request->email;
         $user->save();
-    
+
         $user->syncRoles([$request->rol]);
-    
-        return redirect()->route('usuarios.index')->with('message', 'Usuario actualizado correctamente.');
+
+        return redirect()->route('usuarios.index')
+            ->with('message', 'Usuario actualizado correctamente.')
+            ->with('icono', 'success');
     }
-    
-        
 }
