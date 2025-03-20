@@ -50,7 +50,7 @@ Route::patch('/usuarios/{id}/active' , [UserController::class, 'changeActive'])-
 Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy');
 
 
-//Ruta para editar información de usuario
+//Ruta para editar información de usuario. Accedo a vista con formulario
 Route::get('/usuarios/{id}/editar', [UserController::class, 'showEditForm'])->name('usuarios.edit');
 
 //Ruta para editar información de usuario
