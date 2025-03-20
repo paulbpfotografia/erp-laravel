@@ -1,3 +1,48 @@
+{{-- 
+
+
+
+INSTUCCIONES DE USO:
+
+Con esta plantilla crearemos formularios dinámicos. Así, si queremos modificar algo, se hará desde aquí.
+
+Este es un ejemplo de como funciona. En la vista Blade deberíamos crear un código como este:
+
+INCLUIMOS EN FORMULARIO EN LA VISTA
+@include('partials.formulario', [
+    //DECIMOS LA ACCIÓN QUE HARÁ. PASAMOS PARÁMETROS SI ES NECESARIO
+    'accion' => route('usuarios.update', $user->id),
+    //INDICAMOS MÉTODO. ESTO ES ÚTIL PARA LOS PUT Y PATCH. SI NO, SE RECOGE POST
+    'metodo' => 'PUT',
+    //CREAMOS UN ARRAY DE CAMPOS. Y LOS COMPLETAMOS CON SU NOMBRE, TIPO Y SI ES REQUERIDO EL CAMPO O NO.
+
+    //ESTÁN CONTEMPLADOS TODOS LOS CAMPOS
+    'campos' => [
+        ['nombre' => 'name', 'etiqueta' => 'Nombre', 'tipo' => 'text', 'requerido' => true],
+
+        ['nombre' => 'email', 'etiqueta' => 'Correo Electrónico', 'tipo' => 'email', 'requerido' => true],
+        [
+            'nombre' => 'rol', 
+            'etiqueta' => 'Rol', 
+            'tipo' => 'select', 
+            //SI ES UN SELECT, DEBEMOS TRAER LOS DATOS Y CONVERTIRLOS EN UN ARRAY
+            'opciones' => $roles->pluck('name', 'name')->toArray(), //Extraemos los roles como array para el select, y asignamos lo mismo en clave y en valor
+            'requerido' => true
+        ]
+    ],
+    'valores' => [
+        'name' => $user->name,
+        'email' => $user->email,
+        'rol' => $user->roles->first()->name ?? ''
+    ],
+    //AÑADIMOS EL TEXTO DEL BOTÓN DE CONFIRMAR BOTÓN
+    'textoBoton' => 'Guardar Cambios'
+])
+
+ --}}
+
+
+
 <!-- Formulario POST. Si lleva otro método, lo cambiamos abajo. Enctype para permitir subida de archivos -->
 <form method="POST" action="{{ $accion }}" enctype="multipart/form-data">
     @csrf
