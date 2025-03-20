@@ -4,47 +4,37 @@
 
 @section('content')
 
-
 <div class="container mt-4">
     <div class="card shadow-lg border-0 rounded-4">
         <div class="card-header bg-warning text-white">
             <h4 class="mb-0">Editar Usuario: {{ $user->name }}</h4>
         </div>
         <div class="card-body p-4">
-            <form method="POST" action="{{ route('usuarios.update', $user->id) }}">
-                @csrf
-                @method('PUT')
-            
-                <!-- Nombre -->
-                <div class="mb-3">
-                    <label for="nombre" class="form-label">Nombre</label>
-                    <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre', $user->name) }}" required>
-                </div>
-            
-                <!-- Correo Electrónico -->
-                <div class="mb-3">
-                    <label for="email" class="form-label">Correo Electrónico</label>
-                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email', $user->email) }}" required>
-                </div>
-            
-                <!-- Selección de Rol -->
-                <div class="mb-3">
-                    <label for="rol" class="form-label">Selecciona un nuevo rol</label>
-                    <select id="rol" name="rol" class="form-control">
-                        <option value="Admin" {{ $rol == 'Admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="Gerente" {{ $rol == 'Gerente' ? 'selected' : '' }}>Gerente</option>
-                        <option value="Empleado" {{ $rol == 'Empleado' ? 'selected' : '' }}>Empleado</option>
-                        <option value="Directivo" {{ $rol == 'Directivo' ? 'selected' : '' }}>Directivo</option>
-                    </select>
-                </div>
-                
 
-                <!-- Botón de Guardar Cambios -->
-                <div class="text-center">
-                    <button type="submit" class="btn btn-success btn-lg">Guardar Cambios</button>
-                </div>
-            </form>
-            
+            @include('partials.formulario', [
+                'accion' => route('usuarios.update', $user->id), 
+                'metodo' => 'PUT',
+                'campos' => [
+                    ['nombre' => 'name', 'etiqueta' => 'Nombre', 'tipo' => 'text', 'requerido' => true],
+
+                    ['nombre' => 'email', 'etiqueta' => 'Correo Electrónico', 'tipo' => 'email', 'requerido' => true],
+                    [
+                        'nombre' => 'rol', 
+                        'etiqueta' => 'Rol', 
+                        'tipo' => 'select', 
+                        'opciones' => $roles->pluck('name', 'name')->toArray(), //Extraemos los roles como array para el select, y asignamos lo mismo en clave y en valor
+                        'requerido' => true
+                    ]
+                ],
+                'valores' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'rol' => $user->roles->first()->name ?? ''
+                ],
+                'textoBoton' => 'Guardar Cambios'
+            ])
+
+        </div>
         <div class="card-footer text-end">
             <a href="{{ route('usuarios.index') }}" class="btn btn-outline-secondary">Volver</a>
         </div>
@@ -52,5 +42,3 @@
 </div>
 
 @endsection
-
-

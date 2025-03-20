@@ -109,30 +109,29 @@ class UserController extends Controller
     public function showEditForm ($id) {
 
         $user = User::findOrFail($id);
-        $rol = $user->getRoleNames()->first() ?? ``; //Envio el rol con el usuario. Con ?? '' 
-        return view('modulos.usuarios.usuarios-editar', compact('user', 'rol'));
+        $rol = $user->getRoleNames()->first() ?? ``; //Envio el rol con el usuario.
+        $roles = Role::all();
+        return view('modulos.usuarios.usuarios-editar', compact('user', 'rol', 'roles'));
 
     }
 
 
-
-    public function update (Request $request, $id) {
-            $request->validate([
-                'nombre' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email,' . $id,
-                'rol' => 'required|string',
-            ]);
-        
-            $user = User::findOrFail($id);
-            $user->update([
-                'name' => $request->nombre,
-                'email' => $request->email,
-            ]);
-            
-            //Al estar en una tabla intermedia, actualizo los roles así.
-            $user->syncRoles([$request->rol]);
-
-            return redirect()->route('usuarios.index')->with('message', 'Usuario actualizado correctamente.');
-        }
+    public function update(Request $request, $id) {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'rol' => 'required|string',
+        ]);
+    
+        $user = User::findOrFail($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
+    
+        $user->syncRoles([$request->rol]);
+    
+        return redirect()->route('usuarios.index')->with('message', 'Usuario actualizado correctamente.');
+    }
+    
         
 }

@@ -25,7 +25,7 @@ class UsersTableSeeder extends Seeder
 
       
         $empleado1 = User::create([
-            'name' => 'Empleado',
+            'name' => 'Empleado1',
             'email' => 'empleado1@empleado.com',
             'password' => Hash::make('12345678'),
             'image' => 'imagenes_usuarios/empleado_imagen.webp'
@@ -33,7 +33,7 @@ class UsersTableSeeder extends Seeder
         $empleado1->assignRole('Empleado');
 
         $empleado2 = User::create([
-            'name' => 'Empleado',
+            'name' => 'Empleado2',
             'email' => 'empleado2@empleado.com',
             'password' => Hash::make('12345678'),
             'image' => null, 

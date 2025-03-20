@@ -22,7 +22,6 @@
                     <table class="table table-striped table-bordered table-hover text-center align-middle">
                         <thead class="thead-light">
                             <tr class="bg-primary text-white">
-                                <th class="fw-bold">Foto</th> 
                                 <th class="fw-bold">Nombre</th>
                                 <th class="fw-bold">Email</th>
                                 <th class="fw-bold">Rol</th>
@@ -33,14 +32,7 @@
                             @foreach ($users as $user)
                                 @if($user->active)
                                     <tr>
-                                        <!-- Mostrar la imagen del usuario -->
-                                        <td>
-                                            @if($user->foto)
-                                                <img src="{{ asset($user->foto) }}" alt="Foto de {{ $user->name }}" class="img-thumbnail" width="50">
-                                            @else
-                                                <i class="bi bi-person-circle text-secondary" style="font-size: 1.5rem;"></i>
-                                            @endif
-                                        </td>
+                                      
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->roles->first()->name }}</td>
@@ -83,7 +75,6 @@
                     <table class="table table-striped table-bordered table-hover text-center align-middle">
                         <thead class="thead-light">
                             <tr class="bg-secondary text-white">
-                                <th class="fw-bold">Foto</th>
                                 <th class="fw-bold">Nombre</th>
                                 <th class="fw-bold">Email</th>
                                 <th class="fw-bold">Rol</th>
@@ -95,13 +86,7 @@
                                 @if(!$user->active)
                                     <tr>
                                         <!-- Mostrar la imagen del usuario -->
-                                        <td>
-                                            @if($user->foto)
-                                                <img src="{{ asset($user->foto) }}" alt="Foto de {{ $user->name }}" class="img-thumbnail" width="50">
-                                            @else
-                                                <i class="bi bi-person-circle text-secondary" style="font-size: 1.5rem;"></i>
-                                            @endif
-                                        </td>
+                                     
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->roles->first()->name }}</td>
@@ -153,77 +138,20 @@
 
             <!-- Modal Body -->
             <div class="modal-body p-4">
-                <form method="POST" action="{{ route('usuarios.registrar.store') }}">
-                    @csrf
-
-                    <!-- Nombre -->
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nombre</label>
-                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                            name="name" value="{{ old('name') }}" required autofocus>
-                        @error('name')
-                            <span class="invalid-feedback">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-
-                    <!-- Correo Electrónico -->
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Correo Electrónico</label>
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                            name="email" value="{{ old('email') }}" required>
-                        @error('email')
-                            <span class="invalid-feedback">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-
-                    <!-- Contraseña -->
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Contraseña</label>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                            name="password" required>
-                        @error('password')
-                            <span class="invalid-feedback">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-
-                    <!-- Confirmación de Contraseña -->
-                    <div class="mb-3">
-                        <label for="password-confirm" class="form-label">Confirmar Contraseña</label>
-                        <input id="password-confirm" type="password" class="form-control"
-                            name="password_confirmation" required>
-                    </div>
-
-                    
-
-                    <!-- Selección de Rol -->
-                    <div class="mb-3">
-                        <label for="role" class="form-label">Rol</label>
-                        <select id="role" name="role" class="form-control @error('role') is-invalid @enderror" required>
-                            <option value="" disabled selected>Seleccione un rol</option>
-                            @foreach($roles as $role)
-                                <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
-                            @endforeach
-                        </select>
-                        @error('role')
-                            <span class="invalid-feedback">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-
-                    <!-- Botón de Registrar -->
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-success btn-lg">
-                            Registrar
-                        </button>
-                    </div>
-                </form>
+                @include('partials.formulario', [
+                    'accion' => route('usuarios.registrar.store'),
+                    'metodo' => 'POST',
+                    'campos' => [
+                        ['nombre' => 'name', 'etiqueta' => 'Nombre', 'tipo' => 'text', 'requerido' => true],
+                        ['nombre' => 'email', 'etiqueta' => 'Correo Electrónico', 'tipo' => 'email', 'requerido' => true],
+                        ['nombre' => 'password', 'etiqueta' => 'Contraseña', 'tipo' => 'password', 'requerido' => true],
+                        ['nombre' => 'password_confirmation', 'etiqueta' => 'Confirmar Contraseña', 'tipo' => 'password', 'requerido' => true],
+                        ['nombre' => 'image', 'etiqueta' => 'Foto de Perfil', 'tipo' => 'file', 'requerido' => false], 
+                        ['nombre' => 'role', 'etiqueta' => 'Rol', 'tipo' => 'select', 'opciones' => $roles->pluck('name', 'name')->toArray()]
+                    ],
+                    'valores' => [],
+                    'textoBoton' => 'Registrar Usuario'
+                ])
             </div>
 
             <!-- Modal Footer -->
