@@ -59,6 +59,20 @@
                         <li class="list-group-item fw-bold">
                             Registrado desde: <span class="fw-normal">{{ $user->created_at }}</span>
                         </li>
+                        <li class="list-group-item fw-bold">
+                            Rol: <span class="fw-normal">{{ $user->roles->first()->name ?? 'Sin rol asignado' }}</span>
+                        </li>
+                        <li class="list-group-item fw-bold">
+                          Permisos: <ul>
+                            @foreach ($user->roles as $role)
+                                <ul>
+                                    @foreach ($role->permissions as $permission)
+                                        <li>{{ $permission->name }}</li>
+                                    @endforeach
+                                </ul>
+                            @endforeach
+                        </ul>
+                        </li>
                        
                     </ul>
                 </div>
