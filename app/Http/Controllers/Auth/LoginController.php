@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
 
 
 class LoginController extends Controller
@@ -54,7 +56,7 @@ class LoginController extends Controller
         // Validación personalizada
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
         ]);
 
         // Intentar autenticación con los datos del request
@@ -66,7 +68,9 @@ class LoginController extends Controller
                 return redirect()->back()->withErrors(['message' => 'Tu cuenta está deshabilitada. Contacte con un administrador']);
             }
 
-            return redirect()->intended('/home'); // Redirigir a una ruta personalizada
+            $user = User::All();
+            
+            return redirect('/home')->with('message', '¡Has iniciado sesión correctamente!');
         }
 
         // Si falla el login, volver con un error
