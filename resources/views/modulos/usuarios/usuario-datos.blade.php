@@ -3,36 +3,36 @@
 @section('title', 'Detalles del Usuario')
 
 @section('content')
-<div class="container mt-4">
-    <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-header bg-primary text-white">
-            <h3 class="mb-0">Detalles del Usuario</h3>
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card shadow-lg border-0 rounded-4 text-center" style="width: 35rem;">
+        <div class="card-header bg-primary text-white p-2">
+            <h4 class="mb-0">Detalles del Usuario</h4>
         </div>
-        <div class="card-body p-4">
+        <div class="card-body p-3">
+
+            <!-- Imagen del usuario con tamaño ajustado -->
             <div class="mb-3">
-                <label class="fw-bold">ID:</label>
-                <p>{{ $user->id }}</p>
+                @if($user->image)
+                    <img src="{{ asset('storage/' . $user->image) }}" 
+                        class="img-thumbnail rounded-circle shadow"
+                        style="width: 120px; height: 120px; object-fit: cover;">
+                @else
+                <img src="{{ asset('storage/imagenes_usuarios/anonimo_imagen.jpg') }}" 
+                class="img-thumbnail rounded-circle shadow"
+                style="width: 120px; height: 120px; object-fit: cover;">
+                @endif
             </div>
 
-            <div class="mb-3">
-                <label class="fw-bold">Nombre:</label>
-                <p>{{ $user->name }}</p>
-            </div>
-
-            <div class="mb-3">
-                <label class="fw-bold">Correo Electrónico:</label>
-                <p>{{ $user->email }}</p>
-            </div>
-
-            <div class="mb-3">
-                <label class="fw-bold">Rol:</label>
-                <p>{{ $user->roles->first()->name }}</p>
-            </div>
-
-            <div class="mb-3">
-                <label class="fw-bold">Estado:</label>
-                <p class="{{ $user->active ? 'text-success' : 'text-danger' }}">
-                    {{ $user->active ? 'Activo' : 'Inactivo' }}
+            <!-- Datos del usuario -->
+            <div class="text-center">
+                <p><strong>ID:</strong> <span class="text-muted">{{ $user->id }}</span></p>
+                <p><strong>Nombre:</strong> <span class="text-muted">{{ $user->name }}</span></p>
+                <p><strong>Correo Electrónico:</strong> <span class="text-muted">{{ $user->email }}</span></p>
+                <p><strong>Rol:</strong> <span class="text-muted">{{ $user->roles->first()->name }}</span></p>
+                <p><strong>Estado:</strong> 
+                    <span class="{{ $user->active ? 'text-success fw-bold' : 'text-danger fw-bold' }}">
+                        {{ $user->active ? 'Activo' : 'Inactivo' }}
+                    </span>
                 </p>
             </div>
 
@@ -41,14 +41,14 @@
                 @csrf
                 @method('PATCH')
                 @can('activar usuarios')
-                <button type="submit" class="btn btn-{{ $user->active ? 'danger' : 'success' }}">
+                <button type="submit" class="btn btn-{{ $user->active ? 'danger' : 'success' }} btn-sm">
                     {{ $user->active ? 'Deshabilitar' : 'Habilitar' }}
                 </button>
                 @endcan
             </form>
         </div>
-        <div class="card-footer text-end">
-            <a href="{{ route('usuarios.index') }}" class="btn btn-outline-secondary">Volver</a>
+        <div class="card-footer text-center p-2">
+            <a href="{{ route('usuarios.index') }}" class="btn btn-outline-secondary btn-sm">Volver</a>
         </div>
     </div>
 </div>

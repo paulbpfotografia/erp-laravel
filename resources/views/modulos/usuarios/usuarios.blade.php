@@ -199,6 +199,8 @@
                             name="password_confirmation" required>
                     </div>
 
+                    
+
                     <!-- Selección de Rol -->
                     <div class="mb-3">
                         <label for="role" class="form-label">Rol</label>
