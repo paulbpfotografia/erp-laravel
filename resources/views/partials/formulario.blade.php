@@ -112,7 +112,7 @@ INCLUIMOS EN FORMULARIO EN LA VISTA
 
  <!-- Botón de envío -->
 <div class="text-center">
-    <button type="submit" class="btn btn-success btn-lg" onclick="console.log('Formulario enviado');">
+    <button type="submit" class="btn btn-success btn-lg">
         {{ $textoBoton }} <!-- Texto del botón de envío -->
     </button>
 </div>

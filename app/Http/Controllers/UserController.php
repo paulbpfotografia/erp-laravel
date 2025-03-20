@@ -106,7 +106,7 @@ class UserController extends Controller
 
 
     //Devuelve la vista para la edición de usuario con los datos del usuario y los roles para el desplegable
-    public function showEditForm ($id) {
+    public function edit ($id) {
 
         $user = User::findOrFail($id);
         $rol = $user->getRoleNames()->first() ?? ``; //Envio el rol con el usuario.

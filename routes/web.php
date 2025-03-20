@@ -4,6 +4,7 @@ use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PruebaController;
 use App\Http\Controllers\Auth\LoginController; // 👈 Agrega esta línea
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 
 
@@ -18,12 +19,23 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 
 
+//RUTA DE PEDIDO
+Route::get('/pedidos', [OrderController::class, 'index'])->name('pedidos.index');
+
+
+
 
 
 //RUTA DE PRODUCTO
-Route::get('producto/vista', [ProductController::class, 'producto'])->name('producto.vista');
+Route::get('/productos', [ProductController::class, 'index'])->name('productos.index');
 
-Route::resource('producto', ProductController::class);
+
+
+
+
+
+
+
 
 
 
@@ -51,7 +63,7 @@ Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuar
 
 
 //Ruta para editar información de usuario. Accedo a vista con formulario
-Route::get('/usuarios/{id}/editar', [UserController::class, 'showEditForm'])->name('usuarios.edit');
+Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('usuarios.edit');
 
 //Ruta para editar información de usuario
 Route::put('/usuarios/{id}/editar', [UserController::class, 'update'])->name('usuarios.update');

@@ -19,5 +19,11 @@ class Product extends Model
         'category_id',
     ];
 
+    public function orders() {
+
+        return $this->belongsTo(Order::class);
+
+    }
+
 
 }

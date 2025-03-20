@@ -11,7 +11,7 @@
 
         <!-- Opción de menú para Productos -->
         <li class="nav-item">
-            <a class="nav-link text-white" href="{{ route('producto.vista') }}">
+            <a class="nav-link text-white" href="{{ route('productos.index') }}">
                 <i class="bi bi-box-fill"></i> PRODUCTO
             </a>
         </li>

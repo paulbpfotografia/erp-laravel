@@ -12,10 +12,10 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto">
-                <!-- Botón rojo con imagen, nombre y dropdown -->
+                <!-- Botón rojo con imagen y nombre del user -->
                 <li class="nav-item dropdown">
                     <button type="button" class="btn btn-danger dropdown-toggle d-flex align-items-center px-3" data-bs-toggle="dropdown" aria-expanded="false">
-                        <!-- Imagen de perfil o icono por defecto -->
+                        <!-- Imagen de perfil -->
                         @if(Auth::user()->image)
                             <img src="{{ asset('storage/' . Auth::user()->image) }}" class="rounded-circle me-2" width="35" height="35">
                         @else
@@ -26,8 +26,8 @@
 
                     <!-- Menú desplegable -->
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Perfil</a></li>
-                        <li><a class="dropdown-item" href="#">Configuración</a></li>
+                        <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+                        <li><a class="dropdown-item" href="#">Modo Oscruo</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item" href="{{ route('logout') }}"
