@@ -1,17 +1,20 @@
 @extends('layouts.main_layout')
 
-@section('title', 'Gestión Usuarios')
+@section('title', 'Gestión de pedidos')
 
 @section('content')
 
 <section class="content">
     <div class="box">
+        @can('crear pedidos')
         <div class="box-header with-border">
-            <!-- Botón Registrar Usuario con margen para dar espacio -->
-            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarPedido">
+            <!-- Botón Registrar Pedido -->
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarPedidos">
                 Crear Pedido
             </button>
-        </div>
+        </div>     
+        @endcan
+       
 
         <div class="box-body">
             <div class="container mt-4">
@@ -107,33 +110,75 @@
 
 
 <!-- MODAL AGREGAR PEDIDO -->
-<div class="modal fade" id="modalAgregarUsuarios" aria-hidden="true">
+<div class="modal fade" id="modalAgregarPedidos" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content shadow-lg border-0 rounded-4">
 
             <!-- Modal Header -->
             <div class="modal-header bg-primary text-white rounded-top">
-                <h4 class="modal-title" id="modalUsuariosAgregarLabel">Registro de Usuario</h4>
+                <h4 class="modal-title" id="modalPedidosAgregarLabel">Registro de Usuario</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
             <!-- Modal Body -->
             <div class="modal-body p-4">
-                @include('partials.formulario', [
-                    'accion' => route('usuarios.registrar.store'),
-                    'metodo' => 'POST',
-                    'campos' => [
-                        ['nombre' => 'name', 'etiqueta' => 'Nombre', 'tipo' => 'text', 'requerido' => true],
-                        ['nombre' => 'email', 'etiqueta' => 'Correo Electrónico', 'tipo' => 'email', 'requerido' => true],
-                        ['nombre' => 'password', 'etiqueta' => 'Contraseña', 'tipo' => 'password', 'requerido' => true],
-                        ['nombre' => 'password_confirmation', 'etiqueta' => 'Confirmar Contraseña', 'tipo' => 'password', 'requerido' => true],
-                        ['nombre' => 'image', 'etiqueta' => 'Foto de Perfil', 'tipo' => 'file', 'requerido' => false], 
-                        ['nombre' => 'role', 'etiqueta' => 'Rol', 'tipo' => 'select', 'opciones' => $roles->pluck('name', 'name')->toArray()]
-                    ],
-                    'valores' => [],
-                    'textoBoton' => 'Registrar Usuario'
-                ])
-            </div>
+                <form action="{{ route('pedidos.store') }}" method="POST">
+                    @csrf
+                
+                    <!-- LISTAD DE CLIENTES -->
+                    <label for="customer_id">Cliente</label>
+                    <select name="customer_id" class="form-control" required>
+                        <option value="" disabled selected>Seleccione un cliente</option>
+                        @foreach ($customers as $customer)
+                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                        @endforeach
+                    </select>
+
+                    <div class="accordion" id="accordionCategorias">
+                        @foreach ($categories as $category)
+                            @php
+                            //Identificamos dinamicamente los ID para poder colapsar los accordion de 1 en 1.
+                                $collapseId = 'collapseCategoria' . $category->id;
+                                $headingId = 'headingCategoria' . $category->id;
+                            @endphp
+
+                            {{-- Creamos el accordion de cada categoría --}}
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="{{ $headingId }}">
+                                    <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#{{ $collapseId }}"
+                                            aria-expanded="false"
+                                            aria-controls="{{ $collapseId }}">
+                                        {{ $category->name }}
+                                    </button>
+                                </h2>
+
+                                <div id="{{ $collapseId }}" class="accordion-collapse collapse"
+                                     aria-labelledby="{{ $headingId }}" data-bs-parent="#accordionCategorias">
+
+                                     {{-- Para cada categoria - accordion, le ponemos todos los productos que pertenecen a esa categoría para poder seleccionar cantidad y producto --}}
+
+                                    <div class="accordion-body">
+                                        @foreach ($category->products as $product)
+                                            <div class="form-group d-flex align-items-center mb-2">
+                                                <input type="checkbox" name="productos[]" value="{{ $product->id }}">
+                                                <span class="ms-2">{{ $product->name }} - ${{ $product->price }}</span>
+                                                <input type="number" name="cantidades[{{ $product->id }}]"
+                                                       class="form-control ms-3" placeholder="Cantidad" max="{{ $product->stock }}" style="width: 300px;">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    
+                   
+                    <button type="submit" class="btn btn-primary mt-3">Crear Pedido</button>
+                </form>
+                
 
             <!-- Modal Footer -->
             <div class="modal-footer">

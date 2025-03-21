@@ -21,15 +21,13 @@ class Order extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    // Si más adelante usas tabla intermedia
+    // Relación tabla intermedia
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('quantity', 'total_price');
+        return $this->belongsToMany(Product::class)->withPivot('quantity', 'unit_price')->withTimestamps();
     }
 
 
-
-    // Relación con factura, si cada pedido tiene una factura
     public function invoice()
     {
         return $this->hasOne(Invoice::class);

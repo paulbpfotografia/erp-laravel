@@ -7,7 +7,7 @@
 <section class="content">
     <div class="box">
         <div class="box-header with-border">
-            <!-- Botón Registrar Usuario con margen para dar espacio -->
+            <!-- Botón Registrar Usuario -->
             <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarUsuarios">
                 Registrar Usuario
             </button>

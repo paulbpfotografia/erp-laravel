@@ -2,31 +2,34 @@
     <h4 class="text-center mb-4">ERP</h4> <!-- Título centrado del sistema -->
     <ul class="nav flex-column"> <!-- Lista de navegación vertical -->
 
+
         <!-- Opción de menú para inicio -->
         <li class="nav-item">
-            <a class="nav-link text-white" href="#">
-                <i class="bi bi-house-door-fill"></i> PANEL DE CONTROL
+            <a class="nav-link text-white" href="{{ route('home') }}">
+                <i class="bi bi-house-door-fill"></i> Home
             </a>
         </li>
 
+
         <!-- Opción de menú para Productos -->
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link text-white" href="{{ route('productos.index') }}">
                 <i class="bi bi-box-fill"></i> PRODUCTO
             </a>
-        </li>
+        </li> --}}
+
 
         <!-- Opción de menú para Clientes -->
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link text-white disabled">
                 <i class="bi bi-person-fill"></i> CLIENTE
             </a>
-        </li>
+        </li> --}}
 
         <!-- Opción de menú para Pedidos -->
         <li class="nav-item">
-            <a class="nav-link text-white disabled">
-                <i class="bi bi-file-earmark-binary-fill"></i> PEDIDO
+            <a class="nav-link text-white" href="{{ route('pedidos.index') }}">
+                <i class="bi bi-file-earmark-binary-fill"></i> Gestión de pedidos
             </a>
         </li>
      
@@ -37,7 +40,7 @@
 
         <li class="nav-item">
             <a class="nav-link text-white" href="{{ route('usuarios.index') }}">
-                <i class="bi bi-people-fill"></i> GESTIÓN DE USUARIOS
+                <i class="bi bi-people-fill"></i> Gestión de usuarios
             </a>
         </li>
         @endrole

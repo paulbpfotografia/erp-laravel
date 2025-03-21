@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Customer;
+use App\Models\Product;
+use App\Models\Category;
+
+
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Can;
 
@@ -15,7 +20,12 @@ class OrderController extends Controller
     {
         $this->authorize('ver pedidos');
         $orders = Order::all();
-        return view('modulos.pedidos.pedidos',compact('orders'));
+        $customers = Customer::all();
+        $products = Product::with('stock')->get();
+        $categories = Category::with('products.stock')->get();
+
+
+        return view('modulos.pedidos.pedidos',compact('orders','customers', 'products', 'categories'));
     }
 
     /**

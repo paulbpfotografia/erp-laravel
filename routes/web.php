@@ -19,45 +19,83 @@ Route::middleware(['auth'])->group(function () {
     // Ruta página home. Página a la que el usuario es redirigido tras el login
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-    // RUTA DE PEDIDO
+
+
+
+
+
+
+
+    // RUTAS DE PEDIDO
+        //Listar pedidos
     Route::get('/pedidos', [OrderController::class, 'index'])
         ->middleware('permission:ver pedidos')->name('pedidos.index');
 
-    Route::get('/pedidos/{id}/editar', [OrderController::class, 'edit'])
+        //Crear un pedido
+        Route::post('/pedidos', [OrderController::class, 'store'])
+        ->middleware('permission:crear pedidos')->name('pedidos.store');
+
+        //mostrar página para editar pedidos
+    Route::get('/pedidos/{order}/editar', [OrderController::class, 'edit'])
         ->middleware('permission:editar pedidos')->name('pedidos.edit');
 
+        //Mostrar información de un pedido en concreto
     Route::get('/pedidos/{order}', [OrderController::class, 'show'])
         ->middleware('permission:ver pedidos')->name('pedidos.show');
 
+        //Eliminar un pedido
     Route::delete('/pedidos/{order}', [OrderController::class, 'destroy'])
         ->middleware('permission:eliminar pedidos')->name('pedidos.destroy');
 
-    // RUTA DE PRODUCTO
+     
+
+
+
+
+
+    // RUTAS DE PRODUCTO
     Route::get('/productos', [ProductController::class, 'index'])
         ->name('productos.index');
 
-    // Rutas Gestión de Usuarios del ERP. Protegida para rol ADMIN
+
+
+
+
+
+
+
+
+
+
+
+    // Rutas Gestión de Usuarios. Protegida para rol ADMIN
     Route::group(['middleware' => ['role:Admin']], function () {
+        //Registrar un usuario
         Route::post('/usuarios/registrar', [UserController::class, 'register'])
             ->name('usuarios.registrar.store');
-
+        //Listar usuarios
         Route::get('/usuarios', [UserController::class, 'index'])
             ->name('usuarios.index');
-
+        //Mostrar información sobre un usuario
         Route::get('/usuarios/{user}', [UserController::class, 'show'])
             ->name('usuarios.show');
-
+        //Cambiar columna active de cada usuario para habilitar o deshabilitar
         Route::patch('/usuarios/{user}/active', [UserController::class, 'changeActive'])
             ->name('usuarios.changeActive');
-
+        //Eliminar usuarios
         Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])
             ->name('usuarios.destroy');
-
+        //Recuperar vista de formulario para editar usuario
         Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])
             ->name('usuarios.edit');
-
+        //Actualizar usuario
         Route::put('/usuarios/{user}/editar', [UserController::class, 'update'])
             ->name('usuarios.update');
     });
+
+
+
+
+
 
 });
