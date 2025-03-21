@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CostumerTableSeeder extends Seeder
+class CustomerTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class CostumerTableSeeder extends Seeder
     public function run(): void
     {
         //Datos de prueba
-        DB::table('costumers')->insert([
+        DB::table('customers')->insert([
             ['name' => 'Carlos Ramírez', 'cif' => 'A87654321', 'address' => 'Calle Gran Vía 45, Madrid', 'phone' => '600-123456', 'email' => 'carlosr@example.com'],
             ['name' => 'Elisa Gómez', 'cif' => 'B11223344', 'address' => 'Avenida del Cid 23, Valencia', 'phone' => '600-654321', 'email' => 'elisag@example.com'],
             ['name' => 'Manuel Fernández', 'cif' => 'C55667788', 'address' => 'Paseo Marítimo 89, Málaga', 'phone' => '600-789012', 'email' => 'manuelf@example.com'],

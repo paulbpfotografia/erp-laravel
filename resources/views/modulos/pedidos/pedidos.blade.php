@@ -106,7 +106,7 @@
 
 
 
-{{-- <!-- MODAL AGREGAR USUARIO -->
+<!-- MODAL AGREGAR PEDIDO -->
 <div class="modal fade" id="modalAgregarUsuarios" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content shadow-lg border-0 rounded-4">
@@ -142,7 +142,7 @@
 
         </div>
     </div>
-</div> --}}
+</div>
 
 
 

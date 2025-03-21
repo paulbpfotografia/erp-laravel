@@ -16,7 +16,7 @@ return new class extends Migration
             $table->date('order_date');
             $table->enum('status', ['preparado', 'pendiente', 'enviado', 'entregado', 'cancelado']);
             $table->decimal('total', 10, 2);
-            $table->foreignId('costumer_id')->constrained('costumers');
+            $table->foreignId('customer_id')->constrained('customers');
             $table->timestamps();
         });
     }

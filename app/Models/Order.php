@@ -7,24 +7,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-      
     use HasFactory;
-    protected $table = 'orders';
 
     protected $fillable = [
         'order_date',
         'status',
         'total',
-        'costumer_id',
+        'customer_id',
     ];
 
-    public function products() {
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 
-        return $this->hasMany(Product::class);
-
+    // Si más adelante usas tabla intermedia
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)->withPivot('quantity', 'total_price');
     }
 
 
 
-
+    // Relación con factura, si cada pedido tiene una factura
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 }
