@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,11 +21,17 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
+    
+    
     public function boot(): void
     {
-        // verificamos si existe el enlace simbólico para las imágenes, y si no se crea automático.
-        if (!Storage::exists('public')) {
-            Artisan::call('storage:link');    }
+        $publicStoragePath = public_path('storage');
+    
+        // Si el enlace simbólico no existe, lo creamos
+        if (!File::exists($publicStoragePath)) {
+            Artisan::call('storage:link');
         }
+    }
+    
 
 }

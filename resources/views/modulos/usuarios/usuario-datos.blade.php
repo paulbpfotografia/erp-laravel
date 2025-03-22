@@ -17,7 +17,8 @@
                         class="img-thumbnail rounded-circle shadow"
                         style="width: 120px; height: 120px; object-fit: cover;">
                 @else
-                <img src="{{ asset('storage/imagenes_usuarios/anonimo_imagen.jpg') }}" 
+                {{-- <img src="{{ asset('storage/imagenes_usuarios/anonimo_imagen.jpg') }}"  --}}
+                <img src="{{ asset('resources/default/imagenes_usuarios/anonimo_imagen.jpg') }}" 
                 class="img-thumbnail rounded-circle shadow"
                 style="width: 120px; height: 120px; object-fit: cover;">
                 @endif

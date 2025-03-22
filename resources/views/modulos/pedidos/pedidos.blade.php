@@ -164,8 +164,8 @@
                                         @foreach ($category->products as $product)
                                             <div class="form-group d-flex align-items-center mb-2">
                                                 <input type="checkbox" name="productos[]" value="{{ $product->id }}">
-                                                <span class="ms-2">{{ $product->name }} - ${{ $product->price }}</span>
-                                                <input type="number" name="cantidades[{{ $product->id }}]"
+                                                <span class="ms-2">ID {{ $product->id }} | {{ $product->name }} - ${{ $product->price }}</span>
+                                                <input type="number" name="cantidades[{{ $product->id }},{{ $product->price }}]"
                                                        class="form-control ms-3" placeholder="Cantidad" max="{{ $product->stock }}" style="width: 300px;">
                                             </div>
                                         @endforeach

@@ -28,6 +28,8 @@ class OrderController extends Controller
         return view('modulos.pedidos.pedidos',compact('orders','customers', 'products', 'categories'));
     }
 
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -44,7 +46,19 @@ class OrderController extends Controller
     {
         $this->authorize('crear pedidos');
 
-        //
+        dd($request->all());
+
+        foreach ($request->productos as $productoId) {
+            
+        }
+
+
+
+
+        return redirect()->route('pedidos.index')
+        ->with('message', 'Pedido realizado correctamente.')
+        ->with('icono', 'success'); 
+    
     }
 
     /**
