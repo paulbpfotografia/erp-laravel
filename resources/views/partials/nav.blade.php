@@ -9,13 +9,18 @@
                 <i class="bi bi-house-door-fill"></i> Home
             </a>
         </li>
-
+        <!-- Opción de menú para Productos -->
+        <li class="nav-item">
+            <a class="nav-link text-white" href="{{ route('productos.index') }}">
+                <i class="bi bi-file-earmark-binary-fill"></i> Gestión de productos
+            </a>
+        </li>
 
         <!-- Opción de menú para Productos -->
         {{-- <li class="nav-item">
             <a class="nav-link text-white" href="{{ route('productos.index') }}">
-                <i class="bi bi-box-fill"></i> PRODUCTO
-            </a>
+        <i class="bi bi-box-fill"></i> PRODUCTO
+        </a>
         </li> --}}
 
 
@@ -32,11 +37,11 @@
                 <i class="bi bi-file-earmark-binary-fill"></i> Gestión de pedidos
             </a>
         </li>
-     
-     
+
+
         <!-- Opción de menú para crear usuarios-->
         @role('Admin')
-      
+
 
         <li class="nav-item">
             <a class="nav-link text-white" href="{{ route('usuarios.index') }}">
@@ -44,5 +49,16 @@
             </a>
         </li>
         @endrole
+
+        <!-- Opción de menú para Directivo vea informes-->
+        @role('Directivo')
+        <li class="nav-item">
+            <a class="nav-link text-white" href="{{ route('informes.index') }}">
+                <i class="bi bi-bar-chart-fill"></i> Ver Informe
+            </a>
+        </li>
+        @endrole
+
+    
     </ul>
 </div>

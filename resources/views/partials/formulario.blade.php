@@ -1,4 +1,4 @@
-{{-- 
+{{--
 
 
 
@@ -61,15 +61,15 @@ INCLUIMOS EN FORMULARIO EN LA VISTA
 
             <!-- Si el campo es de tipo select, generamos un desplegable con opciones -->
             @if ($campo['tipo'] === 'select')
-                <select id="{{ $campo['nombre'] }}" name="{{ $campo['nombre'] }}" 
-                    class="form-control @error($campo['nombre']) is-invalid @enderror" 
+                <select id="{{ $campo['nombre'] }}" name="{{ $campo['nombre'] }}"
+                    class="form-control @error($campo['nombre']) is-invalid @enderror"
                     @if(isset($campo['requerido']) && $campo['requerido']) required @endif>
                     
                     <option value="" disabled selected>Seleccione una opción</option> 
 
                     <!-- Iteramos sobre los roles -->
                     @foreach($campo['opciones'] as $valor => $texto)
-                        <option value="{{ $valor }}" 
+                        <option value="{{ $valor }}"
                             {{ old($campo['nombre'], $valores[$campo['nombre']] ?? '') == $valor ? 'selected' : '' }}>
                             {{ $texto }}
                         </option>
@@ -78,26 +78,26 @@ INCLUIMOS EN FORMULARIO EN LA VISTA
 
             <!-- Si el campo es un "textarea", generamos una caja de texto de varias líneas -->
             @elseif ($campo['tipo'] === 'textarea')
-                <textarea id="{{ $campo['nombre'] }}" name="{{ $campo['nombre'] }}" 
+                <textarea id="{{ $campo['nombre'] }}" name="{{ $campo['nombre'] }}"
                     class="form-control @error($campo['nombre']) is-invalid @enderror"
                     @if(isset($campo['requerido']) && $campo['requerido']) required @endif>{{ old($campo['nombre'], $valores[$campo['nombre']] ?? '') }}</textarea>
 
             <!-- Si el campo es de tipo archivo (file), generamos un input para subir archivos -->
             @elseif ($campo['tipo'] === 'file')
-                <input id="{{ $campo['nombre'] }}" 
-                    type="file" 
-                    class="form-control @error($campo['nombre']) is-invalid @enderror"        
+                <input id="{{ $campo['nombre'] }}"
+                    type="file"
+                    class="form-control @error($campo['nombre']) is-invalid @enderror"
                     name="{{ $campo['nombre'] }}"
                     accept="image/jpeg, image/png, image/jpg"
                     @if(isset($campo['requerido']) && $campo['requerido']) required @endif>
 
             <!-- Si el campo es de cualquier otro tipo, generamos un input -->
             @else
-                <input id="{{ $campo['nombre'] }}" 
-                    type="{{ $campo['tipo'] }}" 
-                    class="form-control @error($campo['nombre']) is-invalid @enderror"        
-                    name="{{ $campo['nombre'] }}" 
-                    value="{{ old($campo['nombre'], $valores[$campo['nombre']] ?? '') }}" 
+                <input id="{{ $campo['nombre'] }}"
+                    type="{{ $campo['tipo'] }}"
+                    class="form-control @error($campo['nombre']) is-invalid @enderror"
+                    name="{{ $campo['nombre'] }}"
+                    value="{{ old($campo['nombre'], $valores[$campo['nombre']] ?? '') }}"
                     @if(isset($campo['requerido']) && $campo['requerido']) required @endif>
             @endif
 

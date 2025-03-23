@@ -12,16 +12,16 @@
         <div class="card-body p-4">
 
             @include('partials.formulario', [
-                'accion' => route('usuarios.update', $user->id), 
+                'accion' => route('usuarios.update', $user->id),
                 'metodo' => 'PUT',
                 'campos' => [
                     ['nombre' => 'name', 'etiqueta' => 'Nombre', 'tipo' => 'text', 'requerido' => true],
 
                     ['nombre' => 'email', 'etiqueta' => 'Correo Electrónico', 'tipo' => 'email', 'requerido' => true],
                     [
-                        'nombre' => 'rol', 
-                        'etiqueta' => 'Rol', 
-                        'tipo' => 'select', 
+                        'nombre' => 'rol',
+                        'etiqueta' => 'Rol',
+                        'tipo' => 'select',
                         'opciones' => $roles->pluck('name', 'name')->toArray(), //Extraemos los roles como array para el select, y asignamos lo mismo en clave y en valor
                         'requerido' => true
                     ]

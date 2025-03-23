@@ -13,7 +13,7 @@
             <!-- Imagen del usuario con tamaño ajustado -->
             <div class="mb-3">
                 @if($user->image)
-                    <img src="{{ asset('storage/' . $user->image) }}" 
+                    <img src="{{ asset('storage/' . $user->image) }}"
                         class="img-thumbnail rounded-circle shadow"
                         style="width: 120px; height: 120px; object-fit: cover;">
                 @else
@@ -30,7 +30,7 @@
                 <p><strong>Nombre:</strong> <span class="text-muted">{{ $user->name }}</span></p>
                 <p><strong>Correo Electrónico:</strong> <span class="text-muted">{{ $user->email }}</span></p>
                 <p><strong>Rol:</strong> <span class="text-muted">{{ $user->roles->first()->name }}</span></p>
-                <p><strong>Estado:</strong> 
+                <p><strong>Estado:</strong>
                     <span class="{{ $user->active ? 'text-success fw-bold' : 'text-danger fw-bold' }}">
                         {{ $user->active ? 'Activo' : 'Inactivo' }}
                     </span>

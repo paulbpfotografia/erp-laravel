@@ -41,7 +41,7 @@
                 </div>
                 
                 {{-- Mensaje de Sesión cerrada. --}}
-                    @if (session('message')) 
+                    @if (session('message'))
 
                         <div class="alert alert-danger">
                             {{ session('message') }}

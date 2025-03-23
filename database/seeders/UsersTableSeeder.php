@@ -36,7 +36,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'Empleado2',
             'email' => 'empleado2@empleado.com',
             'password' => Hash::make('12345678'),
-            'image' => null, 
+            'image' => null,
             'active' => '0'
         ]);
         $empleado2->assignRole('Empleado');
@@ -46,7 +46,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'Gerente',
             'email' => 'gerente@gerente.com',
             'password' => Hash::make('12345678'),
-            'image' => null, 
+            'image' => null,
         ]);
         $gerente->assignRole('Gerente');
 

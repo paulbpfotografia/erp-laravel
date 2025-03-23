@@ -6,6 +6,9 @@ use App\Http\Controllers\PruebaController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ReportController;
+
 
   // Ruta Login. Página principal "/"
   Route::get('/', [LoginController::class, 'showLoginForm'])->name('ingresar');
@@ -54,9 +57,10 @@ Route::middleware(['auth'])->group(function () {
 
 
     // RUTAS DE PRODUCTO
-    Route::get('/productos', [ProductController::class, 'index'])
-        ->name('productos.index');
-
+    //Route::get('/productos', [ProductController::class, 'index'])
+    //    ->name('productos.index');
+    Route::resource('productos', ProductController::class);
+    Route::delete('/productos/{product}', [ProductController::class, 'destroy'])->name('productos.destroy');
 
 
 
@@ -95,7 +99,11 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+    // RUTA PARA INFORMES (Solo para Directivo)
+    Route::get('/informes', function () {
+        return view('modulos.informes.informes');
+    })->middleware('role:Directivo')->name('informes.index');
 
-
-
+    // Rutas para informes de pedidos (solo para el rol Directivo)
+    Route::get('/informes/pedidos', [ReportController::class, 'ordersByMonth'])->middleware('role:Directivo')->name('informes.pedidos');
 });

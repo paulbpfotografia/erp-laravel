@@ -12,7 +12,7 @@
             <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarPedidos">
                 Crear Pedido
             </button>
-        </div>     
+        </div>
         @endcan
        
 
@@ -73,7 +73,7 @@
                                                     data-url="{{ route('pedidos.destroy', $order->id) }}"
                                                     data-entidad="Pedido">
                                                     <i class="bi bi-trash3-fill"></i>
-                                                </button>    
+                                                </button>
                                                 @endcan
                                                 
 
@@ -81,7 +81,7 @@
                                                 @can('editar pedidos')
                                                 <a href="{{ route( 'pedidos.edit',$order) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil-fill"></i>
-                                                </a>     
+                                                </a>
                                                 @endcan
                                                
 
@@ -89,7 +89,7 @@
                                                 @can('ver pedidos')
                                                 <a href="{{ route('pedidos.show', $order) }}" class="btn btn-sm btn-primary">
                                                     <i class="bi bi-eye-fill"></i>
-                                                </a>      
+                                                </a>
                                                 @endcan
                                                 
                                             </div>

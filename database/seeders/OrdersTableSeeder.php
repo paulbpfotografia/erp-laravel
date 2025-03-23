@@ -33,7 +33,7 @@ class OrdersTableSeeder extends Seeder
         for ($i = 0; $i < 50; $i++) {
             DB::table('orders')->insert([
                 'customer_id' => rand(1, 20),
-                'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')),
+                'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), //Se puede colocar a 365 dias en lugar de 90
                 'status' => collect(['Preparado', 'Enviado', 'Pendiente'])->random(),
                 'total' => rand(100, 1000) + (rand(0, 99) / 100),
             ]);
