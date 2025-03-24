@@ -68,6 +68,7 @@ class OrderController extends Controller
     {
         $this->authorize('ver pedidos');
 
+
         return view('modulos.pedidos.pedidos-datos', compact('order'));
     }
     

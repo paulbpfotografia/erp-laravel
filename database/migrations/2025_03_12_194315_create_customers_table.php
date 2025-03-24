@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone');
             $table->string('email');
+            $table->foreignId('province_id')->constrained('provinces');
             $table->timestamps();
         });
     }

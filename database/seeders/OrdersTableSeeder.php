@@ -2,40 +2,63 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class OrdersTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        DB::table('orders')->insert([
-            ['customer_id' => 1, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Preparado', 'total' => 799.99],
-            ['customer_id' => 2, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Enviado', 'total' => 199.99],
-            ['customer_id' => 3, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Pendiente', 'total' => 299.99],
-            ['customer_id' => 1, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Enviado', 'total' => 129.99],
-            ['customer_id' => 4, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Preparado', 'total' => 599.99],
-            ['customer_id' => 2, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Pendiente', 'total' => 349.99],
-            ['customer_id' => 5, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Enviado', 'total' => 999.99],
-            ['customer_id' => 6, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Preparado', 'total' => 159.99],
-            ['customer_id' => 3, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Enviado', 'total' => 449.99],
-            ['customer_id' => 7, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Pendiente', 'total' => 249.99],
-            ['customer_id' => 8, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Preparado', 'total' => 799.99],
-            ['customer_id' => 9, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Enviado', 'total' => 109.99],
-            ['customer_id' => 10, 'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), 'status' => 'Pendiente', 'total' => 219.99],
-        ]);
+        $customerIds = DB::table('customers')->pluck('id')->toArray();
+        $productIds = DB::table('products')->pluck('id')->toArray();
 
-        // Generar más pedidos con clientes repetidos
-        for ($i = 0; $i < 50; $i++) {
-            DB::table('orders')->insert([
-                'customer_id' => rand(1, 20),
-                'order_date' => date('Y-m-d', strtotime('-'.rand(1, 90).' days')), //Se puede colocar a 365 dias en lugar de 90
-                'status' => collect(['Preparado', 'Enviado', 'Pendiente'])->random(),
-                'total' => rand(100, 1000) + (rand(0, 99) / 100),
+        if (empty($productIds) || empty($customerIds)) {
+            $this->command->warn('No hay productos o clientes disponibles para asociar a pedidos.');
+            return;
+        }
+
+        for ($i = 0; $i < 100; $i++) {
+            // Generar una fecha entre septiembre 2024 y hoy
+            $orderDate = Carbon::create(2024, 9, 1)->addDays(rand(0, now()->diffInDays('2024-09-01')));
+
+            // Determinar el estado del pedido según la fecha
+            $status = $orderDate < Carbon::create(2025, 2, 1) ? 'Entregado' : collect(['Preparado', 'Enviado', 'Pendiente', 'Recibido'])->random();
+
+            // Crear el pedido
+            $orderId = DB::table('orders')->insertGetId([
+                'customer_id' => collect($customerIds)->random(),
+                'order_date' => $orderDate,
+                'status' => $status,
+                'total' => 0, // se actualiza luego
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $total = 0;
+
+            // Seleccionar productos aleatorios (1 a 5)
+            $products = collect($productIds)->random(rand(1, 5));
+
+            foreach ($products as $productId) {
+                $quantity = rand(1, 10);
+                $unitPrice = DB::table('products')->where('id', $productId)->value('price');
+                $subtotal = $quantity * $unitPrice;
+                $total += $subtotal;
+
+                DB::table('order_product')->insert([
+                    'order_id' => $orderId,
+                    'product_id' => $productId,
+                    'quantity' => $quantity,
+                    'unit_price' => $unitPrice,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            // Actualizar el total en el pedido
+            DB::table('orders')->where('id', $orderId)->update([
+                'total' => round($total, 2),
             ]);
         }
     }

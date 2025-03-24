@@ -21,7 +21,7 @@ class Product extends Model
 
     public function orders() {
 
-        return $this->belongsToMany(Order::class)->whitpivot('quantity','unit_price')->withTimestamps();
+        return $this->belongsToMany(Order::class)->whithpivot('quantity','unit_price')->withTimestamps();
 
     }
 
