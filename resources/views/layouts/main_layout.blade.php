@@ -17,7 +17,7 @@
     {{-- SweetAlert2 (CDN) --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- jQuery (por si lo necesitás en otras partes) -->
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
@@ -40,12 +40,10 @@
         </div>
     </div>
 
-    {{-- Scripts --}}
-
-    <!-- Bootstrap 5 JS (necesario para tooltips, modals, etc.) -->
+    <!-- Bootstrap 5 JS  -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    {{-- SweetAlert2 configuración de toast --}}
+    {{-- Configuración de Toast de SweetAlert2 --}}
     <script>
         const Toast = Swal.mixin({
             toast: true,
@@ -79,12 +77,12 @@
     </script>
     @endif
 
-    {{-- Confirmación para eliminar --}}
+    {{-- Script para eliminar registros --}}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Botón de eliminar
             document.querySelectorAll(".eliminarRegistroBtn").forEach(boton => {
                 boton.addEventListener("click", function () {
-                    let registroId = this.getAttribute("data-id");
                     let url = this.getAttribute("data-url");
                     let registro = this.getAttribute("data-entidad");
 
@@ -123,13 +121,16 @@
                 });
             });
 
-            // Activar tooltips de Bootstrap
-            const tooltipTriggerList = document.querySelectorAll('[title]');
+            // Activar tooltips
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
             tooltipTriggerList.forEach(el => {
                 new bootstrap.Tooltip(el);
             });
         });
     </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
