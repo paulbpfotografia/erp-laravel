@@ -41,23 +41,33 @@
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">
                                                 
-                                                <!-- Botón Eliminar -->
-                                                <button type="button" class="btn btn-sm btn-danger eliminarRegistroBtn"
-                                                    data-id="{{ $user->id }}"
-                                                    data-url="{{ route('usuarios.destroy', $user->id) }}"
-                                                    data-entidad="Usuario">
+                                              <!-- Botón Eliminar -->
+                                                    <button type="button"
+                                                    class="btn btn-sm btn-danger"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    title="Eliminar usuario">
                                                     <i class="bi bi-trash3-fill"></i>
-                                                </button>
+                                                    </button>
 
-                                                <!-- Botón Editar -->
-                                                <a href="{{ route('usuarios.edit', $user->id) }}" class="btn btn-sm btn-warning">
+                                                    <!-- Botón Editar -->
+                                                    <button type="button"
+                                                    class="btn btn-sm btn-warning"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    title="Editar usuario">
                                                     <i class="bi bi-pencil-fill"></i>
-                                                </a>
+                                                    </button>
 
-                                                <!-- Botón Ver Usuario -->
-                                                <a href="{{ route('usuarios.show', $user->id) }}" class="btn btn-sm btn-primary">
+                                                    <!-- Botón Ver Usuario -->
+                                                    <a href="{{ route('usuarios.show', $user->id) }}"
+                                                    class="btn btn-sm btn-primary"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    title="Ver detalles del usuario">
                                                     <i class="bi bi-eye-fill"></i>
-                                                </a>
+                                                    </a>
+
                                             </div>
                                         </td>
                                     </tr>
@@ -95,21 +105,33 @@
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">
                                                 
-                                                <!-- Botón Eliminar -->
-                                                <button type="button" class="btn btn-sm btn-danger">
-                                                    <i class="bi bi-trash3-fill"></i>
-                                                </button>
+                                 <!-- Botón Eliminar -->
+                                                        <button type="button"
+                                                        class="btn btn-sm btn-danger"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Eliminar usuario">
+                                                        <i class="bi bi-trash3-fill"></i>
+                                                        </button>
 
-                                                <!-- Botón Editar -->
-                                                <button type="button" class="btn btn-sm btn-warning">
-                                                    <i class="bi bi-pencil-fill"></i>
-                                                </button>
+                                                        <!-- Botón Editar -->
+                                                        <button type="button"
+                                                        class="btn btn-sm btn-warning"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Editar usuario">
+                                                        <i class="bi bi-pencil-fill"></i>
+                                                        </button>
 
-                                                <!-- Botón Ver Usuario -->
-                                                <a href="{{ route('usuarios.show', $user->id) }}" class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-eye-fill"></i>
-                                                </a>
-                                                
+                                                        <!-- Botón Ver Usuario -->
+                                                        <a href="{{ route('usuarios.show', $user->id) }}"
+                                                        class="btn btn-sm btn-primary"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Ver detalles del usuario">
+                                                        <i class="bi bi-eye-fill"></i>
+                                                        </a>
+
                                             </div>
                                         </td>
                                     </tr>

@@ -38,27 +38,10 @@
                                       
                                         <td>{{ $order->id }}</td>
                                         <td>{{ $order->order_date }}</td>
-                                            <?php
-                                            $estado='';
-                                            ?>
-                                        @if ($order->status == 'enviado')
-                                                <?php
-                                                $estado='badge bg-info';
-                                                ?>
-                                        @elseif ($order->status == 'pendiente')
-                                                <?php
-                                                $estado='badge bg-danger';
-                                                ?>
-                                        @elseif ($order->status == 'preparado')
-                                                <?php
-                                                $estado='badge bg-warning';
-                                                ?>
-                                        @else
-                                                <?php
-                                                $estado='badge bg-success';
-                                                ?>
-                                        @endif
-                                        <td><span class="{{ $estado }}">{{ $order->status }}</span></td>
+                                        <td><span class="{{ clase_estado_pedido($order->status) }}">
+                                            {{ ucfirst($order->status) }}
+                                        </span></td>
+                                           
                                         <td>{{ $order->total }}</td>
 
 
@@ -68,29 +51,39 @@
                                                 
                                                 <!-- Botón Eliminar -->
                                                 @can('eliminar pedidos')
-                                                <button type="button" class="btn btn-sm btn-danger eliminarRegistroBtn"
+                                                <button type="button"
+                                                    class="btn btn-sm btn-danger eliminarRegistroBtn"
                                                     data-id="{{ $order->id }}"
                                                     data-url="{{ route('pedidos.destroy', $order->id) }}"
-                                                    data-entidad="Pedido">
+                                                    data-entidad="Pedido"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    title="Eliminar pedido">
                                                     <i class="bi bi-trash3-fill"></i>
                                                 </button>
-                                                @endcan
-                                                
-
-                                                <!-- Botón Editar -->
-                                                @can('editar pedidos')
-                                                <a href="{{ route( 'pedidos.edit',$order) }}" class="btn btn-sm btn-warning">
+                                            @endcan
+                                            
+                                            @can('editar pedidos')
+                                                <a href="{{ route('pedidos.edit', $order) }}"
+                                                   class="btn btn-sm btn-warning"
+                                                   data-bs-toggle="tooltip"
+                                                   data-bs-placement="top"
+                                                   title="Editar pedido">
                                                     <i class="bi bi-pencil-fill"></i>
                                                 </a>
-                                                @endcan
-                                               
-
-                                                <!-- Botón Ver Usuario -->
-                                                @can('ver pedidos')
-                                                <a href="{{ route('pedidos.show', $order) }}" class="btn btn-sm btn-primary">
+                                            @endcan
+                                            
+                                            @can('ver pedidos')
+                                                <a href="{{ route('pedidos.show', $order) }}"
+                                                   class="btn btn-sm btn-primary"
+                                                   data-bs-toggle="tooltip"
+                                                   data-bs-placement="top"
+                                                   title="Ver detalles del pedido">
                                                     <i class="bi bi-eye-fill"></i>
                                                 </a>
-                                                @endcan
+                                            @endcan
+                                            
+                                                
                                                 
                                             </div>
                                         </td>

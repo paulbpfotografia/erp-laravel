@@ -42,29 +42,42 @@
                                     <div class="d-flex justify-content-center gap-2">
                                         <!-- Formulario de eliminación -->
                                         <!-- Botón Eliminar -->
+                                     <!-- Botón Eliminar -->
                                         @can('eliminar productos')
-                                        <button type="button" class="btn btn-sm btn-danger eliminarRegistroBtn"
+                                        <button type="button"
+                                            class="btn btn-sm btn-danger eliminarRegistroBtn"
                                             data-id="{{ $product->id }}"
                                             data-url="{{ route('productos.destroy', $product->id) }}"
-                                            data-entidad="Productos">
+                                            data-entidad="Productos"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Eliminar producto">
                                             <i class="bi bi-trash3-fill"></i>
                                         </button>
                                         @endcan
 
-
                                         <!-- Botón Editar -->
                                         @can('editar productos')
-                                        <a href="{{ route('productos.edit', $product) }}" class="btn btn-sm btn-warning">
+                                        <a href="{{ route('productos.edit', $product) }}"
+                                        class="btn btn-sm btn-warning"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="Editar producto">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
                                         @endcan
 
                                         <!-- Botón Ver -->
                                         @can('ver productos')
-                                        <a href="{{ route('productos.show', $product) }}" class="btn btn-sm btn-primary">
+                                        <a href="{{ route('productos.show', $product) }}"
+                                        class="btn btn-sm btn-primary"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="Ver detalles del producto">
                                             <i class="bi bi-eye-fill"></i>
                                         </a>
                                         @endcan
+
                                     </div>
                                 </td>
                             </tr>
