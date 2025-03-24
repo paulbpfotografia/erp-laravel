@@ -47,6 +47,6 @@ class MoveStockTableSeeder extends Seeder
             ];
         }
 
-        DB::table('move_stock')->insert($movimientos);
+        DB::table('move_stocks')->insert($movimientos);
     }
 }

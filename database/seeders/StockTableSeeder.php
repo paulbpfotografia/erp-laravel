@@ -14,7 +14,7 @@ class StockTableSeeder extends Seeder
     public function run(): void
     {
         //Prueba
-        DB::table('stock')->insert([
+        DB::table('stocks')->insert([
             ['product_id' => 1, 'available_quantity' => 50],  // Sofá
             ['product_id' => 2, 'available_quantity' => 20],  // Mesa
             ['product_id' => 3, 'available_quantity' => 100], // Colchón

@@ -18,26 +18,52 @@ class OrdersTableSeeder extends Seeder
             return;
         }
 
+        $pedidos = [];
+
+        // Generar 200 pedidos desde septiembre 2024 a hoy
+        $startDate = Carbon::create(2024, 9, 1);
+        $daysRange = $startDate->diffInDays(now());
+
+        for ($i = 0; $i < 200; $i++) {
+            $orderDate = Carbon::create(2024, 9, 1)->addDays(rand(0, $daysRange));
+
+            $pedidos[] = [
+                'order_date' => $orderDate,
+                'status' => $orderDate < Carbon::create(2025, 2, 1)
+                    ? 'entregado'
+                    : collect(['preparado', 'pendiente', 'enviado', 'entregado'])->random(),
+            ];
+        }
+
+        // Generar 100 pedidos desde febrero 2025 a hoy
+        $startRecent = Carbon::create(2025, 2, 1);
+        $recentRange = $startRecent->diffInDays(now());
+
         for ($i = 0; $i < 100; $i++) {
-            // Generar una fecha entre septiembre 2024 y hoy
-            $orderDate = Carbon::create(2024, 9, 1)->addDays(rand(0, now()->diffInDays('2024-09-01')));
+            $orderDate = Carbon::create(2025, 2, 1)->addDays(rand(0, $recentRange));
 
-            // Determinar el estado del pedido según la fecha
-            $status = $orderDate < Carbon::create(2025, 2, 1) ? 'Entregado' : collect(['Preparado', 'Enviado', 'Pendiente', 'Recibido'])->random();
+            $pedidos[] = [
+                'order_date' => $orderDate,
+                'status' => collect(['preparado', 'pendiente', 'enviado', 'entregado'])->random(),
+            ];
+        }
 
-            // Crear el pedido
+        // Ordenar los pedidos por fecha ascendente
+        usort($pedidos, fn($a, $b) => $a['order_date']->timestamp <=> $b['order_date']->timestamp);
+
+        // Insertar pedidos en orden y generar sus productos
+        foreach ($pedidos as $pedido) {
             $orderId = DB::table('orders')->insertGetId([
                 'customer_id' => collect($customerIds)->random(),
-                'order_date' => $orderDate,
-                'status' => $status,
-                'total' => 0, // se actualiza luego
+                'order_date' => $pedido['order_date'],
+                'status' => $pedido['status'],
+                'total' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
             $total = 0;
 
-            // Seleccionar productos aleatorios (1 a 5)
             $products = collect($productIds)->random(rand(1, 5));
 
             foreach ($products as $productId) {
@@ -56,10 +82,11 @@ class OrdersTableSeeder extends Seeder
                 ]);
             }
 
-            // Actualizar el total en el pedido
             DB::table('orders')->where('id', $orderId)->update([
                 'total' => round($total, 2),
             ]);
         }
+
+        $this->command->info('✅ 300 pedidos creados cronológicamente (IDs más altos = más recientes).');
     }
 }
