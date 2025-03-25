@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Order;
 use App\Models\Customer;
@@ -8,6 +9,7 @@ use App\Models\Product;
 use App\Models\Category;
 
 
+use Carbon\Traits\Timestamp;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Can;
 
@@ -41,25 +43,92 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    
-    {
-        $this->authorize('crear pedidos');
-
-        dd($request->all());
-
-        foreach ($request->productos as $productoId) {
-            
-        }
 
 
 
 
-        return redirect()->route('pedidos.index')
-        ->with('message', 'Pedido realizado correctamente.')
-        ->with('icono', 'success'); 
-    
-    }
+     public function store(Request $request)
+     {
+         $this->authorize('crear pedidos');
+
+         $request->validate([
+             'customer_id' => 'required|exists:customers,id',
+             'products' => 'required|array',
+         ]);
+
+         // Filtrar productos válidos
+         $validatedProducts = [];
+         foreach ($request->products as $product) {
+             if (!empty($product['id']) && !empty($product['quantity']) && $product['quantity'] > 0) {
+                 $validatedProducts[] = $product;
+             }
+         }
+
+         if (count($validatedProducts) === 0) {
+             return redirect()->back()
+                 ->with('message', 'Debe seleccionar al menos un producto con cantidad válida.')
+                 ->with('icono', 'error');
+         }
+
+         //Iniciamos una transacción en la base de datos. Si falla, acaba con un rollback
+         DB::beginTransaction();
+
+         try {
+             // Calculamos el total
+             $total = 0;
+             foreach ($validatedProducts as $product) {
+                 $total += $product['quantity'] * $product['unit_price'];
+             }
+
+             // Creamos el pedido
+             $order = Order::create([
+                 'customer_id' => $request->customer_id,
+                 'status' => 'pendiente',
+                 'order_date' => now(),
+                 'total' => $total,
+             ]);
+
+             // Asociamos los productos. Y actualizaremos el stock
+             foreach ($validatedProducts as $product) {
+                 $productoBD = Product::find($product['id']);
+
+                 //Si el stock del producto que estoy intentando pasar es menor que la cantidad que han pedido, hago un rollback.
+                 if ($productoBD->stock < $product['quantity']) {
+                     DB::rollBack();
+                     return redirect()->back()
+                         ->with('message', "No hay suficiente stock para el producto '{$productoBD->name}'.")
+                         ->with('icono', 'error');
+                 }
+
+                 //De otra forma, con attach relaciono los datos en la tabla pivot
+                 $order->products()->attach($product['id'], [
+                     'quantity' => $product['quantity'],
+                     'unit_price' => $product['unit_price'],
+                 ]);
+
+                 //Resto el stock y  guardo el dato
+                 $productoBD->stock -= $product['quantity'];
+                 $productoBD->save();
+             }
+
+             //Si todo ha salido bien, se hace commit
+             DB::commit();
+
+             //Devuelvo la vista del pedido con mensaje de éxito
+             return redirect()->route('pedidos.show', $order->id)
+                 ->with('message', 'Pedido creado correctamente.')
+                 ->with('icono', 'success');
+
+
+        //Si hay algún fallo, devuelvo error.
+         } catch (\Exception $e) {
+             DB::rollBack();
+             return redirect()->back()
+                 ->with('message', 'Hubo un error al procesar el pedido.')
+                 ->with('icono', 'error');
+         }
+     }
+
 
     /**
      * Display the specified resource.
@@ -71,7 +140,7 @@ class OrderController extends Controller
 
         return view('modulos.pedidos.pedidos-datos', compact('order'));
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      */

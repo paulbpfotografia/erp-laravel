@@ -87,6 +87,6 @@ class OrdersTableSeeder extends Seeder
             ]);
         }
 
-        $this->command->info('✅ 300 pedidos creados cronológicamente (IDs más altos = más recientes).');
+
     }
 }

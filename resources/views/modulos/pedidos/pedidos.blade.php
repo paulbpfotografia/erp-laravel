@@ -14,11 +14,11 @@
             </button>
         </div>
         @endcan
-       
+
 
         <div class="box-body">
             <div class="container mt-4">
-                
+
                 <h2 class="mb-3">Pedidos</h2>
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered table-hover text-center align-middle">
@@ -35,20 +35,20 @@
                         <tbody>
                             @foreach ($orders as $order)
                                     <tr>
-                                      
+
                                         <td>{{ $order->id }}</td>
                                         <td>{{ $order->order_date }}</td>
                                         <td><span class="{{ clase_estado_pedido($order->status) }}">
                                             {{ ucfirst($order->status) }}
                                         </span></td>
-                                           
+
                                         <td>{{ $order->total }}</td>
 
 
                                         <!-- Acciones -->
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">
-                                                
+
                                                 <!-- Botón Eliminar -->
                                                 @can('eliminar pedidos')
                                                 <button type="button"
@@ -62,7 +62,7 @@
                                                     <i class="bi bi-trash3-fill"></i>
                                                 </button>
                                             @endcan
-                                            
+
                                             @can('editar pedidos')
                                                 <a href="{{ route('pedidos.edit', $order) }}"
                                                    class="btn btn-sm btn-warning"
@@ -72,7 +72,7 @@
                                                     <i class="bi bi-pencil-fill"></i>
                                                 </a>
                                             @endcan
-                                            
+
                                             @can('ver pedidos')
                                                 <a href="{{ route('pedidos.show', $order) }}"
                                                    class="btn btn-sm btn-primary"
@@ -82,13 +82,13 @@
                                                     <i class="bi bi-eye-fill"></i>
                                                 </a>
                                             @endcan
-                                            
-                                                
-                                                
+
+
+
                                             </div>
                                         </td>
                                     </tr>
-                                
+
                             @endforeach
                         </tbody>
                     </table>
@@ -109,7 +109,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header bg-primary text-white rounded-top">
-                <h4 class="modal-title" id="modalPedidosAgregarLabel">Registro de Usuario</h4>
+                <h4 class="modal-title" id="modalPedidosAgregarLabel">Registro de Pedido</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
@@ -117,25 +117,25 @@
             <div class="modal-body p-4">
                 <form action="{{ route('pedidos.store') }}" method="POST">
                     @csrf
-                
-                    <!-- LISTAD DE CLIENTES -->
-                    <label for="customer_id">Cliente</label>
-                    <select name="customer_id" class="form-control" required>
-                        <option value="" disabled selected>Seleccione un cliente</option>
-                        @foreach ($customers as $customer)
-                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                        @endforeach
-                    </select>
 
+                    <!-- LISTADO DE CLIENTES -->
+                    <div class="mb-3">
+                        <label for="customer_id" class="form-label">Cliente</label>
+                        <select name="customer_id" class="form-control" required>
+                            <option value="" disabled selected>Seleccione un cliente</option>
+                            @foreach ($customers as $customer)
+                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- ACCORDION DE CATEGORÍAS Y PRODUCTOS -->
                     <div class="accordion" id="accordionCategorias">
                         @foreach ($categories as $category)
                             @php
-                            //Identificamos dinamicamente los ID para poder colapsar los accordion de 1 en 1.
                                 $collapseId = 'collapseCategoria' . $category->id;
                                 $headingId = 'headingCategoria' . $category->id;
                             @endphp
-
-                            {{-- Creamos el accordion de cada categoría --}}
 
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="{{ $headingId }}">
@@ -150,16 +150,25 @@
 
                                 <div id="{{ $collapseId }}" class="accordion-collapse collapse"
                                      aria-labelledby="{{ $headingId }}" data-bs-parent="#accordionCategorias">
-
-                                     {{-- Para cada categoria - accordion, le ponemos todos los productos que pertenecen a esa categoría para poder seleccionar cantidad y producto --}}
-
                                     <div class="accordion-body">
                                         @foreach ($category->products as $product)
                                             <div class="form-group d-flex align-items-center mb-2">
-                                                <input type="checkbox" name="productos[]" value="{{ $product->id }}">
+                                                <!-- Checkbox para seleccionar el producto -->
+                                                <input type="checkbox" name="products[{{ $product->id }}][id]" value="{{ $product->id }}">
+
+                                                <!-- Información del producto -->
                                                 <span class="ms-2">ID {{ $product->id }} | {{ $product->name }} - ${{ $product->price }}</span>
-                                                <input type="number" name="cantidades[{{ $product->id }},{{ $product->price }}]"
-                                                       class="form-control ms-3" placeholder="Cantidad" max="{{ $product->stock }}" style="width: 300px;">
+
+                                                <!-- Cantidad -->
+                                                <input type="number" name="products[{{ $product->id }}][quantity]"
+                                                       class="form-control ms-3"
+                                                       placeholder="Cantidad"
+                                                       max="{{ $product->stock }}"
+                                                       style="width: 120px;">
+
+                                                <!-- Precio unitario -->
+                                                <input type="hidden" name="products[{{ $product->id }}][unit_price]"
+                                                       value="{{ $product->price }}">
                                             </div>
                                         @endforeach
                                     </div>
@@ -167,11 +176,11 @@
                             </div>
                         @endforeach
                     </div>
-                    
-                   
-                    <button type="submit" class="btn btn-primary mt-3">Crear Pedido</button>
+
+                    <!-- Botón de enviar -->
+                    <button type="submit" class="btn btn-primary mt-4">Crear Pedido</button>
                 </form>
-                
+            </div>
 
             <!-- Modal Footer -->
             <div class="modal-footer">
@@ -181,8 +190,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 
