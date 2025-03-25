@@ -93,11 +93,12 @@ class OrderController extends Controller
                  $productoBD = Product::find($product['id']);
 
                  //Si el stock del producto que estoy intentando pasar es menor que la cantidad que han pedido, hago un rollback.
-                 if ($productoBD->stock < $product['quantity']) {
+                 //Además, hacemos la comprobación de si existe la relación de stock y además su hay stock disponible
+                 if ($productoBD->stock || $productoBD->stock->available_quantity < $product['quantity']) {
                      DB::rollBack();
                      return redirect()->back()
-                         ->with('message', "No hay suficiente stock para el producto '{$productoBD->name}'.")
-                         ->with('icono', 'error');
+                     ->with('message', "No hay suficiente stock para el producto '{$productoBD->name}'. Disponibles: {$productoBD->stock->available_quantity}.")
+                     ->with('icono', 'error');
                  }
 
                  //De otra forma, con attach relaciono los datos en la tabla pivot
@@ -107,8 +108,8 @@ class OrderController extends Controller
                  ]);
 
                  //Resto el stock y  guardo el dato
-                 $productoBD->stock -= $product['quantity'];
-                 $productoBD->save();
+                 $productoBD->stock->available_quantity -= $product['quantity'];
+                 $productoBD->stock->save();
              }
 
              //Si todo ha salido bien, se hace commit
