@@ -1,53 +1,32 @@
 @extends('layouts.main_layout')
 
-
 @section('title', 'Home')
-
 
 @section('content')
 
+<div class="container py-4"> {{-- padding para separar del topbar --}}
 
+    <h1 class="text-center display-5 mb-4">Bienvenido al ERP, {{ $user->name }}</h1>
 
-
-
-
-<div class="container">
-
-    <h1 class="text-center display-4 m-5">Bienvenido al ERP, {{ $user->name }}</h1>
-
-    
-
-    <div class="row justify-content-center m-4">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <div class="alert alert-warning fw-bold" role="alert">
-                        INSTRUCCIONES PARA NUEVOS USUARIOS
-                    </div>
+    {{-- Instrucciones --}}
+    <div class="row justify-content-center mb-4">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark fw-bold">
+                    INSTRUCCIONES PARA NUEVOS USUARIOS
                 </div>
-                
-
                 <div class="card-body">
-                    
-                <p>dddddddddddddddddd</p>
-                  
+                    <p>dddddddddddddddddd</p>
                 </div>
-                
             </div>
         </div>
     </div>
-</div>
 
-
-
-
-
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Mi perfil</div>
-                
-
+    {{-- Perfil --}}
+    <div class="row justify-content-center mb-5">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card shadow">
+                <div class="card-header fw-bold">Mi perfil</div>
                 <div class="card-body">
                     <ul class="list-group">
                         <li class="list-group-item fw-bold">
@@ -63,22 +42,20 @@
                             Rol: <span class="fw-normal">{{ $user->roles->first()->name ?? 'Sin rol asignado' }}</span>
                         </li>
                         <li class="list-group-item fw-bold">
-                          Permisos: <ul>
-                            @foreach ($user->roles as $role)
-                                <ul>
-                                    @foreach ($role->permissions as $permission)
-                                        <li>{{ $permission->name }}</li>
+                            Permisos:
+                            <ul class="mt-2">
+                                @foreach ($user->roles as $rol)
+                                    @foreach ($rol->permissions as $permiso)
+                                        <li>{{ $permiso->name }}</li>
                                     @endforeach
-                                </ul>
-                            @endforeach
-                        </ul>
+                                @endforeach
+                            </ul>
                         </li>
-                       
                     </ul>
                 </div>
-                
             </div>
         </div>
     </div>
+
 </div>
 @endsection
