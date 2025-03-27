@@ -50,8 +50,8 @@
         </li>
         @endrole
 
-        <!-- Opción de menú para Directivo vea informes-->
-        @role('Directivo')
+        <!-- Opción de menú para que directivo y Admin-->
+        @role('Directivo|Admin')
         <li class="nav-item">
             <a class="nav-link text-white" href="{{ route('informes.index') }}">
                 <i class="bi bi-bar-chart-fill"></i> Ver Informe
@@ -59,6 +59,5 @@
         </li>
         @endrole
 
-    
     </ul>
 </div>

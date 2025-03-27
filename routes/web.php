@@ -15,7 +15,7 @@ use App\Http\Controllers\ReportController;
 
 //No eliminar. Con esto se cargan rutas de login y logout
   Auth::routes();
-  
+
 
 Route::middleware(['auth'])->group(function () {
 
@@ -50,7 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/pedidos/{order}', [OrderController::class, 'destroy'])
         ->middleware('permission:eliminar pedidos')->name('pedidos.destroy');
 
-     
+
 
 
 
@@ -102,8 +102,12 @@ Route::middleware(['auth'])->group(function () {
     // RUTA PARA INFORMES (Solo para Directivo)
     Route::get('/informes', function () {
         return view('modulos.informes.informes');
-    })->middleware('role:Directivo')->name('informes.index');
+    })->middleware('role:Directivo|Admin')->name('informes.index');
+
 
     // Rutas para informes de pedidos (solo para el rol Directivo)
-    Route::get('/informes/pedidos', [ReportController::class, 'ordersByMonth'])->middleware('role:Directivo')->name('informes.pedidos');
+    Route::get('/informes/pedidos', [ReportController::class, 'ordersByMonth'])
+    ->middleware('role:Directivo|Admin')
+    ->name('informes.pedidos');
+
 });
