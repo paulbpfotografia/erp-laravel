@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>@yield('title')</title>
 
     {{-- Estilos con Vite --}}
@@ -13,10 +15,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 </head>
 <body>
+
+
 
 <div class="d-flex">
     {{-- Sidebar --}}
@@ -29,7 +35,26 @@
 </div>
 
 {{-- JavaScript con Vite --}}
-@vite(['resources/js/sidebar.js'])
+@vite([
+    'resources/js/app.js'
+])
+
+
+@if(session('message') || session('error'))
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Toast.fire({
+            icon: @json(session('icono', session('error') ? 'error' : 'success')),
+            title: @json(session('message') ?? session('error'))
+        });
+    });
+</script>
+@endif
+
+
+
+
 
 </body>
+
 </html>

@@ -94,8 +94,8 @@ class OrderController extends Controller
 
                  //Si el stock del producto que estoy intentando pasar es menor que la cantidad que han pedido, hago un rollback.
                  //Además, hacemos la comprobación de si existe la relación de stock y además su hay stock disponible
-                 if ($productoBD->stock || $productoBD->stock->available_quantity < $product['quantity']) {
-                     DB::rollBack();
+                 if (!$productoBD->stock || $productoBD->stock->available_quantity < $product['quantity']) {
+                    DB::rollBack();
                      return redirect()->back()
                      ->with('message', "No hay suficiente stock para el producto '{$productoBD->name}'. Disponibles: {$productoBD->stock->available_quantity}.")
                      ->with('icono', 'error');

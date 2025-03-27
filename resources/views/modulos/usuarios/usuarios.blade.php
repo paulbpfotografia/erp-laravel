@@ -42,31 +42,39 @@
                                             <div class="d-flex justify-content-center gap-2">
 
                                               <!-- Botón Eliminar -->
-                                                    <button type="button"
-                                                    class="btn btn-sm btn-danger"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="top"
-                                                    title="Eliminar usuario">
-                                                    <i class="bi bi-trash3-fill"></i>
-                                                    </button>
+                                              @can('eliminar usuarios')
+                                              <button type="button"
+                                                  class="btn btn-sm btn-danger eliminarRegistroBtn"
+                                                  data-id="{{ $user->id }}"
+                                                  data-url="{{ route('usuarios.destroy', $user->id) }}"
+                                                  data-entidad="Usuario"
+                                                  data-bs-toggle="tooltip"
+                                                  data-bs-placement="top"
+                                                  title="Eliminar usuario">
+                                                  <i class="bi bi-trash3-fill"></i>
+                                              </button>
+                                          @endcan
 
-                                                    <!-- Botón Editar -->
-                                                    <button type="button"
-                                                    class="btn btn-sm btn-warning"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="top"
-                                                    title="Editar usuario">
-                                                    <i class="bi bi-pencil-fill"></i>
-                                                    </button>
+                                          @can('editar usuarios')
+                                              <a href="{{ route('usuarios.edit', $user) }}"
+                                                 class="btn btn-sm btn-warning"
+                                                 data-bs-toggle="tooltip"
+                                                 data-bs-placement="top"
+                                                 title="Editar usuario">
+                                                  <i class="bi bi-pencil-fill"></i>
+                                              </a>
+                                          @endcan
 
-                                                    <!-- Botón Ver Usuario -->
-                                                    <a href="{{ route('usuarios.show', $user->id) }}"
-                                                    class="btn btn-sm btn-primary"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="top"
-                                                    title="Ver detalles del usuario">
-                                                    <i class="bi bi-eye-fill"></i>
-                                                    </a>
+                                          @can('ver usuarios')
+                                              <a href="{{ route('usuarios.show', $user) }}"
+                                                 class="btn btn-sm btn-primary"
+                                                 data-bs-toggle="tooltip"
+                                                 data-bs-placement="top"
+                                                 title="Ver detalles del usuario">
+                                                  <i class="bi bi-eye-fill"></i>
+                                              </a>
+                                          @endcan
+
 
                                             </div>
                                         </td>

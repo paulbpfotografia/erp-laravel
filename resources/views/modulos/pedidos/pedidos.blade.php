@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="content">
+
     <div class="box">
         @can('crear pedidos')
         <div class="box-header with-border">
