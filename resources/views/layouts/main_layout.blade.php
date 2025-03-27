@@ -10,25 +10,19 @@
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Iconos de Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
-    {{-- SweetAlert2 (CDN) --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    {{-- Estilo del SideNav --}}
     <style>
         #menu-lateral {
             transition: width 0.3s ease;
             width: 250px;
             position: fixed;
-            top: 60px;
+            top: 0;
             left: 0;
-            height: calc(100vh - 60px);
+            height: 100vh;
             z-index: 1040;
             overflow-x: hidden;
             background-color: #343a40;
@@ -47,14 +41,8 @@
             margin-right: 0 !important;
         }
 
-        #barra-superior {
-            z-index: 1050;
-            height: 60px;
-        }
-
         #contenido-principal {
             transition: margin-left 0.3s;
-            margin-top: 60px;
             margin-left: 250px;
         }
 
@@ -69,30 +57,22 @@
         }
     </style>
 </head>
-
 <body>
-
-    {{-- Barra superior --}}
-    @if(!isset($hidenav))
-        @include('partials.topbar')
-    @endif
-
     <div class="d-flex" style="min-height: 100vh;">
-        {{-- Menú lateral --}}
+
         @if(!isset($hidenav))
             @include('partials.nav')
         @endif
 
-        {{-- Contenido principal --}}
+        @include('partials.topbar')
+
         <div id="contenido-principal" class="flex-grow-1 p-3">
             @yield('content')
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    {{-- Toast personalizado --}}
     <script>
         const Toast = Swal.mixin({
             toast: true,
@@ -106,7 +86,6 @@
         });
     </script>
 
-    {{-- Mensajes de éxito --}}
     @if(session('message'))
     <script>
         Toast.fire({
@@ -116,7 +95,6 @@
     </script>
     @endif
 
-    {{-- Mensajes de error --}}
     @if(session('error'))
     <script>
         Toast.fire({
@@ -126,7 +104,6 @@
     </script>
     @endif
 
-    {{-- Eliminar registros --}}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".eliminarRegistroBtn").forEach(boton => {
@@ -169,16 +146,12 @@
                 });
             });
 
-            // Activar tooltips normales
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
             tooltipTriggerList.forEach(el => {
                 new bootstrap.Tooltip(el);
             });
         });
-    </script>
 
-    {{-- Script para dirigir el comportamiento del menu lateral --}}
-    <script>
         const botonToggle = document.getElementById('boton-toggle');
         const botonMenuMovil = document.getElementById('boton-movil-menu');
         const menuLateral = document.getElementById('menu-lateral');
@@ -221,7 +194,6 @@
             });
         }
 
-        // Toggle con botón en escritorio
         if (botonToggle) {
             botonToggle.addEventListener('click', () => {
                 menuLateral.classList.toggle('menu-colapsado');
@@ -229,7 +201,6 @@
             });
         }
 
-        // Toggle con botón en móvil
         if (botonMenuMovil) {
             botonMenuMovil.addEventListener('click', () => {
                 menuLateral.classList.toggle('menu-colapsado');
@@ -237,7 +208,6 @@
             });
         }
 
-        // Aplicar colapsado automático según tamaño de pantalla
         function aplicarColapsadoPorPantalla() {
             if (window.innerWidth < 768) {
                 menuLateral.classList.add('menu-colapsado');
@@ -250,6 +220,5 @@
         document.addEventListener('DOMContentLoaded', aplicarColapsadoPorPantalla);
         window.addEventListener('resize', aplicarColapsadoPorPantalla);
     </script>
-
 </body>
 </html>
