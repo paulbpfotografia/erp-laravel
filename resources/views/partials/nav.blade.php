@@ -1,75 +1,64 @@
-<div id="menu-lateral" class="bg-dark text-white position-fixed d-flex flex-column justify-content-between vh-100"
-    style="width: 250px; top: 0; left: 0; z-index: 1040;">
+<nav class="sidebar d-flex flex-column flex-shrink-0 position-fixed" id="sidebar">
 
-    {{-- Parte superior: navegación --}}
-    <div>
-        <div class="d-flex justify-content-between align-items-center px-3 py-3 border-bottom">
-            <span id="titulo-menu" class="fs-5 fw-bold">ERP</span>
-            <button id="boton-toggle" class="btn btn-sm btn-outline-light d-none d-md-inline">
-                <i class="bi bi-chevron-left"></i>
-            </button>
-        </div>
+    <!-- Botón de toggle -->
+    <button class="toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-chevron-left"></i>
+    </button>
 
-        <div class="px-2 mt-3 d-flex flex-column gap-2">
-            <a href="{{ route('home') }}" class="d-flex align-items-center px-3 py-2 text-white text-decoration-none enlace-menu">
-                <i class="bi bi-house-door-fill me-2"></i> <span class="texto-enlace">Inicio</span>
-            </a>
-            <a href="{{ route('productos.index') }}" class="d-flex align-items-center px-3 py-2 text-white text-decoration-none enlace-menu">
-                <i class="bi bi-file-earmark-binary-fill me-2"></i> <span class="texto-enlace">Gestión de productos</span>
-            </a>
-            <a href="{{ route('pedidos.index') }}" class="d-flex align-items-center px-3 py-2 text-white text-decoration-none enlace-menu">
-                <i class="bi bi-file-earmark-binary-fill me-2"></i> <span class="texto-enlace">Gestión de pedidos</span>
-            </a>
-
-            @role('Admin')
-            <a href="{{ route('usuarios.index') }}" class="d-flex align-items-center px-3 py-2 text-white text-decoration-none enlace-menu">
-                <i class="bi bi-people-fill me-2"></i> <span class="texto-enlace">Gestión de usuarios</span>
-            </a>
-            @endrole
-
-            @role('Directivo|Admin')
-            <a href="{{ route('informes.index') }}" class="d-flex align-items-center px-3 py-2 text-white text-decoration-none enlace-menu">
-                <i class="bi bi-bar-chart-fill me-2"></i> <span class="texto-enlace">Ver informe</span>
-            </a>
-            @endrole
-        </div>
+    <div class="p-4 text-center">
+        <h4 class="logo-text fw-bold mb-0 text-white">ERP</h4>
+        <p class="text-muted small hide-on-collapse">Dashboard</p>
     </div>
 
-    {{-- Bloque de usuario con dropdown --}}
-    <div class="dropdown px-3 mb-4">
-        <button type="button" class="btn btn-danger dropdown-toggle w-100 d-flex align-items-center justify-content-start"
-            data-bs-toggle="dropdown" aria-expanded="false" id="dropdownUser">
+    <div class="nav flex-column">
+        <a href="{{ route('home') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('home') ? 'active' : '' }}">
+            <i class="fas fa-home me-3"></i>
+            <span class="hide-on-collapse">Inicio</span>
+        </a>
 
-            {{-- Imagen redonda --}}
+        <a href="{{ route('productos.index') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('productos.*') ? 'active' : '' }}">
+            <i class="fas fa-cogs me-3"></i>
+            <span class="hide-on-collapse">Gestión de productos</span>
+        </a>
+
+        <a href="{{ route('pedidos.index') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('pedidos.*') ? 'active' : '' }}">
+            <i class="fas fa-box me-3"></i>
+            <span class="hide-on-collapse">Gestión de pedidos</span>
+        </a>
+
+        @role('Admin')
+        <a href="{{ route('usuarios.index') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
+            <i class="fas fa-users me-3"></i>
+            <span class="hide-on-collapse">Gestión de usuarios</span>
+        </a>
+        @endrole
+
+        @role('Directivo|Admin')
+        <a href="{{ route('informes.index') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('informes.*') ? 'active' : '' }}">
+            <i class="fas fa-chart-line me-3"></i>
+            <span class="hide-on-collapse">Ver informe</span>
+        </a>
+        @endrole
+    </div>
+
+    <!-- Perfil del usuario -->
+    <div class="profile-section mt-auto p-4">
+        <div class="d-flex align-items-center">
+            {{-- Imagen del usuario --}}
             @if(Auth::user()->image)
-                <img src="{{ asset('storage/' . Auth::user()->image) }}"
-                    class="rounded-circle me-2"
-                    style="width: 35px; height: 35px; object-fit: cover;"
-                    >
+                <img src="{{ asset('storage/' . Auth::user()->image) }}" class="rounded-circle" style="height: 60px; width: 60px; object-fit: cover;">
             @else
-                <img src="{{ asset('storage/imagenes_usuarios/anonimo_imagen.jpg') }}"
-                    class="rounded-circle me-2"
-                    style="width: 35px; height: 35px; object-fit: cover;"
-                    >
+                <img src="{{ asset('storage/imagenes_usuarios/anonimo_imagen.jpg') }}" class="rounded-circle" style="height: 60px; width: 60px; object-fit: cover;">
             @endif
 
-            {{-- Nombre del usuario --}}
-            <span class="texto-enlace">{{ Auth::user()->name }}</span>
-        </button>
-
-        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
-            <li><a class="dropdown-item" href="#">Mi perfil</a></li>
-            <li><a class="dropdown-item" href="#">Modo oscuro</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                <a class="dropdown-item" href="{{ route('logout') }}"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    Cerrar sesión
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-            </li>
-        </ul>
+            {{-- Información del usuario --}}
+            <div class="ms-3 profile-info">
+                <h6 class="text-white mb-0">{{ Auth::user()->name }}</h6>
+                <small class="text-muted">{{ Auth::user()->roles->first()->name ?? 'Sin rol asignado' }}</small>
+            </div>
+        </div>
     </div>
-</div>
+
+
+
+</nav>

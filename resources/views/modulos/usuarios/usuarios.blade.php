@@ -15,7 +15,7 @@
 
         <div class="box-body">
             <div class="container mt-4">
-                
+
                 <!-- Usuarios Activos -->
                 <h2 class="mb-3">Usuarios Activos</h2>
                 <div class="table-responsive">
@@ -32,7 +32,7 @@
                             @foreach ($users as $user)
                                 @if($user->active)
                                     <tr>
-                                      
+
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->roles->first()->name }}</td>
@@ -40,7 +40,7 @@
                                         <!-- Acciones -->
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">
-                                                
+
                                               <!-- Botón Eliminar -->
                                                     <button type="button"
                                                     class="btn btn-sm btn-danger"
@@ -96,7 +96,7 @@
                                 @if(!$user->active)
                                     <tr>
                                         <!-- Mostrar la imagen del usuario -->
-                                     
+
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->roles->first()->name }}</td>
@@ -104,7 +104,7 @@
                                         <!-- Acciones -->
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">
-                                                
+
                                  <!-- Botón Eliminar -->
                                                         <button type="button"
                                                         class="btn btn-sm btn-danger"
