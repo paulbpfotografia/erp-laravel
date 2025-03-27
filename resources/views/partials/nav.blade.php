@@ -42,22 +42,26 @@
     </div>
 
     <!-- Perfil del usuario -->
-    <div class="profile-section mt-auto p-4">
-        <div class="d-flex align-items-center">
-            {{-- Imagen del usuario --}}
-            @if(Auth::user()->image)
-                <img src="{{ asset('storage/' . Auth::user()->image) }}" class="rounded-circle" style="height: 60px; width: 60px; object-fit: cover;">
-            @else
-                <img src="{{ asset('storage/imagenes_usuarios/anonimo_imagen.jpg') }}" class="rounded-circle" style="height: 60px; width: 60px; object-fit: cover;">
-            @endif
+   <!-- Perfil del usuario -->
+@auth
+<div class="profile-section mt-auto p-4">
+    <div class="d-flex align-items-center">
+        {{-- Imagen del usuario --}}
+        @if(Auth::user()->image)
+            <img src="{{ asset('storage/' . Auth::user()->image) }}" class="rounded-circle" style="height: 60px; width: 60px; object-fit: cover;">
+        @else
+            <img src="{{ asset('storage/imagenes_usuarios/anonimo_imagen.jpg') }}" class="rounded-circle" style="height: 60px; width: 60px; object-fit: cover;">
+        @endif
 
-            {{-- Información del usuario --}}
-            <div class="ms-3 profile-info">
-                <h6 class="text-white mb-0">{{ Auth::user()->name }}</h6>
-                <small class="text-muted">{{ Auth::user()->roles->first()->name ?? 'Sin rol asignado' }}</small>
-            </div>
+        {{-- Información del usuario --}}
+        <div class="ms-3 profile-info">
+            <h6 class="text-white mb-0">{{ Auth::user()->name }}</h6>
+            <small class="text-muted">{{ Auth::user()->roles->first()->name ?? 'Sin rol asignado' }}</small>
         </div>
     </div>
+</div>
+@endauth
+
 
 
 

@@ -22,11 +22,14 @@
 </head>
 <body>
 
+ 
 
 
 <div class="d-flex">
     {{-- Sidebar --}}
+    @if (empty($hidenav))
     @include('partials.nav')
+@endif
 
     {{-- Contenido principal --}}
     <div class="main-content">
