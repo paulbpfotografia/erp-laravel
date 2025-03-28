@@ -22,7 +22,7 @@
 </head>
 <body>
 
- 
+
 
 
 <div class="d-flex">
@@ -36,6 +36,10 @@
         @yield('content')
     </div>
 </div>
+
+
+@include('partials.footer')
+
 
 {{-- JavaScript con Vite --}}
 @vite([
