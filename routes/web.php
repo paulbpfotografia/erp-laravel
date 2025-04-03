@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PruebaController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderLogisticsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ReportController;
@@ -109,5 +110,23 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/informes/pedidos', [ReportController::class, 'ordersByMonth'])
     ->middleware('role:Directivo|Admin')
     ->name('informes.pedidos');
+
+
+
+
+
+    //RUTAS DE LOGÍSTICA Y ALMACÉN
+
+      // Rutas Gestión de Usuarios. Protegida para rol ADMIN
+      Route::group(['middleware' => ['role:Logistica']], function () {
+        //Listar usuarios
+        Route::get('/logistica', [OrderLogisticsController::class, 'index'])
+            ->name('logistica.index');
+
+    });
+
+
+
+
 
 });

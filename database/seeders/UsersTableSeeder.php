@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-      
+        // Usuario Admin
         $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
@@ -23,39 +23,53 @@ class UsersTableSeeder extends Seeder
         ]);
         $admin->assignRole('Admin');
 
-      
-        $empleado1 = User::create([
-            'name' => 'Empleado1',
-            'email' => 'empleado1@empleado.com',
+        // Usuario Administrativo activo
+        $administrativo1 = User::create([
+            'name' => 'Administrativo1',
+            'email' => 'administrativo1@empresa.com',
             'password' => Hash::make('12345678'),
-            'image' => 'imagenes_usuarios/empleado_imagen.webp'
+            'image' => 'imagenes_usuarios/empleado_imagen.webp',
+            'active' => 1
         ]);
-        $empleado1->assignRole('Empleado');
+        $administrativo1->assignRole('Administrativo');
 
-        $empleado2 = User::create([
-            'name' => 'Empleado2',
-            'email' => 'empleado2@empleado.com',
+        // Usuario Administrativo inactivo
+        $administrativo2 = User::create([
+            'name' => 'Administrativo2',
+            'email' => 'administrativo2@empresa.com',
             'password' => Hash::make('12345678'),
-            'image' => null,
-            'active' => '0'
+            'image' => 'imagenes_usuarios/empleado_imagen.webp',
+            'active' => 0
         ]);
-        $empleado2->assignRole('Empleado');
+        $administrativo2->assignRole('Administrativo');
 
-   
+        // Usuario Gerente de Almacén
+        $gerenteAlmacen = User::create([
+            'name' => 'Pepe López',
+            'email' => 'logistica@empresa.com',
+            'password' => Hash::make('12345678'),
+            'image' => 'imagenes_usuarios/empleado_imagen.webp',
+            'active' => 1
+        ]);
+        $gerenteAlmacen->assignRole('Logistica');
+
+        // Usuario Gerente
         $gerente = User::create([
-            'name' => 'Gerente',
+            'name' => 'Homer Simpsom',
             'email' => 'gerente@gerente.com',
             'password' => Hash::make('12345678'),
-            'image' => null,
+            'image' => 'imagenes_usuarios/empleado_imagen.webp',
+            'active' => 1
         ]);
         $gerente->assignRole('Gerente');
 
-     
+        // Usuario Directivo
         $directivo = User::create([
-            'name' => 'Directivo',
+            'name' => 'Señor Burns',
             'email' => 'directivo@directivo.com',
             'password' => Hash::make('12345678'),
-            'image' => null,
+            'image' => 'imagenes_usuarios/empleado_imagen.webp',
+            'active' => 1
         ]);
         $directivo->assignRole('Directivo');
     }

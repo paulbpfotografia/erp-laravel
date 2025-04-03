@@ -58,6 +58,9 @@
 <div class="bg-light">
     <div class="container py-5">
         <div class="row">
+
+
+
             <!-- Profile Header -->
             <div class="col-12 mb-4">
                 <div class="profile-header position-relative mb-4">
@@ -66,12 +69,35 @@
                     </div>
                 </div>
                 <div class="text-center">
+
+
                     <div class="position-relative d-inline-block">
-                        <img src="https://randomuser.me/api/portraits/men/40.jpg" class="rounded-circle profile-pic" alt="Profile Picture">
-                        <button class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle">
+                        @if($user->image)
+                            <img src="{{ asset('storage/' . $user->image) }}"
+                                 class="rounded-circle border border-4 border-white shadow profile-pic"
+                                 style="width: 140px; height: 140px; object-fit: cover;"
+                                 alt="Imagen de perfil">
+                        @else
+                            <img src="{{ asset('resources/default/imagenes_usuarios/anonimo_imagen.jpg') }}"
+                                 class="rounded-circle border border-4 border-white shadow profile-pic"
+                                 style="width: 140px; height: 140px; object-fit: cover;"
+                                 alt="Imagen por defecto">
+                        @endif
+
+                        @can('editar usuarios')
+                        <button type="button"
+                                class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle shadow"
+                                style="transform: translate(25%, 25%);"
+                                title="Cambiar imagen">
                             <i class="fas fa-camera"></i>
                         </button>
+                        @endcan
                     </div>
+
+
+
+
+
                     <h3 class="mt-3 mb-1">Alex Johnso</h3>
                     <p class="text-muted mb-3">Senior Product Designer</p>
                     <div class="d-flex justify-content-center gap-2 mb-4">

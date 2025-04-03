@@ -39,6 +39,16 @@
             <span class="hide-on-collapse">Ver informe</span>
         </a>
         @endrole
+
+
+        @role('Directivo|Logistica')
+        <a href="{{ route('logistica.index') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('logistica.*') ? 'active' : '' }}">
+            <i class="fas fa-warehouse me-3"></i>
+            <span class="hide-on-collapse">Almacén y Logística</span>
+        </a>
+        @endrole
+
+
     </div>
 
     <!-- Perfil del usuario -->
