@@ -33,6 +33,8 @@
         </a>
         @endrole
 
+
+
         @role('Directivo|Admin')
         <a href="{{ route('informes.index') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('informes.*') ? 'active' : '' }}">
             <i class="fas fa-chart-line me-3"></i>
@@ -47,7 +49,13 @@
             <span class="hide-on-collapse">Almacén y Logística</span>
         </a>
         @endrole
-
+<!--PRUEBA DE ENLACE CON LA CREACION DE LA VISTA DE CONTACTO -->
+@role('Admin')
+        <a href="{{ route('contact') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
+            <i class="fas fa-users me-3"></i>
+            <span class="hide-on-collapse">Contacto</span>
+        </a>
+@endrole
 
     </div>
 

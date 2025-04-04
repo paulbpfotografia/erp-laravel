@@ -22,7 +22,8 @@
                     <li><a href="#">Services</a></li>
                     <li><a href="#">Products</a></li>
                     <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="{{ route('contact') }}">Contact</a></li>
+
                 </ul>
             </div>
 

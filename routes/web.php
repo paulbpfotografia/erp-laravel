@@ -14,7 +14,12 @@ use App\Http\Controllers\ReportController;
   // Ruta Login. Página principal "/"
   Route::get('/', [LoginController::class, 'showLoginForm'])->name('ingresar');
 
-//No eliminar. Con esto se cargan rutas de login y logout
+  Route::get('/contact', function () {
+    // Retornamos la vista "modulos.contacto.contact"
+    return view('modulos.contacto.contact');
+})->name('contact');
+
+  //No eliminar. Con esto se cargan rutas de login y logout
   Auth::routes();
 
 
