@@ -77,7 +77,13 @@ class ProductController extends Controller
     public function show(string $id)
     {
         // Obtener el producto por ID
-        $product = Product::findOrFail($id);
+        //$product = Product::findOrFail($id);
+        $product = Product::with([
+            'details',       // para cargar la info de product_details
+            'specs',         // para cargar la info de product_specs
+            'reviews.customer', // para cargar las reseñas y el cliente de cada reseña
+            'category'       // si quieres traer también la categoría
+        ])->findOrFail($id);
         
         return view('modulos.productos.show', compact('product'));
     }

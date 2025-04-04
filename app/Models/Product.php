@@ -37,5 +37,22 @@ class Product extends Model
         return $this->hasOne(Stock::class);
     }
 
+    // Relación 1:1 con product_details
+    public function details()
+    {
+        return $this->hasOne(ProductDetail::class);
+    }
+
+    // Relación 1:1 con product_specs
+    public function specs()
+    {
+        return $this->hasOne(ProductSpec::class);
+    }
+
+    // Relación 1:N con product_reviews
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class);
+    }
 
 }
