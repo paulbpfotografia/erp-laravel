@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
             StockTableSeeder::class,
             OrdersTableSeeder::class,
             MoveStockTableSeeder::class,
+            ProductDetailsTableSeeder::class,
+            ProductSpecsTableSeeder::class,
+            ProductReviewsTableSeeder::class,
         ]);
     }
 }
