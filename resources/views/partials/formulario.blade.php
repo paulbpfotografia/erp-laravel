@@ -22,9 +22,9 @@ INCLUIMOS EN FORMULARIO EN LA VISTA
 
         ['nombre' => 'email', 'etiqueta' => 'Correo Electrónico', 'tipo' => 'email', 'requerido' => true],
         [
-            'nombre' => 'rol', 
-            'etiqueta' => 'Rol', 
-            'tipo' => 'select', 
+            'nombre' => 'rol',
+            'etiqueta' => 'Rol',
+            'tipo' => 'select',
             //SI ES UN SELECT, DEBEMOS TRAER LOS DATOS Y CONVERTIRLOS EN UN ARRAY
             'opciones' => $roles->pluck('name', 'name')->toArray(), //Extraemos los roles como array para el select, y asignamos lo mismo en clave y en valor
             'requerido' => true

@@ -98,6 +98,7 @@ body {
     height: 100vh;
     background: linear-gradient(135deg, #1a1c2e 0%, #16181f 100%);
     transition: all 0.3s ease;
+    
 }
 
 .sidebar.collapsed {
@@ -115,7 +116,7 @@ body {
 
 .sidebar-link:hover {
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
     transform: translateX(5px);
 }
 
@@ -141,6 +142,9 @@ body {
     min-height: 100vh;
     padding: 20px;
     transition: all 0.3s ease;
+}
+body.no-sidebar .main-content {
+    margin-left: 0 !important;
 }
 
 .collapsed~.main-content {
@@ -361,3 +365,18 @@ body {
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
     }
+
+    body.no-sidebar .main-content {
+        margin-left: 0 !important;
+    }
+    
+    /* Ajuste del footer según el estado del sidebar */
+    body:not(.no-sidebar) .footer {
+        margin-left: var(--sidebar-width);
+        transition: margin-left 0.3s ease;
+    }
+    
+    body:not(.no-sidebar).collapsed .footer {
+        margin-left: var(--sidebar-width-collapsed);
+    }
+    

@@ -1,4 +1,4 @@
-<footer class="footer pt-5">
+<footer class="footer mt-auto pt-5 bg-light">
     <div class="container">
         <div class="row g-4">
             <!-- Company Info -->
@@ -42,7 +42,7 @@
             <!-- Newsletter -->
             <div class="col-lg-4 col-md-6">
                 <h3 class="footer-title">Newsletter</h3>
-                <p class= mb-4">Subscribe to our newsletter for updates, news, and exclusive offers.</p>
+                <p class= "mb-4">Subscribe to our newsletter for updates, news, and exclusive offers.</p>
                 <form class="mb-4">
                     <div class="input-group">
                         <input type="email" class="form-control newsletter-input" placeholder="Enter your email">

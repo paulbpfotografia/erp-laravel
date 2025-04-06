@@ -3,18 +3,21 @@
 @section('title', 'Iniciar sesión')
 
 
-{{-- Ocultamos la vista del nav. Esta condición está escrita en main_layout --}}
+{{-- Ocultamos la vista del nav. Esta condición está escrita en main_layout class="container py-5 mb-5"--}}
 @php
     $hidenav = true;
 @endphp
 
 
 @section('content')
-<div class="container">
+<div class="container d-flex flex-column justify-content-center" style="min-height: calc(100vh - 100px);">
+
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">{{ __('Iniciar sesión') }}</div>
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h4 class="mb-0">Iniciar Sesión</h4>
+                </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf

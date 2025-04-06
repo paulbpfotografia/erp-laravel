@@ -4,5 +4,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     toggleButton.addEventListener("click", function() {
         sidebar.classList.toggle("collapsed");
+        document.body.classList.toggle('collapsed');
     });
 });
