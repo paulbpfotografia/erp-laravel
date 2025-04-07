@@ -137,7 +137,7 @@ Route::middleware(['auth'])->group(function () {
     //RUTAS DE LOGÍSTICA Y ALMACÉN
 
     // Rutas Gestión de Usuarios. Protegida para rol ADMIN
-    Route::group(['middleware' => ['role:Logistica']], function () {
+    Route::group(['middleware' => ['role:Logistica|Admin']], function () {
         //Listar usuarios
         Route::get('/logistica', [OrderLogisticsController::class, 'index'])
             ->name('logistica.index');

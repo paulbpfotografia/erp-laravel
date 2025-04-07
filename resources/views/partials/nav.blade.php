@@ -60,7 +60,7 @@
             @endrole
 
 
-            @role('Directivo|Logistica')
+            @role('Directivo|Logistica|Admin')
             <a href="{{ route('logistica.index') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('logistica.*') ? 'active' : '' }}">
                 <i class="fas fa-warehouse me-3"></i>
                 <span class="hide-on-collapse">Almacén y Logística</span>

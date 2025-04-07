@@ -12,7 +12,7 @@ class OrderLogisticsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Logistica');
+        $this->middleware('role:Logistica|Admin');
     }
 
 
