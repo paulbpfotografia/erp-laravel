@@ -36,7 +36,9 @@ class OrderLogisticsController extends Controller
 
     public function show(Order $order)
     {
-        //
+
+        return view('modulos.logistica.logistica-pedidos', compact('order'));
+
     }
 
     public function edit(Order $order)

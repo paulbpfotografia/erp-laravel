@@ -139,7 +139,10 @@ Route::middleware(['auth'])->group(function () {
     // Rutas Gestión de Usuarios. Protegida para rol ADMIN
     Route::group(['middleware' => ['role:Logistica|Admin']], function () {
         //Listar usuarios
-        Route::get('/logistica', [OrderLogisticsController::class, 'index'])
-            ->name('logistica.index');
+        Route::get('/logistica', [OrderLogisticsController::class, 'index'])->name('logistica.index');
+
+        //Acceder a un pedido concreto
+        Route::get('/logistica/{order}', [OrderLogisticsController::class, 'show'])->name('logistica.show');
+
     });
 });

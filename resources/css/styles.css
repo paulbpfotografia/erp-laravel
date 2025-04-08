@@ -98,7 +98,7 @@ body {
     height: 100vh;
     background: linear-gradient(135deg, #1a1c2e 0%, #16181f 100%);
     transition: all 0.3s ease;
-    
+
 }
 
 .sidebar.collapsed {
@@ -369,14 +369,15 @@ body.no-sidebar .main-content {
     body.no-sidebar .main-content {
         margin-left: 0 !important;
     }
-    
+
     /* Ajuste del footer según el estado del sidebar */
     body:not(.no-sidebar) .footer {
         margin-left: var(--sidebar-width);
         transition: margin-left 0.3s ease;
     }
-    
+
     body:not(.no-sidebar).collapsed .footer {
         margin-left: var(--sidebar-width-collapsed);
     }
-    
+
+
