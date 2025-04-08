@@ -7,7 +7,7 @@
     <h2 class="mb-4">Pedidos por preparar</h2>
 
     <div class="table-responsive">
-        <table class="table table-hover table-striped align-middle shadow-sm rounded overflow-hidden text-center">
+        <table class="table datatable table-hover table-striped align-middle shadow-sm rounded overflow-hidden text-center">
             <thead class="table-primary text-uppercase">
                 <tr>
                     <th class="fw-bold">ID</th>
@@ -47,4 +47,11 @@
 
     <hr class="my-4">
 </div>
+
+{{-- Usamos la función global que viene desde app.js (via datatables.js) --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        inicializarDataTable(); // Usa .datatable por defecto
+    });
+</script>
 @endsection

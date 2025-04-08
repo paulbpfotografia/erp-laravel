@@ -8,54 +8,41 @@
 
     <title>@yield('title')</title>
 
-    {{-- Estilos con Vite --}}
+    {{-- Estilos y scripts procesados por Vite --}}
     @vite(['resources/css/app.css', 'resources/css/styles.css', 'resources/js/app.js'])
 
-    <!-- Bootstrap 5 y FontAwesome -->
+    <!-- Bootstrap Icons y FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 </head>
 
 <body class="{{ isset($hidenav) && $hidenav ? 'no-sidebar' : '' }} d-flex flex-column min-vh-100">
 
-    {{-- Aquí va el contenido principal de la página, ocupando el espacio disponible --}}
-
+    {{-- Contenido principal con o sin sidebar --}}
     <main class="flex-fill d-flex">
-        {{-- Sidebar / Nav Lateral (si NO está $hidenav) --}}
         @if (empty($hidenav))
             @include('partials.nav')
         @endif
 
-        {{-- Contenido principal --}}
-        <div class="main-content flex-fill ">
+        <div class="main-content flex-fill">
             @yield('content')
         </div>
-
     </main>
 
-    {{-- Footer siempre al final --}}
     @include('partials.footer')
 
-    {{-- JavaScript con Vite --}}
-    @vite(['resources/js/app.js'])
-
+    {{-- Mensajes flash con SweetAlert o Toast --}}
     @if(session('message') || session('error'))
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            Toast.fire({
-                icon: @json(session('icono', session('error') ? 'error' : 'success')),
-                title: @json(session('message') ?? session('error'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Toast.fire({
+                    icon: @json(session('icono', session('error') ? 'error' : 'success')),
+                    title: @json(session('message') ?? session('error'))
+                });
             });
-        });
-    </script>
+        </script>
     @endif
 
-
 </body>
-
 </html>
