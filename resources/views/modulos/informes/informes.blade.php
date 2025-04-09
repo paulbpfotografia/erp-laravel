@@ -22,6 +22,21 @@
             </div>
         </div>
 
+        <form method="GET" action="{{ route('informes.index') }}" class="mb-4">
+            <div class="row align-items-center g-2">
+                <div class="col-auto">
+                    <label for="year" class="form-label mb-0">Filtrar por año:</label>
+                </div>
+                <div class="col-auto">
+                    <select name="year" id="year" class="form-select" onchange="this.form.submit()">
+                        @for ($y = now()->year; $y >= 2024; $y--)
+                            <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
+                        @endfor
+                    </select>
+                </div>
+            </div>
+        </form>
+
         <!-- Statistics Cards -->
         <div class="row g-4 mb-4">
             <!-- Sales Card -->
@@ -37,7 +52,7 @@
                             </span>
                         </div>
                         <h6 class="text-muted mb-2">Total Sales</h6>
-                        <h4 class="mb-3">$24,589</h4>
+                        <h4 class="mb-3">{{$totalSales}}</h4>
                         <div class="progress">
                             <div class="progress-bar bg-primary" style="width: 75%"></div>
                         </div>
@@ -45,20 +60,17 @@
                 </div>
             </div>
 
-            <!-- Users Card -->
+            <!-- Orders Card -->
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card stat-card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex align-items-center mb-3">
                             <div class="stat-icon bg-success bg-opacity-10 text-success">
-                                <i class="fas fa-users"></i>
+                                <i class="bi bi-bag-fill"></i>
                             </div>
-                            <span class="badge bg-danger trend-badge">
-                                <i class="fas fa-arrow-down me-1"></i>5.2%
-                            </span>
                         </div>
-                        <h6 class="text-muted mb-2">Active Users</h6>
-                        <h4 class="mb-3">14,789</h4>
+                        <h6 class="text-muted mb-2">Pedidos Totales</h6>
+                        <h4 class="mb-3">{{$totalOrders}}</h4>
                         <div class="progress">
                             <div class="progress-bar bg-success" style="width: 65%"></div>
                         </div>
