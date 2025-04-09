@@ -80,10 +80,6 @@ html, body {
     width: calc(100% - var(--sidebar-width-collapsed));
 }
 
-
-
-
-
 :root {
     --sidebar-width: 280px;
     --sidebar-width-collapsed: 80px;
@@ -250,9 +246,6 @@ body.no-sidebar .main-content {
     top: 5px;
 }
 
-
-
-
 /* footer */
 .footer {
     background: linear-gradient(145deg, #1a1c23, #242730);
@@ -351,8 +344,6 @@ body.no-sidebar .main-content {
 .footer-bottom a:hover {
     color: #ffffff;
 }
-
-
 
 
 .gradient-custom {

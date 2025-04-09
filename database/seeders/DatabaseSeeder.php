@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
             MoveStockTableSeeder::class,
             ProductDetailsTableSeeder::class,
             ProductSpecsTableSeeder::class,
-            ProductReviewsTableSeeder::class,
         ]);
     }
 }

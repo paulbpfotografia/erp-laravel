@@ -38,8 +38,10 @@
 
     </main>
 
-    {{-- Footer siempre al final --}}
-    @include('partials.footer')
+    {{-- Footer: se muestra solo si no se ha definido $hidefooter --}}
+    @if (!isset($hidefooter) || !$hidefooter)
+        @include('partials.footer')
+    @endif
 
     {{-- JavaScript con Vite --}}
     @vite(['resources/js/app.js'])

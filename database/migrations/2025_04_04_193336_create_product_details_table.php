@@ -14,10 +14,7 @@ return new class extends Migration
     {
         Schema::create('product_details', function (Blueprint $table) {
             $table->id();
-            $table->string('brand')->nullable(); //marca
-            $table->text('shipping_info')->nullable(); //Info de envio
-            $table->text('return_policy')->nullable(); //politica de devoluciones
-            $table->text('warranty')->nullable(); //Garantia
+            $table->text('description')->nullable(); //Amplia descripcion
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->timestamps();
         });
