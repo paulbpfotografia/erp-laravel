@@ -119,16 +119,24 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    // RUTA PARA INFORMES (Solo para Directivo)
-    Route::get('/informes', function () {
-        return view('modulos.informes.informes');
-    })->middleware('role:Directivo|Admin')->name('informes.index');
+    // RUTA PARA INFORMES
+    Route::get('/informes', [ReportController::class, 'index'])
+    ->middleware('role:Directivo|Admin')
+    ->name('informes.index');
 
-
-    // Rutas para informes de pedidos (solo para el rol Directivo)
+    // Rutas para informes de pedidos
     Route::get('/informes/pedidos', [ReportController::class, 'ordersByMonth'])
         ->middleware('role:Directivo|Admin')
         ->name('informes.pedidos');
+
+    //Ruta para el rosco de categorías más vendidas
+        Route::get('/informes/categorias', [ReportController::class, 'productsByCategory'])
+        ->middleware('role:Directivo|Admin')
+        ->name('informes.categorias');
+
+
+
+
 
 
 

@@ -6,6 +6,25 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
+
+
+    public function index()
+{
+    // Ejemplo: contar el total de pedidos, usuarios y productos vendidos
+    // $totalPedidos = DB::table('orders')->count();
+    // $totalUsuarios = DB::table('users')->count();
+    // $totalProductosVendidos = DB::table('order_product')->sum('quantity');
+
+    return view('modulos.informes.informes', [
+        // 'totalPedidos' => $totalPedidos,
+        // 'totalUsuarios' => $totalUsuarios,
+        // 'totalProductosVendidos' => $totalProductosVendidos
+    ]);
+}
+
+
+
+
     public function ordersByMonth()
     {
         // Obtener los pedidos agrupados por mes y contar los pedidos
@@ -19,7 +38,7 @@ class ReportController extends Controller
         // Crear un array con los meses y la cantidad de pedidos
         $labels = [];
         $data = [];
-        
+
         foreach ($orders as $order) {
             $labels[] = $this->getMonthName($order->month) . ' ' . $order->year; // Obtener el nombre del mes
             $data[] = $order->count; // Cantidad de pedidos
@@ -50,4 +69,39 @@ class ReportController extends Controller
 
         return $months[$month];
     }
+
+
+
+    //Función para extraer las categorías más vendidas
+    public function productsByCategory()
+{
+    $categories = DB::table('order_product')
+        ->join('products', 'order_product.product_id', '=', 'products.id')
+        ->join('category', 'products.category_id', '=', 'category.id')
+        ->select('category.name', DB::raw('SUM(order_product.quantity) as total_sold'))
+        ->groupBy('category.name')
+        ->orderByDesc('total_sold')
+        ->get();
+
+    $labels = [];
+    $data = [];
+
+    foreach ($categories as $category) {
+        $labels[] = $category->name;
+        $data[] = $category->total_sold;
+    }
+
+    return response()->json([
+        'labels' => $labels,
+        'data' => $data
+    ]);
+}
+
+
+
+
+
+
+
+
 }

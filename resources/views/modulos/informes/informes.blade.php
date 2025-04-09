@@ -5,13 +5,14 @@
     <h2 class="mb-4">Informe de Ventas</h2>
 
     <div class="container py-4">
+
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="mb-0">Dashboard Overview</h4>
             <div class="dropdown">
                 <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-calendar-alt me-2"></i>This Month
-                    </button>
+                    <i class="fas fa-calendar-alt me-2"></i>This Month
+                </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#">Today</a></li>
                     <li><a class="dropdown-item" href="#">This Week</a></li>
@@ -22,7 +23,7 @@
         </div>
 
         <!-- Statistics Cards -->
-        <div class="row g-4">
+        <div class="row g-4 mb-4">
             <!-- Sales Card -->
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card stat-card border-0 shadow-sm">
@@ -32,8 +33,8 @@
                                 <i class="fas fa-shopping-cart"></i>
                             </div>
                             <span class="badge bg-success trend-badge">
-                                    <i class="fas fa-arrow-up me-1"></i>12.5%
-                                </span>
+                                <i class="fas fa-arrow-up me-1"></i>12.5%
+                            </span>
                         </div>
                         <h6 class="text-muted mb-2">Total Sales</h6>
                         <h4 class="mb-3">$24,589</h4>
@@ -53,8 +54,8 @@
                                 <i class="fas fa-users"></i>
                             </div>
                             <span class="badge bg-danger trend-badge">
-                                    <i class="fas fa-arrow-down me-1"></i>5.2%
-                                </span>
+                                <i class="fas fa-arrow-down me-1"></i>5.2%
+                            </span>
                         </div>
                         <h6 class="text-muted mb-2">Active Users</h6>
                         <h4 class="mb-3">14,789</h4>
@@ -74,8 +75,8 @@
                                 <i class="fas fa-box"></i>
                             </div>
                             <span class="badge bg-success trend-badge">
-                                    <i class="fas fa-arrow-up me-1"></i>8.4%
-                                </span>
+                                <i class="fas fa-arrow-up me-1"></i>8.4%
+                            </span>
                         </div>
                         <h6 class="text-muted mb-2">New Orders</h6>
                         <h4 class="mb-3">1,589</h4>
@@ -95,8 +96,8 @@
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
                             <span class="badge bg-success trend-badge">
-                                    <i class="fas fa-arrow-up me-1"></i>15.7%
-                                </span>
+                                <i class="fas fa-arrow-up me-1"></i>15.7%
+                            </span>
                         </div>
                         <h6 class="text-muted mb-2">Revenue</h6>
                         <h4 class="mb-3">$45,289</h4>
@@ -108,16 +109,16 @@
             </div>
         </div>
 
-        <!-- Activity Section -->
-        <div class="row mt-4">
+        <!-- Recent Activity Section -->
+        <div class="row mb-4">
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h5 class="card-title mb-0">Recent Activity</h5>
                             <button class="btn btn-light btn-sm">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </button>
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
                         </div>
                         <div class="list-group list-group-flush">
                             <div class="list-group-item border-0 d-flex align-items-center px-0">
@@ -145,17 +146,33 @@
                 </div>
             </div>
         </div>
+
+        <!-- Charts Section -->
+        <div class="row mb-4">
+            <!-- Pedidos por Mes -->
+            <div class="col-12 col-lg-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Pedidos por Mes</h5>
+                        <canvas id="miGrafico" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos por Categoría -->
+            <div class="col-12 col-lg-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Categorías con más productos vendidos</h5>
+                        <canvas id="graficoCategorias" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-
-
-
-    <!-- Contenedor del gráfico -->
-    <canvas id="miGrafico" width="400" height="200"></canvas>
 </div>
 
-
-<!-- Incluir el .JS compilado por Vite-->
+<!-- Incluir el .JS compilado por Vite -->
 @vite('resources/js/informes.js')
-
 @endsection

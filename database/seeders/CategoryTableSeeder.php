@@ -15,16 +15,16 @@ class CategoryTableSeeder extends Seeder
     {
         //Datos de prueba
         DB::table('category')->insert([
-            ['name' => 'Sofás', 'description' => 'Variedad en los modelos de sofás.'],
-            ['name' => 'Mesas', 'description' => 'Encontrarás mesas de diferentes dimensiones cuadradas, redondas, etc.'],
-            ['name' => 'Colchones', 'description' => 'Calidad y Confort en nuestros colchones.'],
+            ['name' => 'Sofas', 'description' => 'Variedad en los modelos de sofás.'],
+            ['name' => 'Mesas', 'description' => 'Mesas lista para restauración'],
+            ['name' => 'Colchones', 'description' => 'Variedas de colchones catalogados para cumplir con la normativa en hoteles'],
             ['name' => 'Sillas', 'description' => 'Sillas ergonómicas y de diseño moderno.'],
-            ['name' => 'Estanterías', 'description' => 'Organiza tus espacios con nuestras estanterías.'],
-            ['name' => 'Lámparas', 'description' => 'Ilumina tu hogar con estilo.'],
-            ['name' => 'Espejos', 'description' => 'Dale un toque elegante a tus espacios con nuestros espejos.'],
+            ['name' => 'Estanterias', 'description' => 'Perfectas para la organización de espacios'],
+            ['name' => 'Lamparas', 'description' => 'Catálogo de lamparas de iluminación para el canal HORECA'],
+            ['name' => 'Espejos', 'description' => 'Descripción espejos.'],
             ['name' => 'Alfombras', 'description' => 'Diferentes estilos y materiales en alfombras.'],
-            ['name' => 'Camas', 'description' => 'Descansa plácidamente con nuestras camas.'],
-            ['name' => 'Muebles de TV', 'description' => 'Optimiza tu sala con nuestros muebles para TV.'],
+            ['name' => 'Camas', 'description' => 'Soportes y otros para colchones'],
+            ['name' => 'Muebles de TV', 'description' => 'Muebles de TV listas para todo tipo de espacios'],
         ]);
     }
 }
