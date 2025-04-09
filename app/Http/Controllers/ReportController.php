@@ -4,23 +4,21 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
+use App\Models\Order;
+
 class ReportController extends Controller
 {
 
 
-    public function index()
-{
-    // Ejemplo: contar el total de pedidos, usuarios y productos vendidos
-    // $totalPedidos = DB::table('orders')->count();
-    // $totalUsuarios = DB::table('users')->count();
-    // $totalProductosVendidos = DB::table('order_product')->sum('quantity');
-
-    return view('modulos.informes.informes', [
-        // 'totalPedidos' => $totalPedidos,
-        // 'totalUsuarios' => $totalUsuarios,
-        // 'totalProductosVendidos' => $totalProductosVendidos
-    ]);
-}
+    public function index(Request $request)
+    {
+        $year = $request->input('year', now()->year); 
+    
+        $totalOrders = Order::whereYear('order_date', $year)->count();
+        $totalSales = Order::whereYear('order_date', $year)->sum('total');
+    
+        return view('modulos.informes.informes', compact('totalOrders', 'totalSales', 'year'));
+    }
 
 
 
