@@ -4,47 +4,50 @@
 
 @section('content')
 <div class="container mt-5">
-    <h2 class="mb-4">Pedidos por preparar</h2>
+    <h2 class="mb-4 fw-semibold text-primary-emphasis">Pedidos por preparar</h2>
 
-    <div class="table-responsive">
-        <table class="table table-hover table-striped align-middle shadow-sm rounded overflow-hidden text-center">
-            <thead class="table-primary text-uppercase">
+    <div class="table-responsive rounded shadow-sm border border-light-subtle">
+        <table class="table table-hover align-middle text-center mb-0">
+            <thead class="table-light text-uppercase small text-muted border-bottom border-2">
                 <tr>
-                    <th class="fw-bold">ID</th>
-                    <th class="fw-bold">Fecha de creación</th>
-                    <th class="fw-bold">Estado</th>
-                    <th class="fw-bold">Acciones</th>
+                    <th class="fw-semibold">ID</th>
+                    <th class="fw-semibold">Fecha</th>
+                    <th class="fw-semibold">Estado</th>
+                    <th class="fw-semibold">Acciones</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($orders as $order)
-                    <tr>
-                        <td>{{ $order->id }}</td>
-                        <td>{{ $order->order_date }}</td>
+            <tbody class="bg-white">
+                @forelse ($orders as $order)
+                    <tr class="transition hover-bg-light">
+                        <td class="text-secondary">{{ $order->id }}</td>
+                        <td>{{ \Carbon\Carbon::parse($order->order_date)->format('d/m/Y') }}</td>
                         <td>
-                            <span class="{{ clase_estado_pedido($order->status) }}">
+                            <span class="badge px-3 py-2 rounded-pill
+                                {{ $order->status === 'pendiente' ? 'bg-warning-subtle text-warning' : '' }}
+                                {{ $order->status === 'enviado' ? 'bg-info-subtle text-info' : '' }}
+                                {{ $order->status === 'entregado' ? 'bg-success-subtle text-success' : '' }}
+                                {{ $order->status === 'preparado' ? 'bg-primary-subtle text-primary' : '' }}">
+                                <i class="bi bi-circle-fill me-1 small"></i>
                                 {{ ucfirst($order->status) }}
                             </span>
                         </td>
                         <td>
-                            <div class="d-flex justify-content-center gap-2">
-                                @can('cambiar estado pedido')
-                                    <a href="{{ route('logistica.show', $order) }}"
-                                       class="btn btn-sm btn-primary"
-                                       data-bs-toggle="tooltip"
-                                       data-bs-placement="top"
-                                       title="Ver detalles del pedido">
-                                       <i class="bi bi-truck"></i>
-                                    </a>
-                                @endcan
-                            </div>
+                            <a href="{{ route('logistica.show', $order) }}"
+                               class="btn btn-sm btn-outline-secondary rounded-pill"
+                               data-bs-toggle="tooltip"
+                               title="Ver detalles del pedido">
+                                <i class="bi bi-eye"></i>
+                                Ver
+                            </a>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-muted">No hay pedidos en esta categoría.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
-
-    <hr class="my-4">
 </div>
 @endsection
