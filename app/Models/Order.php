@@ -14,6 +14,7 @@ class Order extends Model
         'status',
         'total',
         'customer_id',
+        'carrier_id', 
     ];
 
     public function customer()
@@ -31,9 +32,14 @@ class Order extends Model
         'products.prepared' => 'boolean',
     ];
 
-
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
+    }
+
+    // Relación con el transportista
+    public function carrier()
+    {
+        return $this->belongsTo(Carrier::class);
     }
 }

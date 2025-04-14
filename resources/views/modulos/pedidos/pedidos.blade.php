@@ -116,6 +116,18 @@
                         </select>
                     </div>
 
+                    <!-- Transportista -->
+                    <div class="mb-3">
+                        <label for="carrier_id" class="form-label fw-semibold">Transportista</label>
+                        <select name="carrier_id" class="form-select">
+                            <option value="" disabled selected>Seleccione un transportista</option>
+                            @foreach ($carriers as $carrier)
+                                <option value="{{ $carrier->id }}">{{ $carrier->name }}</option>
+                            @endforeach
+                            <option value="0">Vehículo propio de la empresa</option>
+                        </select>
+                    </div>
+
                     <!-- Productos agrupados por categoría -->
                     <div class="accordion" id="accordionCategorias">
                         @foreach ($categories as $category)

@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Carrier;
 
 
 use Carbon\Traits\Timestamp;
@@ -25,9 +26,10 @@ class OrderController extends Controller
         $customers = Customer::all();
         $products = Product::with('stock')->get();
         $categories = Category::with('products.stock')->get();
+        $carriers = Carrier::all();
 
 
-        return view('modulos.pedidos.pedidos',compact('orders','customers', 'products', 'categories'));
+        return view('modulos.pedidos.pedidos',compact('orders','customers', 'products', 'categories','carriers'));
     }
 
 

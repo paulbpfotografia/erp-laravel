@@ -46,43 +46,29 @@
             @if($order->products->isEmpty())
                 <p class="text-muted">Este pedido no tiene productos.</p>
             @else
-                @php
-                    $totalPedido = 0;
-                @endphp
-
                 <ul class="list-group list-group-flush mb-4">
                     @foreach ($order->products as $product)
-                        @php
-                            $subtotal = calcular_total_pedido_por_producto($product->price, $product->pivot->quantity);
-                            $totalPedido += $subtotal;
-                        @endphp
                         <li class="list-group-item px-4 py-3 d-flex justify-content-between align-items-start">
                             <div>
                                 <h6 class="mb-1 fw-semibold">{{ $product->name }}</h6>
                                 <small class="text-muted d-block">Categoría: {{ $product->category->name ?? 'Sin categoría' }}</small>
-                                <small class="text-muted d-block">Precio unitario: {{ number_format($product->price, 2) }} €</small>
                                 <small class="text-muted d-block">Cantidad: {{ $product->pivot->quantity }}</small>
                             </div>
                             <div class="text-end">
-                                <span class="fw-semibold text-primary">
-                                    {{ number_format($subtotal, 2) }} €
-                                </span>
+                                @if (!$product->pivot->prepared)
+                                    <span class="badge bg-warning text-dark">Pendiente</span>
+                                @else
+                                    <span class="badge bg-success text-white">Preparado</span>
+                                @endif
                             </div>
                         </li>
                     @endforeach
                 </ul>
-
-                <!-- Total pedido -->
-                <div class="text-end mt-3">
-                    <span class="badge bg-success-subtle text-success-emphasis fs-5 px-4 py-3 rounded-pill shadow-sm">
-                        Total del pedido: {{ number_format($totalPedido, 2) }} €
-                    </span>
-                </div>
             @endif
 
             <!-- Botón volver -->
             <div class="mt-5 text-end">
-                <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary">
+                <a href="{{ route('logistica.index') }}" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left-circle me-1"></i> Volver
                 </a>
             </div>

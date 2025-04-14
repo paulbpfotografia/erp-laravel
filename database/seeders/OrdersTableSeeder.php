@@ -27,11 +27,13 @@ class OrdersTableSeeder extends Seeder
         for ($i = 0; $i < 200; $i++) {
             $orderDate = Carbon::create(2024, 9, 1)->addDays(rand(0, $daysRange));
 
+            $status = $orderDate < Carbon::create(2025, 2, 1)
+                ? 'entregado'
+                : collect(['preparado', 'pendiente', 'enviado', 'entregado'])->random();
+
             $pedidos[] = [
                 'order_date' => $orderDate,
-                'status' => $orderDate < Carbon::create(2025, 2, 1)
-                    ? 'entregado'
-                    : collect(['preparado', 'pendiente', 'enviado', 'entregado'])->random(),
+                'status' => $status,
             ];
         }
 
@@ -42,9 +44,11 @@ class OrdersTableSeeder extends Seeder
         for ($i = 0; $i < 100; $i++) {
             $orderDate = Carbon::create(2025, 2, 1)->addDays(rand(0, $recentRange));
 
+            $status = collect(['preparado', 'pendiente', 'enviado', 'entregado'])->random();
+
             $pedidos[] = [
                 'order_date' => $orderDate,
-                'status' => collect(['preparado', 'pendiente', 'enviado', 'entregado'])->random(),
+                'status' => $status,
             ];
         }
 
@@ -72,11 +76,13 @@ class OrdersTableSeeder extends Seeder
                 $subtotal = $quantity * $unitPrice;
                 $total += $subtotal;
 
+                // Aquí es donde actualizamos el campo 'prepared' según el estado del pedido
                 DB::table('order_product')->insert([
                     'order_id' => $orderId,
                     'product_id' => $productId,
                     'quantity' => $quantity,
                     'unit_price' => $unitPrice,
+                    'prepared' => in_array($pedido['status'], ['entregado', 'enviado', 'preparado']), // Marcar como preparado si el pedido está en uno de esos estados
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -86,7 +92,5 @@ class OrdersTableSeeder extends Seeder
                 'total' => round($total, 2),
             ]);
         }
-
-
     }
 }
