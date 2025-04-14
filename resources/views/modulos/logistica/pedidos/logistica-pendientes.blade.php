@@ -32,13 +32,23 @@
                             </span>
                         </td>
                         <td>
-                            <a href="{{ route('logistica.show', $order) }}"
-                               class="btn btn-sm btn-outline-secondary rounded-pill"
-                               data-bs-toggle="tooltip"
-                               title="Ver detalles del pedido">
-                                <i class="bi bi-eye"></i>
-                                Ver
-                            </a>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="{{ route('logistica.show', $order) }}"
+                                   class="btn btn-sm btn-outline-secondary rounded-pill"
+                                   data-bs-toggle="tooltip"
+                                   title="Ver detalles del pedido">
+                                    <i class="bi bi-eye"></i>
+                                    Ver
+                                </a>
+
+                                <a href="{{ route('logistica.pedidos.verPreparacion', $order) }}"
+                                   class="btn btn-sm btn-success rounded-pill"
+                                   data-bs-toggle="tooltip"
+                                   title="Preparar pedido">
+                                    <i class="bi bi-box-seam"></i>
+                                    Preparar
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 @empty

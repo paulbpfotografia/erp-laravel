@@ -77,4 +77,53 @@ class OrderLogisticsController extends Controller
     {
         //
     }
+
+
+    public function updatePreparacion(Request $request, Order $order)
+    {
+        // Obtener los productos preparados desde el formulario
+        $productosPreparados = $request->input('productos_preparados', []);
+
+        // Actualizamos el valor de 'prepared' solo para los productos marcados
+        foreach ($order->products as $product) {
+            // Si el producto está en el array de productos preparados (marcado en el formulario)
+            if (in_array($product->id, $productosPreparados)) {
+                // Solo actualizamos 'prepared' si estaba marcado como no preparado
+                if ($product->pivot->prepared == 0) {
+                    $order->products()->updateExistingPivot($product->id, [
+                        'prepared' => true, // Marcar como preparado
+                    ]);
+                }
+            }
+        }
+
+        // Recargamos los productos actualizados para asegurarnos de tener los datos más actualizados
+        $order->load('products');
+
+        // Verificamos si todos los productos del pedido están preparados
+        $todosPreparados = $order->products->every(function ($product) {
+            return (bool) $product->pivot->prepared; // Aseguramos que 'prepared' sea tratado como booleano
+        });
+
+        // Si todos los productos están preparados, cambiamos el estado del pedido a 'preparado'
+        if ($todosPreparados) {
+            $order->status = 'preparado'; // Actualizamos el estado del pedido
+            $order->save();
+        }
+
+        // Redirigimos a la misma página con un mensaje de éxito
+        return redirect()->back()->with('success', 'Progreso de preparación actualizado correctamente.');
+    }
+
+
+
+    public function preparar(Order $order)
+    {
+        $order->load(['products']); // ← esto debe estar
+        return view('modulos.logistica.pedidos.logistica-preparar', compact('order'));
+    }
+
+
+
+
 }

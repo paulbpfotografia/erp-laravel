@@ -156,9 +156,16 @@ Route::group(['middleware' => ['role:Logistica|Admin']], function () {
     Route::get('/logistica/entregados', [OrderLogisticsController::class, 'indexEntregados'])->name('logistica.entregados');
     Route::get('/logistica/preparados', [OrderLogisticsController::class, 'indexPreparados'])->name('logistica.preparados');
 
+    // Vista para preparar el pedido (formulario)
+    Route::get('/logistica/pedidos/{order}/preparar', [OrderLogisticsController::class, 'preparar'])
+        ->name('logistica.pedidos.verPreparacion');
+
+    // Guardar progreso de preparación
+    Route::post('/logistica/pedidos/{order}/preparar', [OrderLogisticsController::class, 'updatePreparacion'])
+        ->name('logistica.pedidos.preparar');
+
     // Acceder a un pedido concreto
     Route::get('/logistica/{order}', [OrderLogisticsController::class, 'show'])->name('logistica.show');
-
 });
 
 

@@ -24,8 +24,12 @@ class Order extends Model
     // Relación tabla intermedia
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('quantity', 'unit_price')->withTimestamps();
+        return $this->belongsToMany(Product::class)->withPivot('quantity', 'unit_price','prepared')->withTimestamps();
     }
+
+    protected $casts = [
+        'products.prepared' => 'boolean',
+    ];
 
 
     public function invoice()

@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    
     use HasFactory;
     protected $table = 'products';
 
@@ -20,39 +19,32 @@ class Product extends Model
     ];
 
     public function orders() {
-
-        return $this->belongsToMany(Order::class)->whithpivot('quantity','unit_price')->withTimestamps();
-
+        return $this->belongsToMany(Order::class)
+                    ->withPivot('quantity', 'unit_price', 'prepared') // Añadido 'prepared' al pivot
+                    ->withTimestamps();
     }
-
 
     public function category() {
         return $this->belongsTo(Category::class);
     }
 
-
-    
-    public function stock()
-    {
+    public function stock() {
         return $this->hasOne(Stock::class);
     }
 
-    // Relación 1:1 con product_details
-    public function details()
-    {
+    public function details() {
         return $this->hasOne(ProductDetail::class);
     }
 
-    // Relación 1:1 con product_specs
-    public function specs()
-    {
+    public function specs() {
         return $this->hasOne(ProductSpec::class);
     }
 
-    // Relación 1:N con product_reviews
-    public function reviews()
-    {
+    public function reviews() {
         return $this->hasMany(ProductReview::class);
     }
 
+    protected $casts = [
+        'pivot.prepared' => 'boolean',  // Aquí aseguramos que 'prepared' se trata como un booleano
+    ];
 }
