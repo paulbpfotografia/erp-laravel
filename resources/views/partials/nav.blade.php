@@ -61,11 +61,83 @@
 
 
             @role('Directivo|Logistica|Admin')
-            <a href="{{ route('logistica.index') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('logistica.*') ? 'active' : '' }}">
-                <i class="fas fa-warehouse me-3"></i>
-                <span class="hide-on-collapse">Almacén y Logística</span>
-            </a>
+            <div class="sidebar-item">
+                <!-- Menú principal: Almacén y Logística -->
+                <a class="sidebar-link text-decoration-none p-3 d-flex justify-content-between align-items-center {{ request()->routeIs('logistica.*') ? 'active' : '' }}"
+                   data-bs-toggle="collapse"
+                   href="#submenuLogistica"
+                   role="button"
+                   aria-expanded="false"
+                   aria-controls="submenuLogistica">
+                    <div>
+                        <i class="fas fa-warehouse me-3"></i>
+                        <span>Almacén y Logística</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+
+                <!-- Submenú general -->
+                <div class="collapse ps-3 {{ request()->routeIs('logistica.*') ? 'show' : '' }}" id="submenuLogistica">
+
+                    <!-- Submenú: Pedidos -->
+                    <a class="sidebar-link text-decoration-none d-flex justify-content-between align-items-center py-2 ps-3"
+                       data-bs-toggle="collapse"
+                       href="#submenuPedidos"
+                       role="button"
+                       aria-expanded="false"
+                       aria-controls="submenuPedidos">
+                        <span>Pedidos</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="collapse ps-3 {{ request()->routeIs('logistica.pendientes') || request()->routeIs('logistica.enviados') || request()->routeIs('logistica.entregados') || request()->routeIs('logistica.preparados') || request()->routeIs('logistica.index') ? 'show' : '' }}" id="submenuPedidos">
+                        <a href="{{ route('logistica.index') }}" class="sidebar-link d-block py-2 text-decoration-none">
+                            Todos los Pedidos
+                        </a>
+                        <a href="{{ route('logistica.pendientes') }}" class="sidebar-link d-block py-2 text-decoration-none">
+                            Pendientes
+                        </a>
+                        <a href="{{ route('logistica.enviados') }}" class="sidebar-link d-block py-2 text-decoration-none">
+                            Enviados
+                        </a>
+                        <a href="{{ route('logistica.entregados') }}" class="sidebar-link d-block py-2 text-decoration-none">
+                            Entregados
+                        </a>
+                        <a href="{{ route('logistica.preparados') }}" class="sidebar-link d-block py-2 text-decoration-none">
+                            Preparados
+                        </a>
+                    </div>
+
+                    <!-- Submenú: Almacén -->
+                    <a class="sidebar-link text-decoration-none d-flex justify-content-between align-items-center py-2 ps-3"
+                       data-bs-toggle="collapse"
+                       href="#submenuAlmacen"
+                       role="button"
+                       aria-expanded="false"
+                       aria-controls="submenuAlmacen">
+                        <span>Almacén</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="collapse ps-3" id="submenuAlmacen">
+                        <a href="#" class="sidebar-link d-block py-2 text-decoration-none">
+                            Inventario
+                        </a>
+                        <a href="#" class="sidebar-link d-block py-2 text-decoration-none">
+                            Entradas
+                        </a>
+                        <a href="#" class="sidebar-link d-block py-2 text-decoration-none">
+                            Salidas
+                        </a>
+                        <a href="#" class="sidebar-link d-block py-2 text-decoration-none">
+                            Proveedores
+                        </a>
+                    </div>
+
+                </div>
+            </div>
             @endrole
+
+
+
             <!--PRUEBA DE ENLACE CON LA CREACION DE LA VISTA DE CONTACTO -->
             @role('Admin')
             <a href="{{ route('contact') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('usuarios.*') ? 'active' : '' }}">

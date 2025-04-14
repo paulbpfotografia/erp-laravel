@@ -144,13 +144,23 @@ Route::middleware(['auth'])->group(function () {
 
     //RUTAS DE LOGÍSTICA Y ALMACÉN
 
-    // Rutas Gestión de Usuarios. Protegida para rol ADMIN
-    Route::group(['middleware' => ['role:Logistica|Admin']], function () {
-        //Listar usuarios
-        Route::get('/logistica', [OrderLogisticsController::class, 'index'])->name('logistica.index');
+// Rutas Gestión de Usuarios. Protegida para rol ADMIN o LOGISTICA
+Route::group(['middleware' => ['role:Logistica|Admin']], function () {
 
-        //Acceder a un pedido concreto
-        Route::get('/logistica/{order}', [OrderLogisticsController::class, 'show'])->name('logistica.show');
+    // Listar todos los pedidos
+    Route::get('/logistica/pedidos', [OrderLogisticsController::class, 'indexAll'])->name('logistica.index');
 
-    });
+    // Listar pedidos por estado
+    Route::get('/logistica/pendientes', [OrderLogisticsController::class, 'indexPendientes'])->name('logistica.pendientes');
+    Route::get('/logistica/enviados', [OrderLogisticsController::class, 'indexEnviados'])->name('logistica.enviados');
+    Route::get('/logistica/entregados', [OrderLogisticsController::class, 'indexEntregados'])->name('logistica.entregados');
+    Route::get('/logistica/preparados', [OrderLogisticsController::class, 'indexPreparados'])->name('logistica.preparados');
+
+    // Acceder a un pedido concreto
+    Route::get('/logistica/{order}', [OrderLogisticsController::class, 'show'])->name('logistica.show');
+
+});
+
+
+
 });
