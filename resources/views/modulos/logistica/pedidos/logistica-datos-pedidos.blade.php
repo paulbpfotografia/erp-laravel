@@ -40,6 +40,17 @@
             </div>
             @endif
 
+            <!-- Información del transportista -->
+            @if($order->carrier)
+            <div class="mb-5">
+                <h5 class="text-primary-emphasis mb-3">Transportista</h5>
+                <div class="border rounded p-3 bg-light">
+                    <p class="mb-1"><strong>Nombre:</strong> {{ $order->carrier->name }}</p>
+                    <p class="mb-1"><strong>Teléfono:</strong> {{ $order->carrier->phone }}</p>
+                </div>
+            </div>
+            @endif
+
             <!-- Productos -->
             <h5 class="text-primary-emphasis mb-3">Productos del pedido</h5>
 

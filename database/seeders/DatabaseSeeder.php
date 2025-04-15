@@ -15,14 +15,15 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolSeeder::class,
             UsersTableSeeder::class,
-            CustomerTableSeeder::class,
+            CustomerTableSeeder::class, // Asegúrate de que este sea llamado primero
             CategoryTableSeeder::class,
-            ProductsTableSeeder::class,
+            ProductsTableSeeder::class, // Asegúrate de que este sea llamado antes de Orders
             StockTableSeeder::class,
-            OrdersTableSeeder::class,
             MoveStockTableSeeder::class,
             ProductDetailsTableSeeder::class,
             ProductSpecsTableSeeder::class,
+            CarrierSeeder::class, // Asegúrate de que este sea llamado antes de Orders
+            OrdersTableSeeder::class,
         ]);
     }
 }
