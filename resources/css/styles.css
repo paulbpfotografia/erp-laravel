@@ -345,6 +345,19 @@ body.no-sidebar .main-content {
     color: #ffffff;
 }
 
+/*Estilos de prueba para las img de productos*/
+.product-image {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* sombra suave inicial */
+}
+
+.product-image:hover {
+    transform: translateY(-8px) scale(1.1); /* levanta ligeramente */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); /* sombra más fuerte */
+}
+
+
 
 .gradient-custom {
     /* fallback for old browsers */

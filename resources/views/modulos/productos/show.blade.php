@@ -32,9 +32,9 @@
                     </div>
                     <div class="card-body text-center">
                         @if ($product->image)
-                            <img src="{{ asset('storage/' . $product->image) }}"
-                                 alt="Imagen del Producto"
-                                 class="img-thumbnail mt-2"
+                            <img src="{{ asset($product->image) }}"
+                                 alt="{{ $product->name }}"
+                                 class="img-thumbnail mt-2 product-image"
                                  style="max-width: 100%; height: auto;">
                         @else
                             <p>No hay imagen disponible.</p>
@@ -42,6 +42,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!-- Acordeón con detalles, especificaciones -->

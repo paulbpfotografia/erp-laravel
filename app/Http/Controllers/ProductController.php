@@ -49,15 +49,28 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:category,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
-        // Subir la imagen si se proporciona
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
+            $file = $request->file('image');
+
+            $categoriaNombre = strtolower(Category::find($request->category_id)->name);
+            $folder = 'images/products/' . $categoriaNombre;
+
+            // Asegurar que la carpeta exista
+            if (!file_exists(public_path($folder))) {
+                mkdir(public_path($folder), 0777, true);
+            }
+
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path($folder), $fileName);
+
+            $imagePath = $folder . '/' . $fileName;
         } else {
             $imagePath = null;
         }
+
 
         // Crear el producto
         Product::create([
@@ -83,7 +96,7 @@ class ProductController extends Controller
             'specs',         // para cargar la info de product_specs
             'category'       // si quieres traer también la categoría
         ])->findOrFail($id);
-        
+
         return view('modulos.productos.show', compact('product'));
     }
 
@@ -110,28 +123,43 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:category,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
         // Buscar el producto por ID
         $product = Product::findOrFail($id);
-        
-        // Si se ha subido una nueva imagen
-    if ($request->hasFile('image')) {
-        // Eliminar la imagen anterior (si existe)
-        if ($product->image) {
-            Storage::delete('public/' . $product->image);
+        $imagePath = $product->image; //Mantiene la imagen si no se remplaza
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            // Borrar imagen anterior si existe
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+
+            $categoriaNombre = strtolower(Category::find($request->category_id)->name);
+            $folder = 'images/products/' . $categoriaNombre;
+
+            if (!file_exists(public_path($folder))) {
+                mkdir(public_path($folder), 0777, true);
+            }
+
+            // Crear un nombre único por producto
+            $extension = $file->getClientOriginalExtension();
+            $fileName = 'product_' . $product->id . '.' . $extension;
+            $file->move(public_path($folder), $fileName);
+
+            // Ruta final que se guarda en la BBDD
+            $imagePath = $folder . '/' . $fileName;
         }
 
-        // Subir la nueva imagen
-        $imagePath = $request->file('image')->store('products', 'public');
-        $product->image = $imagePath;
-    }
 
         $product->update([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
             'category_id' => $request->category_id,
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('productos.index')->with('success', 'Producto actualizado exitosamente');
@@ -143,7 +171,7 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         $this->authorize('eliminar productos');
-        
+
         $product = Product::find($id); // Buscar producto manualmente
 
         if (!$product) {
