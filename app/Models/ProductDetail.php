@@ -11,10 +11,8 @@ class ProductDetail extends Model
     // Si usas "fillables" (opcional):
     protected $fillable = [
         'product_id',
-        'brand',
-        'shipping_info',
-        'return_policy',
-        'warranty',
+        'description',
+        
     ];
 
     // Relación inversa (1:1) con products

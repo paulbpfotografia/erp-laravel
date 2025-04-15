@@ -51,6 +51,13 @@ class CustomerTableSeeder extends Seeder
             ['name' => 'Carmen Ibáñez', 'cif' => 'L89012345', 'address' => 'Paseo Alameda 108, Navarra', 'phone' => '600-999900', 'email' => 'carmeni@example.com'],
             ['name' => 'Mateo Vidal', 'cif' => 'M90123456', 'address' => 'Calle Olmo 109, La Rioja', 'phone' => '600-123123', 'email' => 'mateov@example.com'],
             ['name' => 'Lucía Romero', 'cif' => 'N01234567', 'address' => 'Calle Laurel 110, Ourense', 'phone' => '600-456456', 'email' => 'luciar@example.com'],
+            [
+                'name' => 'Jorge Bustamante',
+                'cif' => 'Z99999999',
+                'address' => 'Calle Laravel 123, Madrid',
+                'phone' => '600-000000',
+                'email' => 'erpjorge@gmail.com',
+            ],
         ];
 
         $provinces = DB::table('provinces')->pluck('id', 'name')->toArray();

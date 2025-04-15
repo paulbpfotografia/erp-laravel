@@ -42,7 +42,7 @@
                                     <div class="d-flex justify-content-center gap-2">
                                         <!-- Formulario de eliminación -->
                                         <!-- Botón Eliminar -->
-                                     <!-- Botón Eliminar -->
+                                        <!-- Botón Eliminar -->
                                         @can('eliminar productos')
                                         <button type="button"
                                             class="btn btn-sm btn-danger eliminarRegistroBtn"
@@ -59,10 +59,10 @@
                                         <!-- Botón Editar -->
                                         @can('editar productos')
                                         <a href="{{ route('productos.edit', $product) }}"
-                                        class="btn btn-sm btn-warning"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="Editar producto">
+                                            class="btn btn-sm btn-warning"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Editar producto">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
                                         @endcan
@@ -70,10 +70,10 @@
                                         <!-- Botón Ver -->
                                         @can('ver productos')
                                         <a href="{{ route('productos.show', $product) }}"
-                                        class="btn btn-sm btn-primary"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="Ver detalles del producto">
+                                            class="btn btn-sm btn-primary"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Ver detalles del producto">
                                             <i class="bi bi-eye-fill"></i>
                                         </a>
                                         @endcan
@@ -130,6 +130,21 @@
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <!-- Detalles del producto -->
+                    <div class="mb-3">
+                        <label for="detail_description" class="form-label">Detalles del Producto</label>
+                        <textarea name="detail_description" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <!-- Especificaciones Técnicas -->
+                    <div class="mb-3">
+                        <label class="form-label">Especificaciones Técnicas</label>
+
+                        <input type="text" name="weight" class="form-control mb-2" placeholder="Peso (kg)">
+                        <input type="text" name="dimensions" class="form-control mb-2" placeholder="Dimensiones (ej: 10x20x30 cm)">
+                        <input type="text" name="color" class="form-control mb-2" placeholder="Color">
+                        <input type="text" name="material" class="form-control mb-2" placeholder="Material">
                     </div>
 
                     <!-- Imagen del Producto -->

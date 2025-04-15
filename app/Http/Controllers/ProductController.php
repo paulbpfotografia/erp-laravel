@@ -6,6 +6,10 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewProductMail;
+use App\Models\Customer;
+
 
 class ProductController extends Controller
 {
@@ -73,7 +77,7 @@ class ProductController extends Controller
 
 
         // Crear el producto
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
@@ -81,7 +85,32 @@ class ProductController extends Controller
             'image' => $imagePath,
         ]);
 
-        return redirect()->route('productos.index')->with('success', 'Producto creado exitosamente');
+        // Crear detalle del producto
+        $product->details()->create([
+            'description' => $request->input('detail_description')
+        ]);
+
+        // Crear especificaciones del producto
+        $product->specs()->create([
+            'weight' => $request->input('weight'),
+            'dimensions' => $request->input('dimensions'),
+            'color' => $request->input('color'),
+            'material' => $request->input('material'),
+        ]);
+
+
+
+        // Buscar un cliente con correo válido (por ejemplo, el último insertado con email real)
+        $customer = Customer::whereNotNull('email')
+            ->where('email', 'like', '%@gmail.%')
+            ->latest()
+            ->first();
+
+        if ($customer) {
+            Mail::to($customer->email)->send(new NewProductMail($product));
+        }
+
+        return redirect()->route('productos.index')->with('success', 'Producto creado exitosamente y correo enviado');
     }
 
     /**
