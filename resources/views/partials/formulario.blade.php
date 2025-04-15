@@ -55,19 +55,16 @@ INCLUIMOS EN FORMULARIO EN LA VISTA
 
     <!-- Iteramos sobre el array de campos que se pasa en la vista para generarlos dinámicamente -->
     @foreach($campos as $campo)
-        <div class="mb-3">
+        <div class="mb-4">
             <!-- Etiqueta del campo para mostrar el nombre del campo en el formulario -->
-            <label for="{{ $campo['nombre'] }}" class="form-label">{{ $campo['etiqueta'] }}</label>
+            <label for="{{ $campo['nombre'] }}" class="form-label fw-semibold">{{ $campo['etiqueta'] }}</label>
 
             <!-- Si el campo es de tipo select, generamos un desplegable con opciones -->
             @if ($campo['tipo'] === 'select')
                 <select id="{{ $campo['nombre'] }}" name="{{ $campo['nombre'] }}"
-                    class="form-control @error($campo['nombre']) is-invalid @enderror"
+                    class="form-select @error($campo['nombre']) is-invalid @enderror"
                     @if(isset($campo['requerido']) && $campo['requerido']) required @endif>
-                    
-                    <option value="" disabled selected>Seleccione una opción</option> 
-
-                    <!-- Iteramos sobre los roles -->
+                    <option value="" disabled selected>Seleccione una opción</option>
                     @foreach($campo['opciones'] as $valor => $texto)
                         <option value="{{ $valor }}"
                             {{ old($campo['nombre'], $valores[$campo['nombre']] ?? '') == $valor ? 'selected' : '' }}>
@@ -110,11 +107,11 @@ INCLUIMOS EN FORMULARIO EN LA VISTA
         </div>
     @endforeach
 
- <!-- Botón de envío -->
-<div class="text-center">
-    <button type="submit" class="btn btn-success btn-lg">
-        {{ $textoBoton }} <!-- Texto del botón de envío -->
-    </button>
-</div>
+    <!-- Botón de envío -->
+    <div class="text-end">
+        <button type="submit" class="btn btn-success btn-lg">
+            <i class="bi bi-check-circle me-1"></i> {{ $textoBoton }}
+        </button>
+    </div>
 
 </form>
