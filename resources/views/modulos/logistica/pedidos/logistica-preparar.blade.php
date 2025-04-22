@@ -20,27 +20,32 @@
 
                 <ul class="list-group list-group-flush mb-4">
                     @foreach ($order->products as $product)
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>{{ $product->name }}</strong><br>
-                                <small class="text-muted">Cantidad: {{ $product->pivot->quantity }}</small>
-                            </div>
-                            <div>
-                                @if (!$product->pivot->prepared)
-                                    <!-- Solo mostrar el checkbox si no está preparado -->
-                                    <input type="checkbox"
-                                           name="productos_preparados[]"
-                                           value="{{ $product->id }}"
-                                           id="product_{{ $product->id }}">
-                                    <label for="product_{{ $product->id }}" class="ms-1">Preparar</label>
-                                @else
-                                    <!-- Mostrar "Ya preparado" si el producto está marcado como preparado -->
-                                    <span class="text-success fw-semibold">
-                                        <i class="bi bi-check-circle-fill me-1"></i> Ya preparado
-                                    </span>
-                                @endif
-                            </div>
-                        </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ $product->name }}</strong><br>
+                            <small class="text-muted">
+                                Cantidad: {{ $product->pivot->quantity }}<br>
+                                Volumen total: 
+                                {{ number_format($product->pivot->quantity * ($product->specs->packaged_volume ?? 0), 3) }} m³<br>
+                                Peso total: 
+                                {{ number_format($product->pivot->quantity * ($product->specs->weight ?? 0), 2) }} kg
+                            </small>
+                        </div>
+                        <div>
+                            @if (!$product->pivot->prepared)
+                                <input type="checkbox"
+                                       name="productos_preparados[]"
+                                       value="{{ $product->id }}"
+                                       id="product_{{ $product->id }}">
+                                <label for="product_{{ $product->id }}" class="ms-1">Preparar</label>
+                            @else
+                                <span class="text-success fw-semibold">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Ya preparado
+                                </span>
+                            @endif
+                        </div>
+                    </li>
+                    
                     @endforeach
                 </ul>
 

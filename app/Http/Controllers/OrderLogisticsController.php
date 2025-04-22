@@ -119,7 +119,8 @@ class OrderLogisticsController extends Controller
 
     public function preparar(Order $order)
     {
-        $order->load(['products']); // ← esto debe estar
+        //Con load cargamos la relación de pedido con el producto y sus especificaciones.
+        $order->load(['products.specs']);
         return view('modulos.logistica.pedidos.logistica-preparar', compact('order'));
     }
 

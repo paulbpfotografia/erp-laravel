@@ -75,6 +75,20 @@
                         </li>
                     @endforeach
                 </ul>
+
+                <!-- Resumen del pedido -->
+                <div class="border rounded p-3 bg-light mb-4">
+                    <h6 class="fw-bold text-primary-emphasis mb-3">
+                        <i class="bi bi-truck me-2"></i> Resumen del pedido
+                    </h6>
+                    <p class="mb-1"><strong>Total de productos:</strong> {{ $order->products->sum(fn($p) => $p->pivot->quantity) }}</p>
+                    <p class="mb-1"><strong>Peso total:</strong>
+                        {{ number_format($order->total_weight ?? $order->products->sum(fn($p) => $p->pivot->quantity * ($p->specs->weight ?? 0)), 2) }} kg
+                    </p>
+                    <p class="mb-0"><strong>Volumen total:</strong>
+                        {{ number_format($order->total_volume ?? $order->products->sum(fn($p) => $p->pivot->quantity * ($p->specs->packaged_volume ?? 0)), 3) }} m³
+                    </p>
+                </div>
             @endif
 
             <!-- Botón volver -->
