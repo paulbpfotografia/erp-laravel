@@ -16,6 +16,7 @@ return new class extends Migration
             // Campos de especificaciones técnicas
             $table->decimal('weight', 8, 2)->nullable();
             $table->string('dimensions')->nullable(); // o ancho, alto, fondo separadas
+            $table->decimal('packaged_volume', 8, 3)->nullable(); //Este es el volumen que ocupará embalado
             $table->string('color')->nullable();
             $table->string('material')->nullable();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
