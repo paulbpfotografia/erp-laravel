@@ -16,11 +16,14 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained('orders');
             $table->foreignId('product_id')->constrained('products');
             $table->integer('quantity');
-            $table->decimal('unit_price', 8, 2);
+            $table->decimal('group_price', 10, 2);
+            $table->decimal('group_volume', 8, 3)->nullable();
+            $table->decimal('group_weight', 8, 2)->nullable();
             $table->boolean('prepared')->default(false);
-$table->timestamps();
+            $table->timestamps();
         });
     }
+    
 
     /**
      * Reverse the migrations.

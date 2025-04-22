@@ -13,6 +13,7 @@ class OrdersTableSeeder extends Seeder
         $customerIds = DB::table('customers')->pluck('id')->toArray();
         $productIds = DB::table('products')->pluck('id')->toArray();
         $carrierIds = DB::table('carriers')->pluck('id')->toArray();
+
         if (empty($productIds) || empty($customerIds) || empty($carrierIds)) {
             $this->command->warn('No hay productos, clientes o transportistas disponibles para asociar a pedidos.');
             return;
@@ -69,15 +70,22 @@ class OrdersTableSeeder extends Seeder
 
             foreach ($products as $productId) {
                 $quantity = rand(1, 10);
-                $unitPrice = DB::table('products')->where('id', $productId)->value('price');
-                $subtotal = $quantity * $unitPrice;
-                $total += $subtotal;
+                $product = DB::table('products')->where('id', $productId)->first();
+                $specs = DB::table('product_specs')->where('product_id', $productId)->first();
+
+                $groupPrice = $quantity * $product->price;
+                $groupVolume = $specs ? $quantity * $specs->packaged_volume : 0;
+                $groupWeight = $specs ? $quantity * $specs->weight : 0;
+
+                $total += $groupPrice;
 
                 DB::table('order_product')->insert([
                     'order_id' => $orderId,
                     'product_id' => $productId,
                     'quantity' => $quantity,
-                    'unit_price' => $unitPrice,
+                    'group_price' => $groupPrice,
+                    'group_volume' => $groupVolume,
+                    'group_weight' => $groupWeight,
                     'prepared' => in_array($pedido['status'], ['entregado', 'enviado', 'preparado']),
                     'created_at' => now(),
                     'updated_at' => now(),

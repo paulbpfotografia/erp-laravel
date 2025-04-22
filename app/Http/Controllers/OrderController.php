@@ -53,6 +53,7 @@ class OrderController extends Controller
      {
          $this->authorize('crear pedidos');
 
+         //Validamos que el id del cliente sea correcto y que se haya enviado el array
          $request->validate([
              'customer_id' => 'required|exists:customers,id',
              'products' => 'required|array',
@@ -76,11 +77,23 @@ class OrderController extends Controller
          DB::beginTransaction();
 
          try {
-             // Calculamos el total
+             // Calculamos los totales. Dinero, volumen y peso.
              $total = 0;
+             $totalVolume = 0;
+             $totalWeight = 0;
+             
              foreach ($validatedProducts as $product) {
+                 $producto = Product::with('specs')->find($product['id']);
+             
                  $total += $product['quantity'] * $product['unit_price'];
+             
+                 if ($producto && $producto->specs) {
+                     $totalVolume += $product['quantity'] * $producto->specs->packaged_volume;
+                     $totalWeight += $product['quantity'] * $producto->specs->weight;
+                 }
              }
+
+             
 
              // Creamos el pedido
              $order = Order::create([
@@ -88,6 +101,8 @@ class OrderController extends Controller
                  'status' => 'pendiente',
                  'order_date' => now(),
                  'total' => $total,
+                 'total_volume' => $totalVolume,
+                 'total_weight' => $totalWeight
              ]);
 
              // Asociamos los productos. Y actualizaremos el stock
@@ -105,10 +120,12 @@ class OrderController extends Controller
 
                  //De otra forma, con attach relaciono los datos en la tabla pivot
                  $order->products()->attach($product['id'], [
-                     'quantity' => $product['quantity'],
-                     'unit_price' => $product['unit_price'],
-                 ]);
-
+                    'quantity' => $product['quantity'],
+                    'group_price' => $product['quantity'] * $product['unit_price'],
+                    'group_volume' => $product['quantity'] * ($productoBD->specs->packaged_volume ?? 0),
+                    'group_weight' => $product['quantity'] * ($productoBD->specs->weight ?? 0),
+                    'prepared' => false,
+                ]);
                  //Resto el stock y  guardo el dato
                  $productoBD->stock->available_quantity -= $product['quantity'];
                  $productoBD->stock->save();
