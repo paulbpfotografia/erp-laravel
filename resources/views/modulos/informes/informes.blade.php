@@ -185,6 +185,8 @@
     </div>
 </div>
 
+
+
 <!-- Incluir el .JS compilado por Vite -->
 @vite('resources/js/informes.js')
 @endsection

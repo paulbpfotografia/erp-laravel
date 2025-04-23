@@ -14,15 +14,16 @@ class DatabaseSeeder extends Seeder
         // LLamamos a todos los seeders para que se ejecuten de una
         $this->call([
             RolSeeder::class,
+            SupplierSeeder::class,
             UsersTableSeeder::class,
-            CustomerTableSeeder::class, // Asegúrate de que este sea llamado primero
+            CustomerTableSeeder::class,
             CategoryTableSeeder::class,
-            ProductsTableSeeder::class, // Asegúrate de que este sea llamado antes de Orders
+            ProductsTableSeeder::class,
             StockTableSeeder::class,
             MoveStockTableSeeder::class,
             ProductDetailsTableSeeder::class,
             ProductSpecsTableSeeder::class,
-            CarrierSeeder::class, // Asegúrate de que este sea llamado antes de Orders
+            CarrierSeeder::class,
             OrdersTableSeeder::class,
         ]);
     }
