@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Pagination\Paginator;
+
 
 
 class AppServiceProvider extends ServiceProvider
@@ -21,17 +23,13 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    
-    
+
+
     public function boot(): void
     {
-        $publicStoragePath = public_path('storage');
-    
-        // Si el enlace simbólico no existe, lo creamos
-        if (!File::exists($publicStoragePath)) {
-            Artisan::call('storage:link');
-        }
+        Paginator::useBootstrapFive();
+
     }
-    
+
 
 }

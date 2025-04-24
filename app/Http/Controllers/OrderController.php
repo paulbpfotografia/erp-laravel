@@ -19,18 +19,37 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('ver pedidos');
-        $orders = Order::all();
-        $customers = Customer::all();
-        $products = Product::with('stock')->get();
-        $categories = Category::with('products.stock')->get();
-        $carriers = Carrier::all();
 
+        $query = Order::with('customer');
 
-        return view('modulos.pedidos.pedidos',compact('orders','customers', 'products', 'categories','carriers'));
+        // Filtamos por estado
+        if ($request->filled('estado')) {
+            $query->where('status', $request->estado);
+        }
+
+        // Búsqueda por ID o nombre del cliente
+        if ($request->filled('buscar')) {
+            $buscar = $request->buscar;
+            $query->where(function ($q) use ($buscar) {
+                $q->where('customer_id', $buscar) // ID exacto del cliente. Si no es exacto no buscará
+                  ->orWhereHas('customer', function ($q2) use ($buscar) {
+                      $q2->where('name', 'like', "%$buscar%"); // Nombre parcial del cliente. Si ponemos hotel, devolverá muchos registros. Pero hay que afinar más la búsqeuda
+                  });
+            });
+        }
+
+        // Paginación con 50 por página y manteniendo los filtros activos
+        $orders = $query->orderByDesc('order_date')
+                        ->paginate(50)
+                        ->withQueryString();
+
+        return view('modulos.pedidos.pedidos', compact('orders'));
     }
+
+
 
 
 

@@ -4,16 +4,47 @@
 
 @section('content')
 <div class="container mt-5">
+
+    <!-- Encabezado -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-semibold text-primary-emphasis">Pedidos</h2>
 
         @can('crear pedidos')
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarPedidos">
+        <a href="{{ route('pedidos.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle me-1"></i> Crear Pedido
-        </button>
+        </a>
         @endcan
     </div>
 
+    <!-- Filtros -->
+    <form method="GET" class="row g-2 align-items-end mb-4">
+        <div class="col-md-4">
+            <label for="buscar" class="form-label mb-0 fw-semibold">Buscar pedido</label>
+            <input type="text" name="buscar" id="buscar" value="{{ request('buscar') }}" class="form-control" placeholder="Buscar por ID o cliente">
+        </div>
+        <div class="col-md-4">
+            <label for="estado" class="form-label mb-0 fw-semibold">Filtrar por estado</label>
+            <select name="estado" id="estado" class="form-select">
+                <option value="">Todos</option>
+                <option value="pendiente" {{ request('estado') === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
+                <option value="preparado" {{ request('estado') === 'preparado' ? 'selected' : '' }}>Preparado</option>
+                <option value="enviado" {{ request('estado') === 'enviado' ? 'selected' : '' }}>Enviado</option>
+                <option value="entregado" {{ request('estado') === 'entregado' ? 'selected' : '' }}>Entregado</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-search me-1"></i> Filtrar
+            </button>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-x-circle me-1"></i> Limpiar
+            </a>
+        </div>
+    </form>
+
+    <!-- Tabla de pedidos -->
     <div class="table-responsive rounded shadow-sm border border-light-subtle">
         <table class="table table-hover align-middle text-center mb-0">
             <thead class="table-light text-uppercase small text-muted border-bottom border-2">
@@ -84,10 +115,21 @@
         </table>
     </div>
 
-    <hr class="my-4">
+    <!-- Paginación -->
+<div class="d-flex justify-content-between align-items-center mt-4 flex-wrap">
+    <div class="text-muted small">
+        Mostrando {{ $orders->firstItem() }} a {{ $orders->lastItem() }} de {{ $orders->total() }} resultados
+    </div>
+    <div>
+        {{ $orders->withQueryString()->onEachSide(1)->links() }}
+    </div>
 </div>
 
+<hr class="my-3">
 
+
+    <hr class="my-4">
+</div>
 
 
 @endsection
