@@ -38,10 +38,39 @@
                 <span class="hide-on-collapse">Gestión de productos</span>
             </a>
 
-            <a href="{{ route('pedidos.index') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('pedidos.*') ? 'active' : '' }}">
-                <i class="fas fa-box me-3"></i>
-                <span class="hide-on-collapse">Gestión de pedidos</span>
-            </a>
+
+            @role('Directivo|Administrativo|Admin|Gerente')
+            <div class="sidebar-item">
+
+                 <!-- Menú principal: Gestión de pedidos -->
+    <a class="sidebar-link text-decoration-none p-3 d-flex justify-content-between align-items-center {{ request()->routeIs('pedidos.*') ? 'active' : '' }}"
+        data-bs-toggle="collapse"
+        href="#submenuGestionPedidos"
+        role="button"
+        aria-expanded="{{ request()->routeIs('pedidos.*') ? 'true' : 'false' }}"
+        aria-controls="submenuGestionPedidos">
+         <div>
+             <i class="fas fa-box me-3"></i>
+             <span>Gestión de pedidos</span>
+         </div>
+         <i class="fas fa-chevron-down"></i>
+     </a>
+
+     <!-- Submenú: Pedidos -->
+     <div class="collapse ps-3 {{ request()->routeIs('pedidos.*') ? 'show' : '' }}" id="submenuGestionPedidos">
+         <a href="{{ route('pedidos.index') }}" class="sidebar-link text-decoration-none d-block py-2 ps-3 {{ request()->routeIs('pedidos.index') ? 'active' : '' }}">
+             Todos los Pedidos
+         </a>
+         <a href="{{ route('pedidos.create') }}" class="sidebar-link text-decoration-none d-block py-2 ps-3 {{ request()->routeIs('pedidos.create') ? 'active' : '' }}">
+             Crear Pedido
+         </a>
+     </div>
+
+ </div>
+            @endrole
+
+
+
 
             @role('Admin')
             <a href="{{ route('usuarios.index') }}" class="sidebar-link text-decoration-none p-3 {{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
@@ -62,6 +91,7 @@
 
             @role('Directivo|Logistica|Admin')
             <div class="sidebar-item">
+
                 <!-- Menú principal: Almacén y Logística -->
                 <a class="sidebar-link text-decoration-none p-3 d-flex justify-content-between align-items-center {{ request()->routeIs('logistica.*') ? 'active' : '' }}"
                    data-bs-toggle="collapse"

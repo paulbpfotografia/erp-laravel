@@ -34,18 +34,15 @@ class OrderController extends Controller
 
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
-        //COMO USAMOS MODAL PARA CREAR, NO HACE FALTA COMPLETARLA
+        $customers = Customer::all();
+        $carriers = Carrier::all();
+        $categories = Category::with('products')->get();
+
+        return view('modulos.pedidos.pedidos-crear', compact('customers', 'carriers', 'categories'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
 
 
 
@@ -81,19 +78,19 @@ class OrderController extends Controller
              $total = 0;
              $totalVolume = 0;
              $totalWeight = 0;
-             
+
              foreach ($validatedProducts as $product) {
                  $producto = Product::with('specs')->find($product['id']);
-             
+
                  $total += $product['quantity'] * $product['unit_price'];
-             
+
                  if ($producto && $producto->specs) {
                      $totalVolume += $product['quantity'] * $producto->specs->packaged_volume;
                      $totalWeight += $product['quantity'] * $producto->specs->weight;
                  }
              }
 
-             
+
 
              // Creamos el pedido
              $order = Order::create([
@@ -190,4 +187,8 @@ class OrderController extends Controller
 
         //
     }
+
+
+
+
 }

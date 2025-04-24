@@ -30,26 +30,40 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    // RUTAS DE PEDIDO
-    //Listar pedidos
-    Route::get('/pedidos', [OrderController::class, 'index'])
-        ->middleware('permission:ver pedidos')->name('pedidos.index');
 
-    //Crear un pedido
-    Route::post('/pedidos', [OrderController::class, 'store'])
-        ->middleware('permission:crear pedidos')->name('pedidos.store');
 
-    //mostrar página para editar pedidos
-    Route::get('/pedidos/{order}/editar', [OrderController::class, 'edit'])
-        ->middleware('permission:editar pedidos')->name('pedidos.edit');
 
-    //Mostrar información de un pedido en concreto
-    Route::get('/pedidos/{order}', [OrderController::class, 'show'])
-        ->middleware('permission:ver pedidos')->name('pedidos.show');
+// RUTAS DE PEDIDO
 
-    //Eliminar un pedido
-    Route::delete('/pedidos/{order}', [OrderController::class, 'destroy'])
-        ->middleware('permission:eliminar pedidos')->name('pedidos.destroy');
+// Listar pedidos
+Route::get('/pedidos', [OrderController::class, 'index'])
+    ->middleware('permission:ver pedidos')->name('pedidos.index');
+
+// Mostrar formulario para crear un pedido
+Route::get('/pedidos/crear', [OrderController::class, 'create'])
+    ->middleware('permission:crear pedidos')->name('pedidos.create');
+
+// Crear un pedido
+Route::post('/pedidos', [OrderController::class, 'store'])
+    ->middleware('permission:crear pedidos')->name('pedidos.store');
+
+// Mostrar página para editar pedidos
+Route::get('/pedidos/{order}/editar', [OrderController::class, 'edit'])
+    ->middleware('permission:editar pedidos')->name('pedidos.edit');
+
+// Mostrar información de un pedido en concreto
+Route::get('/pedidos/{order}', [OrderController::class, 'show'])
+    ->middleware('permission:ver pedidos')->name('pedidos.show');
+
+// Eliminar un pedido
+Route::delete('/pedidos/{order}', [OrderController::class, 'destroy'])
+    ->middleware('permission:eliminar pedidos')->name('pedidos.destroy');
+
+
+
+
+
+
 
 
 
