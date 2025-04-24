@@ -87,13 +87,16 @@
                                 @endcan
 
                                 @can('editar pedidos')
-                                <a href="{{ route('pedidos.edit', $order) }}"
-                                   class="btn btn-sm btn-warning"
-                                   data-bs-toggle="tooltip"
-                                   title="Editar pedido">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </a>
-                                @endcan
+                                @if(in_array($order->status, ['pendiente', 'preparado']))
+                                    <a href="{{ route('pedidos.edit', $order) }}"
+                                       class="btn btn-sm btn-warning"
+                                       data-bs-toggle="tooltip"
+                                       title="Editar pedido">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                @endif
+                            @endcan
+                            
 
                                 @can('ver pedidos')
                                 <a href="{{ route('pedidos.show', $order) }}"

@@ -183,9 +183,14 @@ class OrderController extends Controller
     public function edit(Order $order)
     {
         $this->authorize('editar pedidos');
-
-        return view('modulos.pedidos.pedidos-editar',compact('order'));
+    
+        if (!in_array($order->status, ['pendiente', 'preparado'])) {
+            return redirect()->route('pedidos.index')->with('error', 'No se puede editar un pedido que ya ha sido enviado.');
+        }
+    
+        return view('modulos.pedidos.pedidos-editar', compact('order'));
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -193,10 +198,24 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         $this->authorize('editar pedidos');
-
-        //
+    
+        if (!in_array($order->status, ['pendiente', 'preparado'])) {
+            return redirect()->route('pedidos.index')->with('error', 'No se puede editar un pedido que ya ha sido enviado.');
+        }
+    
+        $request->validate([
+            'fecha' => 'required|date',
+            'status' => 'required|in:pendiente,preparado',
+        ]);
+    
+        $order->update([
+            'fecha' => $request->fecha,
+            'status' => $request->status,
+        ]);
+    
+        return redirect()->route('pedidos.index')->with('success', 'Pedido actualizado correctamente.');
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */
