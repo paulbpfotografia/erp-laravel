@@ -27,11 +27,33 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $products = Product::with('category')->get(); // Obtener productos con sus categorías
-        $categories = Category::all(); // Obtener todas las categorías para el modal
+        // 1) Autorización:
+        $this->authorize('ver productos');
+
+        // 2) Construcción de la consulta base con eager loading de la categoría:
+        $query = Product::with('category');
+
+       // 3) Filtro por búsqueda de nombre
+        if ($request->filled('buscar')) {
+            $query->where('name', 'like', "%{$request->buscar}%");
+        }
+        // 4) Filtro por categoría
+        if ($request->filled('categoria_id')) {
+            $query->where('category_id', $request->categoria_id);
+        }
+
+        // 3) Orden, paginación y conservación de la query string:
+        $products = $query
+            ->orderByDesc('id')            // orden descendente por ID (o por created_at)
+            ->paginate(15)                 // 50 ítems por página
+            ->withQueryString();           // conserva GET parameters en los enlaces
+
+        // 4) Cargamos las categorías para el modal de creación:
+        $categories = Category::all();
+
+        // 5) Devolvemos la vista con la colección paginada:
         return view('modulos.productos.productos', compact('products', 'categories'));
     }
 

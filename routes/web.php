@@ -14,10 +14,6 @@ use App\Http\Controllers\ReportController;
 // Ruta Login. Página principal "/"
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('ingresar');
 
-Route::get('/contact', function () {
-    // Retornamos la vista "modulos.contacto.contact"
-    return view('modulos.contacto.contact');
-})->name('contact');
 
 //No eliminar. Con esto se cargan rutas de login y logout
 Auth::routes();
@@ -33,34 +29,34 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-// RUTAS DE PEDIDO
+    // RUTAS DE PEDIDO
 
-// Listar pedidos
-Route::get('/pedidos', [OrderController::class, 'index'])
-    ->middleware('permission:ver pedidos')->name('pedidos.index');
+    // Listar pedidos
+    Route::get('/pedidos', [OrderController::class, 'index'])
+        ->middleware('permission:ver pedidos')->name('pedidos.index');
 
-// Mostrar formulario para crear un pedido
-Route::get('/pedidos/crear', [OrderController::class, 'create'])
-    ->middleware('permission:crear pedidos')->name('pedidos.create');
+    // Mostrar formulario para crear un pedido
+    Route::get('/pedidos/crear', [OrderController::class, 'create'])
+        ->middleware('permission:crear pedidos')->name('pedidos.create');
 
-// Crear un pedido
-Route::post('/pedidos', [OrderController::class, 'store'])
-    ->middleware('permission:crear pedidos')->name('pedidos.store');
+    // Crear un pedido
+    Route::post('/pedidos', [OrderController::class, 'store'])
+        ->middleware('permission:crear pedidos')->name('pedidos.store');
 
-// Mostrar página para editar pedidos
-Route::get('/pedidos/{order}/editar', [OrderController::class, 'edit'])
-    ->middleware('permission:editar pedidos')->name('pedidos.edit');
+    // Mostrar página para editar pedidos
+    Route::get('/pedidos/{order}/editar', [OrderController::class, 'edit'])
+        ->middleware('permission:editar pedidos')->name('pedidos.edit');
 
-// Mostrar información de un pedido en concreto
-Route::get('/pedidos/{order}', [OrderController::class, 'show'])
-    ->middleware('permission:ver pedidos')->name('pedidos.show');
+    // Mostrar información de un pedido en concreto
+    Route::get('/pedidos/{order}', [OrderController::class, 'show'])
+        ->middleware('permission:ver pedidos')->name('pedidos.show');
 
-// Eliminar un pedido
-Route::delete('/pedidos/{order}', [OrderController::class, 'destroy'])
-    ->middleware('permission:eliminar pedidos')->name('pedidos.destroy');
-// Actualizar un pedido
-Route::put('/pedidos/{order}', [OrderController::class, 'update'])
-    ->middleware('permission:editar pedidos')->name('pedidos.update');
+    // Eliminar un pedido
+    Route::delete('/pedidos/{order}', [OrderController::class, 'destroy'])
+        ->middleware('permission:eliminar pedidos')->name('pedidos.destroy');
+    // Actualizar un pedido
+    Route::put('/pedidos/{order}', [OrderController::class, 'update'])
+        ->middleware('permission:editar pedidos')->name('pedidos.update');
 
 
 
@@ -138,8 +134,8 @@ Route::put('/pedidos/{order}', [OrderController::class, 'update'])
 
     // RUTA PARA INFORMES
     Route::get('/informes', [ReportController::class, 'index'])
-    ->middleware('role:Directivo|Admin')
-    ->name('informes.index');
+        ->middleware('role:Directivo|Admin')
+        ->name('informes.index');
 
     // Rutas para informes de pedidos
     Route::get('/informes/pedidos', [ReportController::class, 'ordersByMonth'])
@@ -147,7 +143,7 @@ Route::put('/pedidos/{order}', [OrderController::class, 'update'])
         ->name('informes.pedidos');
 
     //Ruta para el rosco de categorías más vendidas
-        Route::get('/informes/categorias', [ReportController::class, 'productsByCategory'])
+    Route::get('/informes/categorias', [ReportController::class, 'productsByCategory'])
         ->middleware('role:Directivo|Admin')
         ->name('informes.categorias');
 
@@ -161,30 +157,27 @@ Route::put('/pedidos/{order}', [OrderController::class, 'update'])
 
     //RUTAS DE LOGÍSTICA Y ALMACÉN
 
-// Rutas Gestión de Usuarios. Protegida para rol ADMIN o LOGISTICA
-Route::group(['middleware' => ['role:Logistica|Admin']], function () {
+    // Rutas Gestión de Usuarios. Protegida para rol ADMIN o LOGISTICA
+    Route::group(['middleware' => ['role:Logistica|Admin']], function () {
 
-    // Listar todos los pedidos
-    Route::get('/logistica/pedidos', [OrderLogisticsController::class, 'indexAll'])->name('logistica.index');
+        // Listar todos los pedidos
+        Route::get('/logistica/pedidos', [OrderLogisticsController::class, 'indexAll'])->name('logistica.index');
 
-    // Listar pedidos por estado
-    Route::get('/logistica/pendientes', [OrderLogisticsController::class, 'indexPendientes'])->name('logistica.pendientes');
-    Route::get('/logistica/enviados', [OrderLogisticsController::class, 'indexEnviados'])->name('logistica.enviados');
-    Route::get('/logistica/entregados', [OrderLogisticsController::class, 'indexEntregados'])->name('logistica.entregados');
-    Route::get('/logistica/preparados', [OrderLogisticsController::class, 'indexPreparados'])->name('logistica.preparados');
+        // Listar pedidos por estado
+        Route::get('/logistica/pendientes', [OrderLogisticsController::class, 'indexPendientes'])->name('logistica.pendientes');
+        Route::get('/logistica/enviados', [OrderLogisticsController::class, 'indexEnviados'])->name('logistica.enviados');
+        Route::get('/logistica/entregados', [OrderLogisticsController::class, 'indexEntregados'])->name('logistica.entregados');
+        Route::get('/logistica/preparados', [OrderLogisticsController::class, 'indexPreparados'])->name('logistica.preparados');
 
-    // Vista para preparar el pedido (formulario)
-    Route::get('/logistica/pedidos/{order}/preparar', [OrderLogisticsController::class, 'preparar'])
-        ->name('logistica.pedidos.verPreparacion');
+        // Vista para preparar el pedido (formulario)
+        Route::get('/logistica/pedidos/{order}/preparar', [OrderLogisticsController::class, 'preparar'])
+            ->name('logistica.pedidos.verPreparacion');
 
-    // Guardar progreso de preparación
-    Route::post('/logistica/pedidos/{order}/preparar', [OrderLogisticsController::class, 'updatePreparacion'])
-        ->name('logistica.pedidos.preparar');
+        // Guardar progreso de preparación
+        Route::post('/logistica/pedidos/{order}/preparar', [OrderLogisticsController::class, 'updatePreparacion'])
+            ->name('logistica.pedidos.preparar');
 
-    // Acceder a un pedido concreto
-    Route::get('/logistica/{order}', [OrderLogisticsController::class, 'show'])->name('logistica.show');
-});
-
-
-
+        // Acceder a un pedido concreto
+        Route::get('/logistica/{order}', [OrderLogisticsController::class, 'show'])->name('logistica.show');
+    });
 });
