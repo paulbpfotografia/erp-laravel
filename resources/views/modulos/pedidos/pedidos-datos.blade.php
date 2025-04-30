@@ -84,12 +84,24 @@
                     @endforeach
                 </ul>
 
-                <!-- Total pedido -->
-                <div class="text-end mt-3">
-                    <span class="badge bg-success-subtle text-success-emphasis fs-5 px-4 py-3 rounded-pill shadow-sm">
-                        Total del pedido: {{ number_format($totalPedido, 2) }} €
-                    </span>
-                </div>
+                <!-- Total pedido con desglose de IVA -->
+                    @php
+                    $totalIVA = $order->products->sum(function($p) {
+                        return $p->pivot->quantity * $p->price * ($p->iva / 100);
+                    });
+                    $totalConIVA = $order->total + $totalIVA;
+                    @endphp
+
+                    <div class="text-end mt-3">
+                    <p class="mb-1"><strong>Subtotal (sin IVA):</strong> {{ number_format($order->total, 2) }} €</p>
+                    <p class="mb-1"><strong>IVA total:</strong> {{ number_format($totalIVA, 2) }} €</p>
+                    <p class="fs-5 fw-semibold">
+                        <span class="badge bg-success-subtle text-success-emphasis px-4 py-3 rounded-pill shadow-sm">
+                            Total con IVA: {{ number_format($totalConIVA, 2) }} €
+                        </span>
+                    </p>
+                    </div>
+
             @endif
 
             <!-- Botón volver -->

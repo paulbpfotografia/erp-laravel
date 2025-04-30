@@ -14,7 +14,9 @@ return new class extends Migration
             $table->id();
             $table->date('order_date');
             $table->enum('status', ['preparado', 'pendiente', 'enviado', 'entregado', 'cancelado']);
-            $table->decimal('total', 10, 2); // Importe total
+            $table->decimal('total', 10, 2); // Importe sin IVA
+            $table->decimal('total_iva', 10, 2)->nullable(); // IVA total aplicado
+            $table->decimal('total_con_iva', 10, 2)->nullable(); // Importe con IVA
             $table->decimal('total_weight', 8, 2)->nullable();
             $table->decimal('total_volume', 8, 3)->nullable();
             $table->foreignId('customer_id')->constrained('customers');
@@ -22,7 +24,6 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
