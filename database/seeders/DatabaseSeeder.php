@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             ProductSpecsTableSeeder::class,
             CarrierSeeder::class,
             OrdersTableSeeder::class,
+            TodoListSeeder::class,
+
         ]);
     }
 }
