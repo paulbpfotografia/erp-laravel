@@ -14,6 +14,7 @@ if (!function_exists('clase_estado_pedido')) {
             'preparado'  => 'badge bg-warning',
             'recibido'   => 'badge bg-primary',
             'entregado'  => 'badge bg-success',
+            'cancelado' => 'badge bg-danger',
             default      => 'badge bg-secondary',
         };
     }

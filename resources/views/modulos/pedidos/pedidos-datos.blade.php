@@ -13,15 +13,27 @@
                     <i class="bi bi-receipt me-2"></i> Pedido #{{ $order->id }}
                 </h4>
 
-                <span class="badge px-3 py-2 rounded-pill fs-6
-                    {{ $order->status === 'pendiente' ? 'bg-warning-subtle text-warning' : '' }}
-                    {{ $order->status === 'enviado' ? 'bg-info-subtle text-info' : '' }}
-                    {{ $order->status === 'entregado' ? 'bg-success-subtle text-success' : '' }}
-                    {{ $order->status === 'preparado' ? 'bg-primary-subtle text-primary' : '' }}">
-                    <i class="bi bi-circle-fill me-1 small"></i>
-                    {{ ucfirst($order->status) }}
-                </span>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge px-3 py-2 rounded-pill fs-6
+                        {{ $order->status === 'pendiente' ? 'bg-warning-subtle text-warning' : '' }}
+                        {{ $order->status === 'enviado' ? 'bg-info-subtle text-info' : '' }}
+                        {{ $order->status === 'entregado' ? 'bg-success-subtle text-success' : '' }}
+                        {{ $order->status === 'preparado' ? 'bg-primary-subtle text-primary' : '' }}
+                        {{ $order->status === 'cancelado' ? 'bg-danger-subtle text-danger' : '' }}">
+                        <i class="bi bi-circle-fill me-1 small"></i>
+                        {{ ucfirst($order->status) }}
+                    </span>
+
+                    @can('editar pedidos')
+                        @if(in_array($order->status, ['pendiente', 'preparado']))
+                            <a href="{{ route('pedidos.edit', $order) }}" class="btn btn-warning">
+                                <i class="bi bi-pencil-fill me-1"></i> Editar pedido
+                            </a>
+                        @endif
+                    @endcan
+                </div>
             </div>
+
 
             <!-- Fecha -->
             <div class="mb-4">

@@ -60,6 +60,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/pedidos/{order}', [OrderController::class, 'update'])
         ->middleware('permission:editar pedidos')->name('pedidos.update');
 
+    // Cancelar un pedido
+    Route::put('/pedidos/{order}/cancelar', [OrderController::class, 'cancelOrder'])
+        ->middleware('permission:editar pedidos')->name('pedidos.cancel');
 
 
 

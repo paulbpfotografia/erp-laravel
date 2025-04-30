@@ -188,7 +188,10 @@ class OrderController extends Controller
             return redirect()->route('pedidos.index')->with('error', 'No se puede editar un pedido que ya ha sido enviado.');
         }
 
-        return view('modulos.pedidos.pedidos-editar', compact('order'));
+        $categories = Category::with('products.stock')->get();
+        $allProducts = Product::all();
+
+        return view('modulos.pedidos.pedidos-editar', compact('order', 'allProducts', 'categories'));
     }
 
 
@@ -204,17 +207,121 @@ class OrderController extends Controller
         }
 
         $request->validate([
-            'fecha' => 'required|date',
-            'status' => 'required|in:pendiente,preparado',
+            'productos' => 'array',
+            'nuevos' => 'array',
         ]);
 
-        $order->update([
-            'fecha' => $request->fecha,
-            'status' => $request->status,
-        ]);
+        DB::beginTransaction();
 
-        return redirect()->route('pedidos.index')->with('success', 'Pedido actualizado correctamente.');
+        try {
+            $total = 0;
+            $totalVolume = 0;
+            $totalWeight = 0;
+
+            // 1. Actualizar productos ya existentes
+            foreach ($request->input('productos', []) as $productId => $datos) {
+                $producto = Product::with('specs', 'stock')->find($productId);
+                $nuevaCantidad = (int) $datos['cantidad'];
+
+                // Obtener cantidad anterior directamente de la base de datos
+                $cantidadAnterior = DB::table('order_product')
+                    ->where('order_id', $order->id)
+                    ->where('product_id', $productId)
+                    ->value('quantity');
+
+                if ($nuevaCantidad <= 0) {
+                    // Eliminar producto y devolver stock
+                    $producto->stock->available_quantity += $cantidadAnterior;
+                    $producto->stock->save();
+                    $order->products()->detach($productId);
+                    continue;
+                }
+
+                $diferencia = $nuevaCantidad - $cantidadAnterior;
+
+                if ($diferencia > 0 && $producto->stock->available_quantity < $diferencia) {
+                    DB::rollBack();
+                    return redirect()->back()
+                        ->with('message', "Stock insuficiente para '{$producto->name}'.")
+                        ->with('icono', 'error');
+                }
+
+                // Actualizar pivote
+                $order->products()->updateExistingPivot($productId, [
+                    'quantity' => $nuevaCantidad,
+                    'group_price' => $nuevaCantidad * $producto->price,
+                    'group_volume' => $nuevaCantidad * ($producto->specs->packaged_volume ?? 0),
+                    'group_weight' => $nuevaCantidad * ($producto->specs->weight ?? 0),
+                ]);
+
+                // Actualizar stock
+                $producto->stock->available_quantity -= $diferencia;
+                $producto->stock->save();
+
+                // Totales
+                $total += $nuevaCantidad * $producto->price;
+                $totalVolume += $nuevaCantidad * ($producto->specs->packaged_volume ?? 0);
+                $totalWeight += $nuevaCantidad * ($producto->specs->weight ?? 0);
+            }
+
+            // 2. Añadir nuevos productos
+            foreach ($request->input('nuevos', []) as $productId => $cantidad) {
+                $cantidad = (int) $cantidad;
+                if ($cantidad <= 0) continue;
+
+                $producto = Product::with('specs', 'stock')->find($productId);
+
+                if (!$producto->stock || $producto->stock->available_quantity < $cantidad) {
+                    DB::rollBack();
+                    return redirect()->back()
+                        ->with('message', "No hay suficiente stock para el producto '{$producto->name}'.")
+                        ->with('icono', 'error');
+                }
+
+                $order->products()->attach($productId, [
+                    'quantity' => $cantidad,
+                    'group_price' => $cantidad * $producto->price,
+                    'group_volume' => $cantidad * ($producto->specs->packaged_volume ?? 0),
+                    'group_weight' => $cantidad * ($producto->specs->weight ?? 0),
+                    'prepared' => false,
+                ]);
+
+                $producto->stock->available_quantity -= $cantidad;
+                $producto->stock->save();
+
+                $total += $cantidad * $producto->price;
+                $totalVolume += $cantidad * ($producto->specs->packaged_volume ?? 0);
+                $totalWeight += $cantidad * ($producto->specs->weight ?? 0);
+            }
+
+            // 3. Actualizar pedido (sin cambiar estado)
+            $order->update([
+                'total' => $total,
+                'total_volume' => $totalVolume,
+                'total_weight' => $totalWeight,
+                'order_date' => now(), // fecha siempre actual
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('pedidos.show', $order->id)
+                ->with('message', 'Pedido actualizado correctamente.')
+                ->with('icono', 'success');
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return redirect()->back()
+        //         ->with('message', 'Hubo un error al actualizar el pedido.')
+        //         ->with('icono', 'error');
+        // }
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->back()
+            ->with('message', 'Error: ' . $e->getMessage())
+            ->with('icono', 'error');
     }
+
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -225,6 +332,45 @@ class OrderController extends Controller
 
     //     //
     // }
+
+
+    //MÉTODO PARA CANCELAR PEDIDOS
+    public function cancelOrder(Order $order)
+{
+    $this->authorize('editar pedidos');
+
+    // Solo se pueden cancelar pedidos pendientes o preparados. Porque si se han enviado, ya no. Para eso se debería hacer un método devolución.
+    if (!in_array($order->status, ['pendiente', 'preparado'])) {
+        return redirect()->route('pedidos.index')
+            ->with('error', 'Solo se pueden cancelar pedidos pendientes o preparados.');
+    }
+
+    //Empezamos transacción
+    DB::beginTransaction();
+
+    try {
+        foreach ($order->products as $product) {
+            $stock = $product->stock;
+
+            if ($stock) {
+                $stock->available_quantity += $product->pivot->quantity;
+                $stock->save();
+            }
+        }
+
+        $order->update(['status' => 'cancelado']);
+
+        DB::commit();
+
+        return redirect()->route('pedidos.index')->with('success', 'Pedido cancelado correctamente.');
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+        return redirect()->route('pedidos.index')
+            ->with('error', 'Error al cancelar el pedido.');
+    }
+}
+
 
 
 
