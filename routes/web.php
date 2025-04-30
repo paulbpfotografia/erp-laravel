@@ -54,8 +54,8 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('permission:ver pedidos')->name('pedidos.show');
 
     // Eliminar un pedido
-    Route::delete('/pedidos/{order}', [OrderController::class, 'destroy'])
-        ->middleware('permission:eliminar pedidos')->name('pedidos.destroy');
+    // Route::delete('/pedidos/{order}', [OrderController::class, 'destroy'])
+    //     ->middleware('permission:eliminar pedidos')->name('pedidos.destroy');
     // Actualizar un pedido
     Route::put('/pedidos/{order}', [OrderController::class, 'update'])
         ->middleware('permission:editar pedidos')->name('pedidos.update');

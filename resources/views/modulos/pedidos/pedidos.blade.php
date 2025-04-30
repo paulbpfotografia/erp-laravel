@@ -74,7 +74,7 @@
                         <td>{{ number_format($order->total, 2) }} €</td>
                         <td>
                             <div class="d-flex justify-content-center gap-2">
-                                @can('eliminar pedidos')
+                                {{-- @can('eliminar pedidos')
                                 <button type="button"
                                     class="btn btn-sm btn-danger eliminarRegistroBtn"
                                     data-id="{{ $order->id }}"
@@ -84,7 +84,7 @@
                                     title="Eliminar pedido">
                                     <i class="bi bi-trash3-fill"></i>
                                 </button>
-                                @endcan
+                                @endcan --}}
 
                                 @can('editar pedidos')
                                 @if(in_array($order->status, ['pendiente', 'preparado']))
@@ -96,7 +96,7 @@
                                     </a>
                                 @endif
                             @endcan
-                            
+
 
                                 @can('ver pedidos')
                                 <a href="{{ route('pedidos.show', $order) }}"
