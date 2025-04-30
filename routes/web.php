@@ -9,6 +9,8 @@ use App\Http\Controllers\OrderLogisticsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\TodoController;
+
 
 
 // Ruta Login. Página principal "/"
@@ -180,4 +182,16 @@ Route::middleware(['auth'])->group(function () {
         // Acceder a un pedido concreto
         Route::get('/logistica/{order}', [OrderLogisticsController::class, 'show'])->name('logistica.show');
     });
+
+
+
+// Rutas para tareas personales (to-do list). Están en la vista HOME
+Route::post('/todos', [TodoController::class, 'store'])->name('todos.store');
+Route::patch('/todos/{id}/toggle', [TodoController::class, 'toggle'])->name('todos.toggle');
+Route::delete('/todos/{id}', [TodoController::class, 'destroy'])->name('todos.destroy');
+
+
+
 });
+
+
