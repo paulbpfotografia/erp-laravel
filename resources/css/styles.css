@@ -1,4 +1,3 @@
-
 /* Estilos generales para las alertas DE SWEET ALERT */
 .colored-toast {
     color: white !important;
@@ -54,128 +53,121 @@
     font-size: 14px !important;
 }
 
-/* Estilo para la barra de progreso */
-.swal2-timer-progress-bar {
-    background-color: rgba(255, 255, 255, 0.7) !important;
-}
-
-
-.main-content {
-    width: calc(100% - var(--sidebar-width));
-    max-width: 100%;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html, body {
+html,
+body {
     width: 100%;
     overflow-x: hidden;
-}
-
-.collapsed ~ .main-content {
-    width: calc(100% - var(--sidebar-width-collapsed));
-}
-
-:root {
-    --sidebar-width: 280px;
-    --sidebar-width-collapsed: 80px;
 }
 
 body {
     overflow-x: hidden;
 }
 
+/*NUEVOS ESTILOS BARRA LATERAL*/
+:root {
+    --sidebar-collapsed: 60px;
+    --sidebar-expanded: 240px;
+    --sidebar-bg: linear-gradient(
+        145deg,
+        #1a1c23,
+        #242730
+    ); /* ejemplo turquesa */
+    --sidebar-color: #fff;
+    --transition: 0.5s ease;
+}
+.main-content {
+    margin-left: var(--sidebar-collapsed);
+    width: calc(100% - var(--sidebar-collapsed));
+    transition: margin-left var(--transition), width var(--transition);
+  }
+
 .sidebar {
-    width: var(--sidebar-width);
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100vh;
-    background: linear-gradient(135deg, #1a1c2e 0%, #16181f 100%);
-    transition: all 0.3s ease;
-
-}
-
-.sidebar.collapsed {
-    width: var(--sidebar-width-collapsed);
-}
-
-.sidebar-link {
-    color: #a0a3bd;
-    transition: all 0.2s ease;
-    border-radius: 8px;
-    margin: 4px 16px;
-    white-space: nowrap;
+    width: var(--sidebar-collapsed);
+    background: var(--sidebar-bg);
+    color: var(--sidebar-color);
+    transition: width var(--transition);
     overflow: hidden;
 }
-
-.sidebar-link:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.03);
-    transform: translateX(5px);
+/* 2) Al expandir (hover o clase .expanded) */
+.sidebar:hover,
+.sidebar.expanded {
+    width: var(--sidebar-expanded);
 }
-
-.sidebar-link.active {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
+/* 3) Header: toggle + logo */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
 }
-
-.logo-text {
-    background: linear-gradient(45deg, #6b8cff, #8b9fff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: opacity 0.3s ease;
-}
-
-.profile-section {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.main-content {
-    margin-left: var(--sidebar-width);
-    background-color: #f8f9fa;
-    min-height: 100vh;
-    padding: 20px;
-    transition: all 0.3s ease;
-}
-body.no-sidebar .main-content {
-    margin-left: 0 !important;
-}
-
-.collapsed~.main-content {
-    margin-left: var(--sidebar-width-collapsed);
-}
-
-.toggle-btn {
-    position: absolute;
-    right: -15px;
-    top: 20px;
-    background: white;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    z-index: 100;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.collapsed .toggle-btn {
-    transform: rotate(180deg);
-}
-.collapsed .hide-on-collapse {
+.sidebar-header .logo {
+    margin-left: 0.5rem;
+    font-weight: bold;
+    font-size: 1.25rem;
     opacity: 0;
     visibility: hidden;
+    transition: opacity var(--transition);
+}
+.sidebar:hover .sidebar-header .logo,
+.sidebar.expanded .sidebar-header .logo {
+    opacity: 1;
+    visibility: visible;
 }
 
 
+
+/* 5) Menú */
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar-menu li {
+    margin: 0.5rem 0;
+}
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--sidebar-color);
+    text-decoration: none;
+    transition: background var(--transition);
+}
+.sidebar-menu a i {
+    font-size: 1.2rem;
+}
+.sidebar-menu a span {
+    margin-left: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition);
+}
+.sidebar:hover .sidebar-menu a span,
+.sidebar.expanded .sidebar-menu a span {
+    opacity: 1;
+    visibility: visible;
+}
+.sidebar-menu li.active a {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* 7) Contenido principal: se ajusta según el estado del sidebar */
+
+.sidebar:hover ~ .main-content,
+.sidebar.expanded ~ .main-content {
+    margin-left: var(--sidebar-expanded);
+    width: calc(100% - var(--sidebar-expanded));
+}
 
 /* Tarjeta de Usuario: Vista usuarios-datos */
 
 .profile-sidebar {
-    background: linear-gradient(135deg, #4158D0 0%, #C850C0 100%);
+    background: linear-gradient(135deg, #4158d0 0%, #c850c0 100%);
 }
 
 .nav-pills .nav-link {
@@ -192,12 +184,12 @@ body.no-sidebar .main-content {
 
 .nav-pills .nav-link.active {
     background-color: #fff;
-    color: #4158D0;
+    color: #4158d0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .profile-header {
-    background: linear-gradient(135deg, #4158D0 0%, #C850C0 100%);
+    background: linear-gradient(135deg, #4158d0 0%, #c850c0 100%);
     height: 150px;
     border-radius: 15px;
 }
@@ -234,11 +226,11 @@ body.no-sidebar .main-content {
 }
 
 .activity-item::before {
-    content: '';
+    content: "";
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: #4158D0;
+    background: #4158d0;
     position: absolute;
     left: -7px;
     top: 5px;
@@ -246,8 +238,16 @@ body.no-sidebar .main-content {
 
 /* footer */
 .footer {
-    background: linear-gradient(145deg, #1a1c23, #242730);
+    background: var(--sidebar-bg);
     color: #ffffff;
+    margin-left: var(--sidebar-collapsed);
+    width: calc(100% - var(--sidebar-collapsed));
+    transition: margin-left var(--transition), width var(--transition);
+}
+body.sidebar-expanded .main-content,
+body.sidebar-expanded .footer {
+    margin-left: var(--sidebar-expanded);
+    width: calc(100% - var(--sidebar-expanded));
 }
 
 .footer-title {
@@ -258,7 +258,7 @@ body.no-sidebar .main-content {
 }
 
 .footer-title::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     bottom: -8px;
@@ -294,7 +294,7 @@ body.no-sidebar .main-content {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
     margin-right: 10px;
     transition: all 0.3s ease;
@@ -306,13 +306,13 @@ body.no-sidebar .main-content {
 }
 
 .newsletter-input {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
 .newsletter-input:focus {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255, 255, 255, 0.15);
     border-color: #6c5ce7;
     color: #ffffff;
     box-shadow: none;
@@ -331,7 +331,7 @@ body.no-sidebar .main-content {
 }
 
 .footer-bottom {
-    background: rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .footer-bottom a {
@@ -355,31 +355,21 @@ body.no-sidebar .main-content {
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); /* sombra más fuerte */
 }
 
-
-
 .gradient-custom {
     /* fallback for old browsers */
     background: #6a11cb;
 
     /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+    background: -webkit-linear-gradient(
+        to right,
+        rgba(106, 17, 203, 1),
+        rgba(37, 117, 252, 1)
+    );
 
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
-    }
-
-    body.no-sidebar .main-content {
-        margin-left: 0 !important;
-    }
-
-    /* Ajuste del footer según el estado del sidebar */
-    body:not(.no-sidebar) .footer {
-        margin-left: var(--sidebar-width);
-        transition: margin-left 0.3s ease;
-    }
-
-    body:not(.no-sidebar).collapsed .footer {
-        margin-left: var(--sidebar-width-collapsed);
-    }
-
-
+    background: linear-gradient(
+        to right,
+        rgba(106, 17, 203, 1),
+        rgba(37, 117, 252, 1)
+    );
+}

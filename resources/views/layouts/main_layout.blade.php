@@ -29,7 +29,7 @@
     <main class="flex-fill d-flex">
         {{-- Sidebar / Nav Lateral (si NO está $hidenav) --}}
         @if (empty($hidenav))
-            @include('partials.nav')
+        @include('partials.nav')
         @endif
 
         {{-- Contenido principal --}}
@@ -37,12 +37,14 @@
             @yield('content')
         </div>
 
+
     </main>
 
     {{-- Footer: se muestra solo si no se ha definido $hidefooter --}}
     @if (!isset($hidefooter) || !$hidefooter)
-        @include('partials.footer')
+    @include('partials.footer')
     @endif
+
 
     {{-- JavaScript con Vite --}}
     @vite(['resources/js/app.js'])
