@@ -35,7 +35,7 @@ class ProductController extends Controller
         // 2) Construcción de la consulta base con eager loading de la categoría:
         $query = Product::with('category');
 
-       // 3) Filtro por búsqueda de nombre
+        // 3) Filtro por búsqueda de nombre
         if ($request->filled('buscar')) {
             $query->where('name', 'like', "%{$request->buscar}%");
         }
@@ -62,7 +62,13 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('crear productos');
+
+        // Trae las categorías para el select
+        $categories = Category::all();
+
+        // Devuelve la vista que creaste: resources/views/productos/create.blade.php
+        return view('modulos.productos.create', compact('categories'));
     }
 
     /**

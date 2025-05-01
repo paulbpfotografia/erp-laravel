@@ -45,7 +45,7 @@
 
 
         {{-- Sección : Gestión de productos (con submenú) --}}
-        @role('Directivo|Administrativo|Admin|Gerente')
+        @role('Directivo|Logistica|Administrativo|Admin|Gerente')
         <ul class="nav flex-column list-unstyled mb-3">
             <li class="sidebar-section">
                 {{-- Enlace padre colapsable --}}
@@ -84,7 +84,7 @@
 
 
         {{-- Sección : Gestión de clientes (con submenú) --}}
-        @role('Directivo|Administrativo|Admin|Gerente')
+        @role('Directivo|Logistica|Administrativo|Admin|Gerente')
         <ul class="nav flex-column list-unstyled mb-3">
             <li class="sidebar-section">
 
@@ -192,9 +192,7 @@
         @role('Directivo|Logistica|Admin')
         <ul class="nav flex-column list-unstyled mb-3">
             <li class="sidebar-section">
-                <div class="section-title hide-on-collapse px-3 text-uppercase small mb-2">
-                    Almacén y Logística
-                </div>
+                
                 {{-- Enlace padre --}}
                 <a class="sidebar-link text-decoration-none d-flex justify-content-between align-items-center p-3 {{ request()->routeIs('logistica.*') ? 'active' : '' }}"
                     data-bs-toggle="collapse"
