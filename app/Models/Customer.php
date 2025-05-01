@@ -13,12 +13,18 @@ class Customer extends Model
 
     protected $fillable = [
         'name',
-        'cif',
+        'nif',
         'address',
         'phone',
-        'email'
+        'email',
+        'province_id',
     ];
 
+    // Relación: cada cliente pertenece a una provincia
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
 
     public function orders()
     {

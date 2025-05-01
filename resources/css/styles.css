@@ -165,12 +165,10 @@ body.no-sidebar .main-content {
 .collapsed .toggle-btn {
     transform: rotate(180deg);
 }
-
 .collapsed .hide-on-collapse {
     opacity: 0;
     visibility: hidden;
 }
-
 
 
 
