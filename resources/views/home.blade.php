@@ -55,20 +55,26 @@
                                 <div class="fw-semibold">{{ $user->roles->first()->name ?? 'Sin rol asignado' }}</div>
                             </div>
                         </div>
+
+                        <!-- Listado de Permisos -->
+                        <!-- Listado de Permisos -->
                         <div class="col-12">
                             <div class="bg-light rounded-2 p-3">
                                 <small class="text-muted">Permisos</small>
                                 <ul class="mb-0 ps-3 mt-2">
                                     @forelse ($user->roles as $rol)
-                                        @foreach ($rol->permissions as $permiso)
-                                            <li>{{ $permiso->name }}</li>
-                                        @endforeach
+                                    @foreach ($rol->permissions as $permiso)
+                                    <li>{{ $permiso->name }}</li>
+                                    @endforeach
                                     @empty
-                                        <li class="text-muted">Sin permisos asignados.</li>
+                                    <li class="text-muted">Sin permisos asignados.</li>
                                     @endforelse
                                 </ul>
                             </div>
                         </div>
+
+
+                        <!-- ----------- -->
                     </div>
                 </div>
             </div>
@@ -93,33 +99,33 @@
 
                     {{-- Lista de tareas --}}
                     @if ($user->todos->count())
-                        <ul class="list-group">
-                            @foreach ($user->todos as $todo)
-                                <li class="list-group-item d-flex align-items-center justify-content-between flex-wrap">
-                                    <div class="d-flex align-items-center flex-grow-1 me-2">
-                                        <form method="POST" action="{{ route('todos.toggle', $todo->id) }}">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button class="btn btn-sm {{ $todo->completed ? 'btn-success' : 'btn-outline-secondary' }} me-3" title="Marcar como completada">
-                                                <i class="bi {{ $todo->completed ? 'bi-check-circle-fill' : 'bi-circle' }}"></i>
-                                            </button>
-                                        </form>
+                    <ul class="list-group">
+                        @foreach ($user->todos as $todo)
+                        <li class="list-group-item d-flex align-items-center justify-content-between flex-wrap">
+                            <div class="d-flex align-items-center flex-grow-1 me-2">
+                                <form method="POST" action="{{ route('todos.toggle', $todo->id) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button class="btn btn-sm {{ $todo->completed ? 'btn-success' : 'btn-outline-secondary' }} me-3" title="Marcar como completada">
+                                        <i class="bi {{ $todo->completed ? 'bi-check-circle-fill' : 'bi-circle' }}"></i>
+                                    </button>
+                                </form>
 
-                                        <span class="fs-6 {{ $todo->completed ? 'text-decoration-line-through text-muted' : '' }}">
-                                            {{ $todo->task }}
-                                        </span>
-                                    </div>
+                                <span class="fs-6 {{ $todo->completed ? 'text-decoration-line-through text-muted' : '' }}">
+                                    {{ $todo->task }}
+                                </span>
+                            </div>
 
-                                    <form method="POST" action="{{ route('todos.destroy', $todo->id) }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
-                                    </form>
-                                </li>
-                            @endforeach
-                        </ul>
+                            <form method="POST" action="{{ route('todos.destroy', $todo->id) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </li>
+                        @endforeach
+                    </ul>
                     @else
-                        <div class="alert alert-light text-muted mb-0">No tienes tareas pendientes.</div>
+                    <div class="alert alert-light text-muted mb-0">No tienes tareas pendientes.</div>
                     @endif
                 </div>
             </div>
