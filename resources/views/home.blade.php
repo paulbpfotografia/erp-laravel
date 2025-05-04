@@ -55,26 +55,49 @@
                                 <div class="fw-semibold">{{ $user->roles->first()->name ?? 'Sin rol asignado' }}</div>
                             </div>
                         </div>
-
                         
                         <!-- Listado de Permisos -->
-                        <div class="col-12">
-                            <div class="bg-light rounded-2 p-3">
-                                <small class="text-muted">Permisos</small>
-                                <ul class="mb-0 ps-3 mt-2">
-                                    @forelse ($user->roles as $rol)
-                                    @foreach ($rol->permissions as $permiso)
-                                    <li>{{ $permiso->name }}</li>
-                                    @endforeach
-                                    @empty
-                                    <li class="text-muted">Sin permisos asignados.</li>
-                                    @endforelse
-                                </ul>
+                        <div class="container d-flex justify-content-center align-items-center py-4">
+                            <div
+                                class="permissions-grid"
+                                style="
+      display: grid;
+      width: 100%;
+      max-width: 900px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    ">
+                                @php
+                                // Permisos únicos del usuario
+                                $perms = $user->roles
+                                ->flatMap->permissions
+                                ->pluck('name')
+                                ->unique();
+                                // Agrupación por MÓDULO (texto después de '_')
+                                $modules = $perms->groupBy(fn($p) =>
+                                Str::ucfirst(Str::after($p, '_'))
+                                );
+                                @endphp
+
+                                @foreach($modules as $modulo => $items)
+                                <div
+                                    class="permission-card"
+                                    style="
+          background-color: #f5f5f5;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+          font-weight: bold;
+        ">
+                                    {{ $modulo }}
+                                </div>
+                                @endforeach
+
                             </div>
                         </div>
-
-
-                        <!-- ----------- -->
                     </div>
                 </div>
             </div>
