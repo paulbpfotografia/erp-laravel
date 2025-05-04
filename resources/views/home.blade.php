@@ -56,7 +56,7 @@
                             </div>
                         </div>
 
-                        <!-- Listado de Permisos -->
+                        
                         <!-- Listado de Permisos -->
                         <div class="col-12">
                             <div class="bg-light rounded-2 p-3">

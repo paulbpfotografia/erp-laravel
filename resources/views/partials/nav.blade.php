@@ -172,7 +172,7 @@
                 aria-expanded="{{ request()->routeIs('logistica.*') ? 'true' : 'false' }}"
                 aria-controls="submenuLogistica">
                 <div class="d-flex align-items-center">
-                    <i class="bi bi-warehouse"></i>
+                    <i class="bi bi-truck"></i>
                     <span>Logística</span>
                 </div>
                 <i class="bi bi-chevron-down"></i>
@@ -191,7 +191,10 @@
                     role="button"
                     aria-expanded="{{ (request()->routeIs('logistica.*')) ? 'true' : 'false' }}"
                     aria-controls="submenuLogisticaPedidos">
-                    <span>Pedidos</span>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-file-earmark-bar-graph-fill"></i>   <!-- aquí eliges el icono -->
+                        <span>Pedidos</span>
+                    </div>
                     <i class="bi bi-chevron-down"></i>
                 </a>
                 <div class="collapse ps-4 {{ (request()->routeIs('logistica.pendientes') || request()->routeIs('logistica.enviados') || request()->routeIs('logistica.entregados') || request()->routeIs('logistica.preparados') ) ? 'show' : '' }}" id="submenuLogisticaPedidos">
@@ -219,7 +222,10 @@
                     role="button"
                     aria-expanded="false"
                     aria-controls="submenuAlmacen">
-                    <span>Almacén</span>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-building-fill-up"></i>
+                        <span>Almacén</span>
+                    </div>
                     <i class="bi bi-chevron-down"></i>
                 </a>
                 <div class="collapse ps-4" id="submenuAlmacen">

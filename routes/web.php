@@ -131,6 +131,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{cliente}', [CustomerController::class, 'show'])
             ->middleware('permission:ver clientes')
             ->name('show');
+
     
         // Formulario para editar cliente
         Route::get('/{cliente}/edit', [CustomerController::class, 'edit'])

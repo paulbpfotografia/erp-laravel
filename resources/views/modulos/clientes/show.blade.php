@@ -62,25 +62,61 @@
             </table>
         </div>
 
+        {{-- Sección: Pedidos realizados --}}
+        <h3 class="mt-5">Pedidos realizados</h3>
+
+        @if($customer->orders->isEmpty())
+        <div class="alert alert-info">
+            Este cliente aún no ha realizado ningún pedido.
+        </div>
+        @else
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th># Pedido</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Transportista</th>
+                        <th>Total (con IVA)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($customer->orders as $order)
+                    <tr>
+                        <td>{{ $order->id }}</td>
+                        <td>{{ \Carbon\Carbon::parse($order->order_date)->format('d/m/Y') }}</td>
+                        <td>{{ ucfirst($order->status) }}</td>
+                        <td>{{ $order->carrier?->name ?? '—' }}</td>
+                        <td>{{ number_format($order->total_con_iva ?? $order->total, 2) }} €</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @endif
+
+
         {{-- 3) Botones de acción (Editar / Eliminar) --}}
         <div class="mt-4 d-flex gap-2">
             @can('editar clientes')
             <a href="{{ route('clientes.edit', $customer) }}"
-               class="btn btn-warning">
+                class="btn btn-warning">
                 <i class="bi bi-pencil-fill me-1"></i> Editar
             </a>
             @endcan
 
             @can('eliminar clientes')
             <button type="button"
-                    class="btn btn-danger eliminarRegistroBtn"
-                    data-id="{{ $customer->id }}"
-                    data-url="{{ route('clientes.destroy', $customer) }}"
-                    data-entidad="Cliente">
+                class="btn btn-danger eliminarRegistroBtn"
+                data-id="{{ $customer->id }}"
+                data-url="{{ route('clientes.destroy', $customer) }}"
+                data-entidad="Cliente">
                 <i class="bi bi-trash3-fill me-1"></i> Eliminar
             </button>
             @endcan
         </div>
     </div>
 </div>
+
 @endsection

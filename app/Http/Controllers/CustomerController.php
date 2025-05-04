@@ -81,10 +81,13 @@ class CustomerController extends Controller
     {
         $this->authorize('ver clientes');
 
-        $customer = Customer::with('province')->findOrFail($id);
+        $customer = Customer::with('province', 'orders.carrier')->findOrFail($id);
 
         return view('modulos.clientes.show', compact('customer'));
     }
+
+    
+
 
     /**
      * Show the form for editing the specified resource.
@@ -133,13 +136,12 @@ class CustomerController extends Controller
 
         if (! $customer) {
             return redirect()->route('clientes.index')
-                             ->with('error', 'Cliente no encontrado.');
+                ->with('error', 'Cliente no encontrado.');
         }
 
         $customer->delete();
 
         return redirect()->route('clientes.index')
-                         ->with('success', 'Cliente eliminado correctamente.');
+            ->with('success', 'Cliente eliminado correctamente.');
     }
 }
-

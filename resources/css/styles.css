@@ -68,11 +68,7 @@ body {
 :root {
     --sidebar-collapsed: 60px;
     --sidebar-expanded: 240px;
-    --sidebar-bg: linear-gradient(
-        145deg,
-        #1a1c23,
-        #242730
-    ); /* ejemplo turquesa */
+    --sidebar-bg:linear-gradient(to bottom right, #111827, #1F2937, #374151);
     --sidebar-color: #fff;
     --transition: 0.5s ease;
 }
@@ -80,6 +76,7 @@ body {
     margin-left: var(--sidebar-collapsed);
     width: calc(100% - var(--sidebar-collapsed));
     transition: margin-left var(--transition), width var(--transition);
+    
   }
 
 .sidebar {
@@ -92,6 +89,8 @@ body {
     color: var(--sidebar-color);
     transition: width var(--transition);
     overflow: hidden;
+    display: flex;           /* 🔑 activa flex para distribuir hijos */
+    flex-direction: column;
 }
 /* 2) Al expandir (hover o clase .expanded) */
 .sidebar:hover,
@@ -125,6 +124,9 @@ body {
     list-style: none;
     padding: 0;
     margin: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 .sidebar-menu li {
     margin: 0.5rem 0;
