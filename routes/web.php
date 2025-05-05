@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\WarehouseLogisticController;
+
 
 
 
@@ -116,33 +118,33 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [CustomerController::class, 'index'])
             ->middleware('permission:ver clientes')
             ->name('index');
-    
+
         // Formulario para crear cliente
         Route::get('/create', [CustomerController::class, 'create'])
             ->middleware('permission:crear clientes')
             ->name('create');
-    
+
         // Guardar nuevo cliente
         Route::post('/', [CustomerController::class, 'store'])
             ->middleware('permission:crear clientes')
             ->name('store');
-    
+
         // Mostrar detalle de cliente
         Route::get('/{cliente}', [CustomerController::class, 'show'])
             ->middleware('permission:ver clientes')
             ->name('show');
 
-    
+
         // Formulario para editar cliente
         Route::get('/{cliente}/edit', [CustomerController::class, 'edit'])
             ->middleware('permission:editar clientes')
             ->name('edit');
-    
+
         // Actualizar cliente
         Route::put('/{cliente}', [CustomerController::class, 'update'])
             ->middleware('permission:editar clientes')
             ->name('update');
-    
+
         // Eliminar cliente
         Route::delete('/{cliente}', [CustomerController::class, 'destroy'])
             ->middleware('permission:eliminar clientes')
@@ -205,6 +207,8 @@ Route::middleware(['auth'])->group(function () {
     // Rutas Gestión de Usuarios. Protegida para rol ADMIN o LOGISTICA
     Route::group(['middleware' => ['role:Logistica|Admin']], function () {
 
+        //LOGÍSTICA
+
         // Listar todos los pedidos
         Route::get('/logistica/pedidos', [OrderLogisticsController::class, 'indexAll'])->name('logistica.index');
 
@@ -224,7 +228,29 @@ Route::middleware(['auth'])->group(function () {
 
         // Acceder a un pedido concreto
         Route::get('/logistica/{order}', [OrderLogisticsController::class, 'show'])->name('logistica.show');
+
+
+
+        //ALMACÉN
+
+     // Inventario general
+     Route::get('/logistica/almacen/stock', [WarehouseLogisticController::class, 'inventory'])->name('logistica.almacen.inventario');
+
+    //Para las entradas de mercancías
+     Route::get('/logistica/almacen/entradas', [WarehouseLogisticController::class, 'indexEntradas'])->name('logistica.almacen.entradas');
+
+     //Guardar una nueva entrada de mercancía
+     Route::post('/logistica/almacen/entradas', [WarehouseLogisticController::class, 'storeEntry'])->name('logistica.almacen.entradas.guardar');
+
+     //Devuelve vista de formulario para registrar una nueva entrada
+     Route::get('/logistica/almacen/entradas/crear', [WarehouseLogisticController::class, 'createEntry'])->name('logistica.almacen.entradas.crear');
+
+
+
     });
+
+
+
 
 
 

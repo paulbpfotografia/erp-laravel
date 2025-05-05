@@ -229,12 +229,25 @@
                     <i class="bi bi-chevron-down"></i>
                 </a>
                 <div class="collapse ps-4" id="submenuAlmacen">
-                    <a href="#" class="d-block sidebar-sublink py-2">Inventario</a>
-                    <a href="#" class="d-block sidebar-sublink py-2">Entradas</a>
-                    <a href="#" class="d-block sidebar-sublink py-2">Salidas</a>
-                    <a href="#" class="d-block sidebar-sublink py-2">Proveedores</a>
+                    <a href="{{ route('logistica.almacen.inventario') }}"
+                       class="d-block sidebar-sublink py-2 {{ request()->routeIs('logistica.almacen.inventario') ? 'active' : '' }}">
+                        Inventario
+                    </a>
+                    <a href="{{ route('logistica.almacen.entradas') }}"
+                       class="d-block sidebar-sublink py-2 {{ request()->routeIs('logistica.almacen.entradas') ? 'active' : '' }}">
+                        Entradas
+                    </a>
+                    <a href="#" class="d-block sidebar-sublink py-2 text-muted">
+                        Salidas <small>(próximamente)</small>
+                    </a>
+                    <a href="#" class="d-block sidebar-sublink py-2 text-muted">
+                        Proveedores <small>(próximamente)</small>
+                    </a>
                 </div>
             </div>
+
+
+
         </li>
         @endrole
 
