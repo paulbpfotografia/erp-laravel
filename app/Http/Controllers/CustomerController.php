@@ -81,9 +81,23 @@ class CustomerController extends Controller
     {
         $this->authorize('ver clientes');
 
-        $customer = Customer::with('province', 'orders.carrier')->findOrFail($id);
+        $customer = Customer::with('province','orders.products')->findOrFail($id);
 
-        return view('modulos.clientes.show', compact('customer'));
+
+    // 2) Productos comprados por categoría
+    $categoryCounts = $customer->orders
+        ->flatMap(fn($order) => $order->products)
+        ->pluck('category.name')
+        ->countBy()
+        ->toArray();
+
+    $categoriesData = [
+      'labels' => array_keys($categoryCounts),
+      'data'   => array_values($categoryCounts),
+    ];
+
+        return view('modulos.clientes.show', compact('customer',
+        'categoriesData'));
     }
 
     

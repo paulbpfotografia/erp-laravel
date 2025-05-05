@@ -5,3 +5,4 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './toast.js';
 import './eliminar.js';
 import './sidebar.js';
+import './clienteCharts.js';

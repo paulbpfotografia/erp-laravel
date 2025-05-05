@@ -116,7 +116,25 @@
             </button>
             @endcan
         </div>
+
+        {{-- → Grafica --}}
+        <div class="row gy-4">
+
+            <div class="col-md-6">
+                <h5>Productos por categoría</h5>
+                <canvas
+                    id="categoriesChart"
+                    data-categories='@json($categoriesData)'
+                    height="200"></canvas>
+            </div>
+        </div>
+
+
     </div>
 </div>
 
 @endsection
+{{-- Al final de la vista: cargamos el JS que inicializa ambos gráficos --}}
+@push('scripts')
+
+@endpush

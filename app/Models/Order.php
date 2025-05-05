@@ -14,7 +14,7 @@ class Order extends Model
         'status',
         'total',
         'customer_id',
-        'carrier_id', 
+        'carrier_id',
     ];
 
     public function customer()
