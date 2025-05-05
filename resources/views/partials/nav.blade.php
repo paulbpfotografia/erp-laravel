@@ -216,34 +216,34 @@
                 </div>
 
                 {{-- Sub-submenú: Almacén --}}
-                <a class="d-flex justify-content-between align-items-center sidebar-sublink py-2 ps-3"
-                    data-bs-toggle="collapse"
-                    href="#submenuAlmacen"
-                    role="button"
-                    aria-expanded="false"
-                    aria-controls="submenuAlmacen">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-building-fill-up"></i>
-                        <span>Almacén</span>
-                    </div>
-                    <i class="bi bi-chevron-down"></i>
-                </a>
-                <div class="collapse ps-4" id="submenuAlmacen">
-                    <a href="{{ route('logistica.almacen.inventario') }}"
-                       class="d-block sidebar-sublink py-2 {{ request()->routeIs('logistica.almacen.inventario') ? 'active' : '' }}">
-                        Inventario
-                    </a>
-                    <a href="{{ route('logistica.almacen.entradas') }}"
-                       class="d-block sidebar-sublink py-2 {{ request()->routeIs('logistica.almacen.entradas') ? 'active' : '' }}">
-                        Entradas
-                    </a>
-                    <a href="#" class="d-block sidebar-sublink py-2 text-muted">
-                        Salidas <small>(próximamente)</small>
-                    </a>
-                    <a href="#" class="d-block sidebar-sublink py-2 text-muted">
-                        Proveedores <small>(próximamente)</small>
-                    </a>
-                </div>
+                {{-- Sub-submenú: Almacén --}}
+<a class="d-flex justify-content-between align-items-center sidebar-sublink py-2 ps-3 {{ request()->routeIs('logistica.almacen.*') ? 'active' : '' }}"
+    data-bs-toggle="collapse"
+    href="#submenuAlmacen"
+    role="button"
+    aria-expanded="{{ request()->routeIs('logistica.almacen.*') ? 'true' : 'false' }}"
+    aria-controls="submenuAlmacen">
+    <div class="d-flex align-items-center">
+        <i class="bi bi-building-fill-up"></i>
+        <span>Almacén</span>
+    </div>
+    <i class="bi bi-chevron-down"></i>
+</a>
+<div class="collapse ps-4 {{ request()->routeIs('logistica.almacen.*') ? 'show' : '' }}" id="submenuAlmacen">
+    <a href="{{ route('logistica.almacen.inventario') }}"
+        class="d-block sidebar-sublink py-2 {{ request()->routeIs('logistica.almacen.inventario') ? 'active' : '' }}">
+        Inventario
+    </a>
+    <a href="{{ route('logistica.almacen.entradas') }}"
+        class="d-block sidebar-sublink py-2 {{ request()->routeIs('logistica.almacen.entradas') ? 'active' : '' }}">
+        Entradas
+    </a>
+    <a href="{{ route('logistica.almacen.salidas') }}"
+        class="d-block sidebar-sublink py-2 {{ request()->routeIs('logistica.almacen.salidas') ? 'active' : '' }}">
+        Salidas
+    </a>
+</div>
+
             </div>
 
 

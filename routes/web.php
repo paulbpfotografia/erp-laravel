@@ -245,6 +245,8 @@ Route::middleware(['auth'])->group(function () {
      //Devuelve vista de formulario para registrar una nueva entrada
      Route::get('/logistica/almacen/entradas/crear', [WarehouseLogisticController::class, 'createEntry'])->name('logistica.almacen.entradas.crear');
 
+    // Ver salidas de stock
+    Route::get('/logistica/almacen/salidas', [WarehouseLogisticController::class, 'indexSalidas'])->name('logistica.almacen.salidas');
 
 
     });

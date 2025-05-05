@@ -104,6 +104,26 @@ public function storeEntry(Request $request)
 }
 
 
+public function indexSalidas(Request $request)
+{
+    $query = MoveStock::with('product')->where('move_type', 'salida')->orderByDesc('move_date');
+
+    // Filtro por producto
+    if ($request->filled('product_id')) {
+        $query->where('product_id', $request->product_id);
+    }
+
+    // Filtro por fecha (opcional)
+    if ($request->filled('fecha')) {
+        $query->whereDate('move_date', $request->fecha);
+    }
+
+    $salidas = $query->paginate(20)->withQueryString();
+    $products = Product::orderBy('name')->get();
+
+    return view('modulos.logistica.almacen.almacen-salidas', compact('salidas', 'products'));
+}
+
 
 
 }

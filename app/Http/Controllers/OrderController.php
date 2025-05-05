@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Carrier;
+use App\Models\MoveStock;
 
 
 use Carbon\Traits\Timestamp;
@@ -88,11 +89,9 @@ class OrderController extends Controller
                 ->with('icono', 'error');
         }
 
-        //Iniciamos una transacción en la base de datos. Si falla, acaba con un rollback
         DB::beginTransaction();
 
         try {
-            // Calculamos los totales. Dinero, IVA, volumen y peso.
             $total = 0;
             $totalIVA = 0;
             $totalVolume = 0;
@@ -113,7 +112,6 @@ class OrderController extends Controller
                 }
             }
 
-            // Creamos el pedido
             $order = Order::create([
                 'customer_id' => $request->customer_id,
                 'status' => 'pendiente',
@@ -125,7 +123,6 @@ class OrderController extends Controller
                 'total_weight' => $totalWeight
             ]);
 
-            // Asociamos los productos. Y actualizamos el stock
             foreach ($validatedProducts as $product) {
                 $productoBD = Product::find($product['id']);
 
@@ -146,6 +143,16 @@ class OrderController extends Controller
 
                 $productoBD->stock->available_quantity -= $product['quantity'];
                 $productoBD->stock->save();
+
+                // Registramos salida en move_stocks
+                MoveStock::create([
+                    'move_type' => 'salida',
+                    'quantity' => $product['quantity'],
+                    'reason' => 'Salida por creación de pedido #' . $order->id,
+                    'move_date' => now(),
+                    'product_id' => $productoBD->id,
+                    'order_id' => $order->id,
+                ]);
             }
 
             DB::commit();
@@ -161,6 +168,7 @@ class OrderController extends Controller
                 ->with('icono', 'error');
         }
     }
+
 
 
 
@@ -198,167 +206,173 @@ class OrderController extends Controller
      */
 
      public function update(Request $request, Order $order)
-{
-    $this->authorize('editar pedidos');
+     {
+         $this->authorize('editar pedidos');
 
-    // Solo se pueden editar pedidos si está en pendiente o preparado
-    if (!in_array($order->status, ['pendiente', 'preparado'])) {
-        return redirect()->route('pedidos.index')->with('error', 'No se puede editar un pedido que ya ha sido enviado.');
-    }
+         if (!in_array($order->status, ['pendiente', 'preparado'])) {
+             return redirect()->route('pedidos.index')->with('error', 'No se puede editar un pedido que ya ha sido enviado.');
+         }
 
-    // Validamos que lleguen correctamente los arrays
-    $request->validate([
-        'productos' => 'array',
-        'nuevos' => 'array',
-    ]);
+         $request->validate([
+             'productos' => 'array',
+             'nuevos' => 'array',
+         ]);
 
-    // Se empieza una transacción
-    DB::beginTransaction();
+         DB::beginTransaction();
 
-    try {
-        // Iniciamos variables para recalcular los datos del pedido
-        $total = 0;
-        $totalIVA = 0;
-        $totalVolume = 0;
-        $totalWeight = 0;
+         try {
+             $total = 0;
+             $totalIVA = 0;
+             $totalVolume = 0;
+             $totalWeight = 0;
+             $preparadoModificado = false;
 
-        // Variable para saber si algún producto preparado ha cambiado
-        $preparadoModificado = false;
+             foreach ($request->input('productos', []) as $productId => $datos) {
+                 $producto = Product::with('specs', 'stock')->find($productId);
+                 $nuevaCantidad = (int) $datos['cantidad'];
 
-        // Recorremos productos ya existentes en el pedido
-        foreach ($request->input('productos', []) as $productId => $datos) {
-            $producto = Product::with('specs', 'stock')->find($productId);
-            $nuevaCantidad = (int) $datos['cantidad'];
+                 $pivotData = DB::table('order_product')
+                     ->where('order_id', $order->id)
+                     ->where('product_id', $productId)
+                     ->first();
 
-            // Obtenemos cantidad anterior y si estaba preparado
-            $pivotData = DB::table('order_product')
-                ->where('order_id', $order->id)
-                ->where('product_id', $productId)
-                ->first();
+                 $cantidadAnterior = $pivotData->quantity ?? 0;
+                 $estabaPreparado = $pivotData->prepared ?? false;
 
-            $cantidadAnterior = $pivotData->quantity ?? 0;
-            $estabaPreparado = $pivotData->prepared ?? false;
+                 if ($nuevaCantidad <= 0) {
+                     $producto->stock->available_quantity += $cantidadAnterior;
+                     $producto->stock->save();
+                     $order->products()->detach($productId);
 
-            // Si se ha puesto a 0, lo elimino del pedido y devuelvo el stock
-            if ($nuevaCantidad <= 0) {
-                $producto->stock->available_quantity += $cantidadAnterior;
-                $producto->stock->save();
-                $order->products()->detach($productId);
-                continue;
-            }
+                     // Registrar entrada (devolución)
+                     MoveStock::create([
+                         'move_type' => 'entrada',
+                         'quantity' => $cantidadAnterior,
+                         'reason' => 'Devolución por edición de pedido #' . $order->id,
+                         'move_date' => now(),
+                         'product_id' => $producto->id,
+                         'order_id' => $order->id,
+                     ]);
+                     continue;
+                 }
 
-            // Si se aumenta la cantidad, verifico que haya stock suficiente
-            $diferencia = $nuevaCantidad - $cantidadAnterior;
-            if ($diferencia > 0 && $producto->stock->available_quantity < $diferencia) {
-                DB::rollBack();
-                return redirect()->back()
-                    ->with('message', "Stock insuficiente para '{$producto->name}'.")
-                    ->with('icono', 'error');
-            }
+                 $diferencia = $nuevaCantidad - $cantidadAnterior;
+                 if ($diferencia > 0 && $producto->stock->available_quantity < $diferencia) {
+                     DB::rollBack();
+                     return redirect()->back()
+                         ->with('message', "Stock insuficiente para '{$producto->name}'.")
+                         ->with('icono', 'error');
+                 }
 
-            // Si el producto estaba preparado y su cantidad ha cambiado, marco que debe volver a pendiente
-            $prepared = $estabaPreparado && $cantidadAnterior !== $nuevaCantidad ? false : $estabaPreparado;
-            if ($estabaPreparado && $prepared === false) {
-                $preparadoModificado = true;
-            }
+                 $prepared = $estabaPreparado && $cantidadAnterior !== $nuevaCantidad ? false : $estabaPreparado;
+                 if ($estabaPreparado && $prepared === false) {
+                     $preparadoModificado = true;
+                 }
 
-            // Actualizamos los datos en la tabla pivote
-            $order->products()->updateExistingPivot($productId, [
-                'quantity' => $nuevaCantidad,
-                'group_price' => $nuevaCantidad * $producto->price,
-                'group_volume' => $nuevaCantidad * ($producto->specs->packaged_volume ?? 0),
-                'group_weight' => $nuevaCantidad * ($producto->specs->weight ?? 0),
-                'prepared' => $prepared,
-            ]);
+                 $order->products()->updateExistingPivot($productId, [
+                     'quantity' => $nuevaCantidad,
+                     'group_price' => $nuevaCantidad * $producto->price,
+                     'group_volume' => $nuevaCantidad * ($producto->specs->packaged_volume ?? 0),
+                     'group_weight' => $nuevaCantidad * ($producto->specs->weight ?? 0),
+                     'prepared' => $prepared,
+                 ]);
 
-            // Actualizamos el stock
-            $producto->stock->available_quantity -= $diferencia;
-            $producto->stock->save();
+                 $producto->stock->available_quantity -= $diferencia;
+                 $producto->stock->save();
 
-            // Recogemos los datos de los totales del pedido
-            $subtotal = $nuevaCantidad * $producto->price;
-            $iva = $subtotal * ($producto->iva / 100);
+                 // Registrar salida si hay incremento
+                 if ($diferencia > 0) {
+                     MoveStock::create([
+                         'move_type' => 'salida',
+                         'quantity' => $diferencia,
+                         'reason' => 'Salida adicional por edición de pedido #' . $order->id,
+                         'move_date' => now(),
+                         'product_id' => $producto->id,
+                         'order_id' => $order->id,
+                     ]);
+                 }
 
-            $total += $subtotal;
-            $totalIVA += $iva;
-            $totalVolume += $nuevaCantidad * ($producto->specs->packaged_volume ?? 0);
-            $totalWeight += $nuevaCantidad * ($producto->specs->weight ?? 0);
-        }
+                 $subtotal = $nuevaCantidad * $producto->price;
+                 $iva = $subtotal * ($producto->iva / 100);
 
-        // Recorremos los productos nuevos
-        foreach ($request->input('nuevos', []) as $productId => $cantidad) {
-            $cantidad = (int) $cantidad;
-            if ($cantidad <= 0) continue;
+                 $total += $subtotal;
+                 $totalIVA += $iva;
+                 $totalVolume += $nuevaCantidad * ($producto->specs->packaged_volume ?? 0);
+                 $totalWeight += $nuevaCantidad * ($producto->specs->weight ?? 0);
+             }
 
-            $producto = Product::with('specs', 'stock')->find($productId);
+             foreach ($request->input('nuevos', []) as $productId => $cantidad) {
+                 $cantidad = (int) $cantidad;
+                 if ($cantidad <= 0) continue;
 
-            // Verificamos stock
-            if (!$producto->stock || $producto->stock->available_quantity < $cantidad) {
-                DB::rollBack();
-                return redirect()->back()
-                    ->with('message', "No hay suficiente stock para el producto '{$producto->name}'.")
-                    ->with('icono', 'error');
-            }
+                 $producto = Product::with('specs', 'stock')->find($productId);
 
-            // Añadimos el nuevo producto a la tabla pivote
-            $order->products()->attach($productId, [
-                'quantity' => $cantidad,
-                'group_price' => $cantidad * $producto->price,
-                'group_volume' => $cantidad * ($producto->specs->packaged_volume ?? 0),
-                'group_weight' => $cantidad * ($producto->specs->weight ?? 0),
-                'prepared' => false,
-            ]);
+                 if (!$producto->stock || $producto->stock->available_quantity < $cantidad) {
+                     DB::rollBack();
+                     return redirect()->back()
+                         ->with('message', "No hay suficiente stock para el producto '{$producto->name}'.")
+                         ->with('icono', 'error');
+                 }
 
-            // Actualizamos el stock
-            $producto->stock->available_quantity -= $cantidad;
-            $producto->stock->save();
+                 $order->products()->attach($productId, [
+                     'quantity' => $cantidad,
+                     'group_price' => $cantidad * $producto->price,
+                     'group_volume' => $cantidad * ($producto->specs->packaged_volume ?? 0),
+                     'group_weight' => $cantidad * ($producto->specs->weight ?? 0),
+                     'prepared' => false,
+                 ]);
 
-            // Como se ha añadido algo nuevo, hay que marcarlo como modificado
-            $preparadoModificado = true;
+                 $producto->stock->available_quantity -= $cantidad;
+                 $producto->stock->save();
 
-            // Sumamos al total del pedido
-            $subtotal = $cantidad * $producto->price;
-            $iva = $subtotal * ($producto->iva / 100);
+                 // Registrar salida
+                 MoveStock::create([
+                     'move_type' => 'salida',
+                     'quantity' => $cantidad,
+                     'reason' => 'Salida por producto añadido en edición de pedido #' . $order->id,
+                     'move_date' => now(),
+                     'product_id' => $producto->id,
+                     'order_id' => $order->id,
+                 ]);
 
-            $total += $subtotal;
-            $totalIVA += $iva;
-            $totalVolume += $cantidad * ($producto->specs->packaged_volume ?? 0);
-            $totalWeight += $cantidad * ($producto->specs->weight ?? 0);
-        }
+                 $preparadoModificado = true;
 
-        // Si el pedido estaba preparado y algo preparado se ha modificado, se devuelve a pendiente
-        if ($order->status === 'preparado' && $preparadoModificado) {
-            $order->status = 'pendiente';
-        }
+                 $subtotal = $cantidad * $producto->price;
+                 $iva = $subtotal * ($producto->iva / 100);
 
-        // Recalculamos el total con IVA
-        $totalConIVA = $total + $totalIVA;
+                 $total += $subtotal;
+                 $totalIVA += $iva;
+                 $totalVolume += $cantidad * ($producto->specs->packaged_volume ?? 0);
+                 $totalWeight += $cantidad * ($producto->specs->weight ?? 0);
+             }
 
-        // Actualizamos los datos del pedido una vez cambiados
-        $order->update([
-            'total' => $total,
-            'total_iva' => $totalIVA,
-            'total_con_iva' => $totalConIVA,
-            'total_volume' => $totalVolume,
-            'total_weight' => $totalWeight,
-            'order_date' => now(),
-            'status' => $order->status,
-        ]);
+             if ($order->status === 'preparado' && $preparadoModificado) {
+                 $order->status = 'pendiente';
+             }
 
-        DB::commit();
+             $order->update([
+                 'total' => $total,
+                 'total_iva' => $totalIVA,
+                 'total_con_iva' => $total + $totalIVA,
+                 'total_volume' => $totalVolume,
+                 'total_weight' => $totalWeight,
+                 'order_date' => now(),
+                 'status' => $order->status,
+             ]);
 
-        return redirect()->route('pedidos.show', $order->id)
-            ->with('message', 'Pedido actualizado correctamente.')
-            ->with('icono', 'success');
+             DB::commit();
 
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return redirect()->back()
-            ->with('message', 'Error: ' . $e->getMessage())
-            ->with('icono', 'error');
-    }
-}
+             return redirect()->route('pedidos.show', $order->id)
+                 ->with('message', 'Pedido actualizado correctamente.')
+                 ->with('icono', 'success');
 
+         } catch (\Exception $e) {
+             DB::rollBack();
+             return redirect()->back()
+                 ->with('message', 'Error: ' . $e->getMessage())
+                 ->with('icono', 'error');
+         }
+     }
 
 
 
@@ -393,8 +407,19 @@ class OrderController extends Controller
             $stock = $product->stock;
 
             if ($stock) {
+                // Devolvemos el stock al inventario
                 $stock->available_quantity += $product->pivot->quantity;
                 $stock->save();
+
+                // Registramos el movimiento de entrada en el historial
+                MoveStock::create([
+                    'move_type' => 'entrada',
+                    'quantity' => $product->pivot->quantity,
+                    'reason' => 'cancelación del pedido #' . $order->id,
+                    'move_date' => now(),
+                    'product_id' => $product->id,
+                    'order_id' => $order->id,
+                ]);
             }
         }
 
@@ -410,8 +435,6 @@ class OrderController extends Controller
             ->with('error', 'Error al cancelar el pedido.');
     }
 }
-
-
 
 
 
