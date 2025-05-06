@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class OrderLogisticsController extends Controller
 {
@@ -102,16 +104,24 @@ class OrderLogisticsController extends Controller
 
         // Verificamos si todos los productos del pedido están preparados
         $todosPreparados = $order->products->every(function ($product) {
-            return (bool) $product->pivot->prepared; // Aseguramos que 'prepared' sea tratado como booleano
+            return (bool) $product->pivot->prepared;
         });
 
         // Si todos los productos están preparados, cambiamos el estado del pedido a 'preparado'
-        if ($todosPreparados) {
-            $order->status = 'preparado'; // Actualizamos el estado del pedido
+        if ($todosPreparados && $order->status !== 'preparado') {
+            $order->status = 'preparado';
             $order->save();
+
+            //Cargo las relaciones
+            $order->load(['customer', 'carrier', 'products']);
+
+            //Generamos y guardamos el albarán en PDF
+            $pdf = Pdf::loadView('modulos.pedidos.documentos.albaran', compact('order'));
+            $filename = 'albaranes/pedido_' . $order->id . '.pdf';
+            Storage::disk('public')->put($filename, $pdf->output());
         }
 
-        // Redirigimos a la misma página con un mensaje de éxito
+
         return redirect()->back()->with('success', 'Progreso de preparación actualizado correctamente.');
     }
 

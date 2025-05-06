@@ -34,10 +34,11 @@
                 </div>
             </div>
 
-
             <!-- Fecha -->
             <div class="mb-4">
-                <p class="mb-0"><strong>Fecha del pedido:</strong> <span class="text-muted">{{ \Carbon\Carbon::parse($order->order_date)->format('d/m/Y') }}</span></p>
+                <p class="mb-0"><strong>Fecha del pedido:</strong>
+                    <span class="text-muted">{{ \Carbon\Carbon::parse($order->order_date)->format('d/m/Y') }}</span>
+                </p>
             </div>
 
             <!-- Información del cliente -->
@@ -85,14 +86,14 @@
                 </ul>
 
                 <!-- Total pedido con desglose de IVA -->
-                    @php
+                @php
                     $totalIVA = $order->products->sum(function($p) {
                         return $p->pivot->quantity * $p->price * ($p->iva / 100);
                     });
                     $totalConIVA = $order->total + $totalIVA;
-                    @endphp
+                @endphp
 
-                    <div class="text-end mt-3">
+                <div class="text-end mt-3">
                     <p class="mb-1"><strong>Subtotal (sin IVA):</strong> {{ number_format($order->total, 2) }} €</p>
                     <p class="mb-1"><strong>IVA total:</strong> {{ number_format($totalIVA, 2) }} €</p>
                     <p class="fs-5 fw-semibold">
@@ -100,8 +101,22 @@
                             Total con IVA: {{ number_format($totalConIVA, 2) }} €
                         </span>
                     </p>
-                    </div>
+                </div>
 
+                <!-- Botón de descarga del albarán -->
+                @if($order->status === 'preparado')
+                    @php
+                        $albaranPath = 'albaranes/pedido_' . $order->id . '.pdf';
+                    @endphp
+
+                    @if(Storage::disk('public')->exists($albaranPath))
+                        <div class="text-end mt-3">
+                            <a href="{{ route('orders.download-albaran', $order) }}" class="btn btn-outline-primary">
+                                <i class="bi bi-file-earmark-pdf-fill me-1"></i> Descargar albarán
+                            </a>
+                        </div>
+                    @endif
+                @endif
             @endif
 
             <!-- Botón volver -->

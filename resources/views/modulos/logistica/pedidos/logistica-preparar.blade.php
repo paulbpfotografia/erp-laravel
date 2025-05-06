@@ -25,9 +25,9 @@
                             <strong>{{ $product->name }}</strong><br>
                             <small class="text-muted">
                                 Cantidad: {{ $product->pivot->quantity }}<br>
-                                Volumen total: 
+                                Volumen total:
                                 {{ number_format($product->pivot->quantity * ($product->specs->packaged_volume ?? 0), 3) }} m³<br>
-                                Peso total: 
+                                Peso total:
                                 {{ number_format($product->pivot->quantity * ($product->specs->weight ?? 0), 2) }} kg
                             </small>
                         </div>
@@ -45,7 +45,7 @@
                             @endif
                         </div>
                     </li>
-                    
+
                     @endforeach
                 </ul>
 
@@ -55,6 +55,13 @@
                     </button>
                 </div>
             </form>
+            @if($order->status === 'preparado')
+            <div class="mt-4 text-end">
+                <a href="{{ route('logistica.show', $order) }}" class="btn btn-primary">
+                    <i class="bi bi-eye-fill me-1"></i> Ver pedido
+                </a>
+            </div>
+        @endif
 
             <div class="mt-4 text-end">
                 <a href="{{ route('logistica.index') }}" class="btn btn-outline-secondary">

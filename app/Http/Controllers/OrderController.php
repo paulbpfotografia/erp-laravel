@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
 
 use App\Models\Order;
 use App\Models\Customer;
@@ -435,6 +437,23 @@ class OrderController extends Controller
             ->with('error', 'Error al cancelar el pedido.');
     }
 }
+
+
+
+
+
+
+public function downloadAlbaran(Order $order)
+{
+    $filePath = 'albaranes/pedido_' . $order->id . '.pdf';
+
+    if (!Storage::disk('public')->exists($filePath)) {
+        abort(404, 'El albarán no está disponible');
+    }
+
+    return response()->file(storage_path('app/public/' . $filePath));
+}
+
 
 
 

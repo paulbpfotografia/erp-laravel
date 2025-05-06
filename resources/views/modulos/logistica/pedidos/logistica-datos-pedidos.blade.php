@@ -91,7 +91,24 @@
                 </div>
             @endif
 
-            <!-- Botón volver -->
+            <!--Descargar Albarçan -->
+
+            @if($order->status === 'preparado')
+                @php
+                    $albaranPath = 'albaranes/pedido_' . $order->id . '.pdf';
+                @endphp
+
+                @if(Storage::disk('public')->exists($albaranPath))
+                    <div class="text-end mb-4">
+                        <a href="{{ route('orders.download-albaran', $order) }}" class="btn btn-outline-primary">
+                            <i class="bi bi-file-earmark-pdf-fill me-1"></i> Descargar albarán
+                        </a>
+                    </div>
+                @endif
+            @endif
+
+
+            <!--volver -->
             <div class="mt-5 text-end">
                 <a href="{{ route('logistica.index') }}" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left-circle me-1"></i> Volver

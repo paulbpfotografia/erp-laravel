@@ -67,6 +67,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/pedidos/{order}/cancelar', [OrderController::class, 'cancelOrder'])
         ->middleware('permission:editar pedidos')->name('pedidos.cancel');
 
+        //Descargar albaran
+        Route::get('/orders/{order}/download-albaran', [OrderController::class, 'downloadAlbaran'])
+    ->name('orders.download-albaran');
+
+
 
 
 
