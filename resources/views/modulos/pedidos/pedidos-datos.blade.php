@@ -3,6 +3,7 @@
 @section('title', 'Detalle del pedido')
 
 @section('content')
+@php use Illuminate\Support\Facades\Storage; @endphp
 <div class="container mt-5">
     <div class="card shadow-lg border-0 rounded-4 mb-4">
         <div class="card-body px-4 py-5">
@@ -43,14 +44,14 @@
 
             <!-- Información del cliente -->
             @if($order->customer)
-            <div class="mb-5">
-                <h5 class="text-primary-emphasis mb-3">Datos del cliente</h5>
-                <div class="border rounded p-3 bg-light">
-                    <p class="mb-1"><strong>ID Cliente:</strong> {{ $order->customer->id }}</p>
-                    <p class="mb-1"><strong>Nombre:</strong> {{ $order->customer->name }}</p>
-                    <p class="mb-1"><strong>Email:</strong> {{ $order->customer->email }}</p>
+                <div class="mb-5">
+                    <h5 class="text-primary-emphasis mb-3">Datos del cliente</h5>
+                    <div class="border rounded p-3 bg-light">
+                        <p class="mb-1"><strong>ID Cliente:</strong> {{ $order->customer->id }}</p>
+                        <p class="mb-1"><strong>Nombre:</strong> {{ $order->customer->name }}</p>
+                        <p class="mb-1"><strong>Email:</strong> {{ $order->customer->email }}</p>
+                    </div>
                 </div>
-            </div>
             @endif
 
             <!-- Productos -->
@@ -59,9 +60,7 @@
             @if($order->products->isEmpty())
                 <p class="text-muted">Este pedido no tiene productos.</p>
             @else
-                @php
-                    $totalPedido = 0;
-                @endphp
+                @php $totalPedido = 0; @endphp
 
                 <ul class="list-group list-group-flush mb-4">
                     @foreach ($order->products as $product)
@@ -103,19 +102,37 @@
                     </p>
                 </div>
 
-                <!-- Botón de descarga del albarán -->
-                @if($order->status === 'preparado')
-                    @php
-                        $albaranPath = 'albaranes/pedido_' . $order->id . '.pdf';
-                    @endphp
+                <!-- Documentación del pedido -->
+                @if(in_array($order->status, ['preparado', 'enviado', 'entregado']))
+                    <div class="mt-4">
+                        <h6 class="text-primary-emphasis fw-semibold mb-3">
+                            <i class="bi bi-folder-fill me-2"></i> Documentación del pedido
+                        </h6>
 
-                    @if(Storage::disk('public')->exists($albaranPath))
-                        <div class="text-end mt-3">
-                            <a href="{{ route('orders.download-albaran', $order) }}" class="btn btn-outline-primary">
-                                <i class="bi bi-file-earmark-pdf-fill me-1"></i> Descargar albarán
-                            </a>
+                        <div class="d-flex gap-3">
+                            @php
+                                $albaranPath = 'albaranes/pedido_' . $order->id . '.pdf';
+                            @endphp
+
+                            @if(Storage::disk('public')->exists($albaranPath))
+                                <a href="{{ route('pedidos.albaran', $order) }}" class="btn btn-outline-primary">
+                                    <i class="bi bi-file-earmark-pdf-fill me-1"></i> Descargar albarán
+                                </a>
+                            @endif
+
+                            @if($order->status === 'entregado')
+                                @php
+                                    $facturaPath = 'facturas/pedido_' . $order->id . '.pdf';
+                                @endphp
+
+                                @if(Storage::disk('public')->exists($facturaPath))
+                                    <a href="{{ route('pedidos.factura', $order) }}" class="btn btn-outline-dark">
+                                        <i class="bi bi-file-earmark-text-fill me-1"></i> Descargar factura
+                                    </a>
+                                @endif
+                            @endif
                         </div>
-                    @endif
+                    </div>
                 @endif
             @endif
 

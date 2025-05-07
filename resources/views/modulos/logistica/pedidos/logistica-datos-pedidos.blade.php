@@ -3,6 +3,7 @@
 @section('title', 'Detalle del pedido')
 
 @section('content')
+@php use Illuminate\Support\Facades\Storage; @endphp
 <div class="container mt-5">
     <div class="card shadow-lg border-0 rounded-4 mb-4">
         <div class="card-body px-4 py-5">
@@ -30,25 +31,25 @@
 
             <!-- Información del cliente -->
             @if($order->customer)
-            <div class="mb-5">
-                <h5 class="text-primary-emphasis mb-3">Datos del cliente</h5>
-                <div class="border rounded p-3 bg-light">
-                    <p class="mb-1"><strong>ID Cliente:</strong> {{ $order->customer->id }}</p>
-                    <p class="mb-1"><strong>Nombre:</strong> {{ $order->customer->name }}</p>
-                    <p class="mb-1"><strong>Email:</strong> {{ $order->customer->email }}</p>
+                <div class="mb-5">
+                    <h5 class="text-primary-emphasis mb-3">Datos del cliente</h5>
+                    <div class="border rounded p-3 bg-light">
+                        <p class="mb-1"><strong>ID Cliente:</strong> {{ $order->customer->id }}</p>
+                        <p class="mb-1"><strong>Nombre:</strong> {{ $order->customer->name }}</p>
+                        <p class="mb-1"><strong>Email:</strong> {{ $order->customer->email }}</p>
+                    </div>
                 </div>
-            </div>
             @endif
 
             <!-- Información del transportista -->
             @if($order->carrier)
-            <div class="mb-5">
-                <h5 class="text-primary-emphasis mb-3">Transportista</h5>
-                <div class="border rounded p-3 bg-light">
-                    <p class="mb-1"><strong>Nombre:</strong> {{ $order->carrier->name }}</p>
-                    <p class="mb-1"><strong>Teléfono:</strong> {{ $order->carrier->phone }}</p>
+                <div class="mb-5">
+                    <h5 class="text-primary-emphasis mb-3">Transportista</h5>
+                    <div class="border rounded p-3 bg-light">
+                        <p class="mb-1"><strong>Nombre:</strong> {{ $order->carrier->name }}</p>
+                        <p class="mb-1"><strong>Teléfono:</strong> {{ $order->carrier->phone }}</p>
+                    </div>
                 </div>
-            </div>
             @endif
 
             <!-- Productos -->
@@ -91,24 +92,46 @@
                 </div>
             @endif
 
-            <!--Descargar Albarçan -->
-
-            @if($order->status === 'preparado')
+            <!-- Documentación: albarán -->
+            @if(in_array($order->status, ['preparado', 'enviado', 'entregado']))
                 @php
                     $albaranPath = 'albaranes/pedido_' . $order->id . '.pdf';
                 @endphp
 
                 @if(Storage::disk('public')->exists($albaranPath))
                     <div class="text-end mb-4">
-                        <a href="{{ route('orders.download-albaran', $order) }}" class="btn btn-outline-primary">
+                        <a href="{{ route('pedidos.albaran', $order) }}" class="btn btn-outline-primary">
                             <i class="bi bi-file-earmark-pdf-fill me-1"></i> Descargar albarán
                         </a>
                     </div>
                 @endif
             @endif
 
+            <!-- Botón marcar como enviado -->
+            @if($order->status === 'preparado')
+                <div class="text-end mb-4">
+                    <form action="{{ route('logistica.pedidos.marcar-enviado', $order) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-info">
+                            <i class="bi bi-truck me-1"></i> Marcar como enviado
+                        </button>
+                    </form>
+                </div>
+            @endif
 
-            <!--volver -->
+            <!-- Botón marcar como entregado -->
+            @if($order->status === 'enviado')
+                <div class="text-end mb-4">
+                    <form action="{{ route('logistica.pedidos.marcar-entregado', $order) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check2-circle me-1"></i> Marcar como entregado
+                        </button>
+                    </form>
+                </div>
+            @endif
+
+            <!-- Botón volver -->
             <div class="mt-5 text-end">
                 <a href="{{ route('logistica.index') }}" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left-circle me-1"></i> Volver

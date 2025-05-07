@@ -67,9 +67,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/pedidos/{order}/cancelar', [OrderController::class, 'cancelOrder'])
         ->middleware('permission:editar pedidos')->name('pedidos.cancel');
 
-        //Descargar albaran
-        Route::get('/orders/{order}/download-albaran', [OrderController::class, 'downloadAlbaran'])
-    ->name('orders.download-albaran');
+    // Descargar albarán
+    Route::get('/pedidos/{order}/albaran', [OrderController::class, 'downloadAlbaran'])
+    ->middleware('permission:ver pedidos')->name('pedidos.albaran');
+
+    // Descargar factura
+    Route::get('/pedidos/{order}/factura', [OrderController::class, 'downloadFactura'])
+    ->middleware('permission:ver pedidos')->name('pedidos.factura');
 
 
 
@@ -233,8 +237,13 @@ Route::middleware(['auth'])->group(function () {
 
         // Acceder a un pedido concreto
         Route::get('/logistica/{order}', [OrderLogisticsController::class, 'show'])->name('logistica.show');
+    
+        // Marcar pedido como enviado
+        Route::post('/logistica/pedidos/{order}/marcar-enviado', [OrderLogisticsController::class, 'marcarComoEnviado'])->name('logistica.pedidos.marcar-enviado');
 
-
+        // Marcar pedido como entregado
+        Route::post('/logistica/pedidos/{order}/marcar-entregado', [OrderLogisticsController::class, 'marcarComoEntregado'])->name('logistica.pedidos.marcar-entregado');
+    
 
         //ALMACÉN
 

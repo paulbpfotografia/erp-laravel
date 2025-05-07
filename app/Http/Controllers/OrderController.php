@@ -456,5 +456,18 @@ public function downloadAlbaran(Order $order)
 
 
 
+public function downloadFactura(Order $order)
+{
+    $filePath = 'facturas/pedido_' . $order->id . '.pdf';
+
+    if (!Storage::disk('public')->exists($filePath)) {
+        abort(404, 'La factura no está disponible');
+    }
+
+    return response()->file(storage_path('app/public/' . $filePath));
+}
+
+
+
 
 }

@@ -135,6 +135,42 @@ class OrderLogisticsController extends Controller
     }
 
 
+        //Metodo para marcar como enviado
+
+        public function marcarComoEnviado(Order $order)
+    {
+        if ($order->status === 'preparado') {
+            $order->status = 'enviado';
+            $order->save();
+        }
+
+        return redirect()->back()->with('message', 'El pedido ha sido marcado como enviado.')
+        ->with('icono', 'success');
+
+
+        
+    }
+
+    //Metodo para marcar como entregado
+            public function marcarComoEntregado(Order $order)
+        {  if ($order->status === 'enviado') {
+            $order->status = 'entregado';
+            $order->save();
+    
+            // Cargar relaciones necesarias
+            $order->load(['customer', 'carrier', 'products']);
+    
+            // Generar la factura PDF
+            $pdf = Pdf::loadView('modulos.pedidos.documentos.factura', compact('order'));
+            $filename = 'facturas/pedido_' . $order->id . '.pdf';
+            Storage::disk('public')->put($filename, $pdf->output());
+        }
+            return redirect()->back()->with('message', 'El pedido ha sido marcado como entregado.')
+            ->with('icono', 'success');
+        }
+
+
+
 
 
 }
