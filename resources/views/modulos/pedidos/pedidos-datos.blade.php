@@ -115,7 +115,7 @@
                             @endphp
 
                             @if(Storage::disk('public')->exists($albaranPath))
-                                <a href="{{ route('pedidos.albaran', $order) }}" class="btn btn-outline-primary">
+                                <a href="{{ route('pedidos.albaran', $order) }}" class="btn btn-outline-primary" >
                                     <i class="bi bi-file-earmark-pdf-fill me-1"></i> Descargar albarán
                                 </a>
                             @endif

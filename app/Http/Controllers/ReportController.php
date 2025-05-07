@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -12,11 +13,11 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
-        $year = $request->input('year', now()->year); 
-    
+        $year = $request->input('year', now()->year);
+
         $totalOrders = Order::whereYear('order_date', $year)->count();
         $totalSales = Order::whereYear('order_date', $year)->sum('total');
-    
+
         return view('modulos.informes.informes', compact('totalOrders', 'totalSales', 'year'));
     }
 
@@ -72,34 +73,46 @@ class ReportController extends Controller
 
     //Función para extraer las categorías más vendidas
     public function productsByCategory()
-{
-    $categories = DB::table('order_product')
-        ->join('products', 'order_product.product_id', '=', 'products.id')
-        ->join('category', 'products.category_id', '=', 'category.id')
-        ->select('category.name', DB::raw('SUM(order_product.quantity) as total_sold'))
-        ->groupBy('category.name')
-        ->orderByDesc('total_sold')
-        ->get();
+    {
+        $categories = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->join('category', 'products.category_id', '=', 'category.id')
+            ->select('category.name', DB::raw('SUM(order_product.quantity) as total_sold'))
+            ->groupBy('category.name')
+            ->orderByDesc('total_sold')
+            ->get();
 
-    $labels = [];
-    $data = [];
+        $labels = [];
+        $data = [];
 
-    foreach ($categories as $category) {
-        $labels[] = $category->name;
-        $data[] = $category->total_sold;
+        foreach ($categories as $category) {
+            $labels[] = $category->name;
+            $data[] = $category->total_sold;
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data
+        ]);
     }
 
-    return response()->json([
-        'labels' => $labels,
-        'data' => $data
-    ]);
-}
+    public function topProducts()
+    {
+        $rows = DB::table('order_product')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->select(
+                'products.id',
+                'products.name',
+                DB::raw('SUM(order_product.quantity) as total')
+            )
+            ->groupBy('products.id', 'products.name')
+            ->orderByDesc('total')
+            ->limit(10)
+            ->get();
 
+        $labels = $rows->pluck('name')->toArray();
+        $data   = $rows->pluck('total')->map(fn($t) => (int)$t)->toArray();
 
-
-
-
-
-
-
+        return response()->json(compact('labels', 'data'));
+    }
 }

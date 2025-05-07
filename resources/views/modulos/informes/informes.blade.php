@@ -30,7 +30,7 @@
                 <div class="col-auto">
                     <select name="year" id="year" class="form-select" onchange="this.form.submit()">
                         @for ($y = now()->year; $y >= 2024; $y--)
-                            <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
+                        <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
                         @endfor
                     </select>
                 </div>
@@ -180,6 +180,19 @@
                     </div>
                 </div>
             </div>
+            <!-- Top Productos -->
+            <div class="col-12 col-lg-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Top 10 Productos más vendidos</h5>
+                        <div style="position: relative; height: 300px; width: 100%;">
+                            <canvas id="topProductsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
     </div>

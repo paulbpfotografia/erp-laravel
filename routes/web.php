@@ -203,7 +203,10 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('role:Directivo|Admin')
         ->name('informes.categorias');
 
-
+    //Ruta para ver los 10 productos top
+    Route::get('informes/productos/top', [ReportController::class, 'topProducts'])
+     ->middleware('role:Directivo|Admin')
+     ->name('informes.productos.top');
 
 
 
