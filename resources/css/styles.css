@@ -54,10 +54,13 @@
 }
 
 html,
-body {
-    width: 100%;
-    overflow-x: hidden;
-    overscroll-behavior: none;
+body.wrapper {
+    height: 100%;
+    margin: 0;
+}
+.wrapper {
+    display: flex;
+    flex-direction: column;
 }
 
 body {
@@ -66,38 +69,74 @@ body {
 
 /*NUEVOS ESTILOS BARRA LATERAL*/
 :root {
-    --sidebar-collapsed: 60px;
-    --sidebar-expanded: 240px;
-    --sidebar-bg:linear-gradient(to bottom right, #111827, #1F2937, #374151);
+    --topbar-height: 56px; /* Altura del topbar */
+    --footer-height: 30px; /* Altura del footer */
+    --sidebar-collapsed: 115px; /* Ancho cuando está colapsado */
+    --sidebar-expanded: 210px; /* Ancho cuando está expandido */
+    --sidebar-bg: linear-gradient(to bottom right, #111827, #1f2937, #374151);
     --sidebar-color: #fff;
-    --transition: 0.5s ease;
+    --transition: 0.3s ease;
 }
-.main-content {
-    margin-left: var(--sidebar-collapsed);
-    width: calc(100% - var(--sidebar-collapsed));
-    transition: margin-left var(--transition), width var(--transition);
-    
-  }
+/*Estilos para el topbar*/
+#barra-superior {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-collapsed);
+    right: 0;
+    height: var(--topbar-height);
+    z-index: 200;
+    transition: left var(--transition), width var(--transition);
+    background: var(--sidebar-bg);
+}
+/*Estilos para el bloque <ul> de topbar*/
+.bg-topbar{
+    background: var(--sidebar-bg);
+}
+/*Color para los items del topbar */
+.dropdown-menu.bg-topbar .dropdown-item {
+  color: #fff !important;                /* texto blanco siempre */
+}
 
+.dropdown-menu.bg-topbar .dropdown-item:hover,
+.dropdown-menu.bg-topbar .dropdown-item:focus {
+  color: #fff !important;                /* texto blanco al hover/focus */
+  background-color: rgba(255,255,255,0.1) !important;
+}
+
+/* Al expandir el sidebar, mueve el topbar */
+body.sidebar-expanded #barra-superior {
+    left: var(--sidebar-expanded);
+}
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
+    bottom: 0;
     width: var(--sidebar-collapsed);
     background: var(--sidebar-bg);
     color: var(--sidebar-color);
     transition: width var(--transition);
-    overflow: hidden;
-    display: flex;           /* 🔑 activa flex para distribuir hijos */
+    display: flex;
     flex-direction: column;
+    overflow-y: auto;
+  overflow-x: hidden;
+    z-index: 300;
 }
-/* 2) Al expandir (hover o clase .expanded) */
-.sidebar:hover,
+/* Solo el sidebar se expande al hover */
+.sidebar:hover {
+    width: var(--sidebar-expanded);
+    
+}
+.profile-section{
+     margin-top: auto;
+}
+
+/* Expansión (hover o via JS .expanded) */
 .sidebar.expanded {
     width: var(--sidebar-expanded);
 }
-/* 3) Header: toggle + logo */
+
+/* Header: */
 .sidebar-header {
     display: flex;
     align-items: center;
@@ -111,22 +150,20 @@ body {
     visibility: hidden;
     transition: opacity var(--transition);
 }
+
 .sidebar:hover .sidebar-header .logo,
 .sidebar.expanded .sidebar-header .logo {
     opacity: 1;
     visibility: visible;
 }
 
-
-
-/* 5) Menú */
+/* Menú vertical */
 .sidebar-menu {
-    list-style: none;
-    padding: 0;
+    flex: 1;
     margin: 0;
+    padding: 0;
+    list-style: none;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
 }
 .sidebar-menu li {
     margin: 0.5rem 0;
@@ -148,6 +185,8 @@ body {
     visibility: hidden;
     transition: opacity var(--transition);
 }
+
+/* Mostrar texto de menú solo cuando esté expandido */
 .sidebar:hover .sidebar-menu a span,
 .sidebar.expanded .sidebar-menu a span {
     opacity: 1;
@@ -156,17 +195,21 @@ body {
 .sidebar-menu li.active a {
     background: rgba(0, 0, 0, 0.2);
 }
-
-
-
-/* 7) Contenido principal: se ajusta según el estado del sidebar */
-
-.sidebar:hover ~ .main-content,
-.sidebar.expanded ~ .main-content {
+/*Contenido principal*/
+.main-content {
+    margin-top: var(--topbar-height);
+    margin-left: var(--sidebar-collapsed);
+    margin-bottom: var(--footer-height);
+    padding: 1rem;
+    width: calc(100% - var(--sidebar-collapsed));
+    transition: margin-left var(--transition), width var(--transition);
+}
+/* Cuando el sidebar está expandido por click */
+body.sidebar-expanded .main-content,
+body.sidebar-expanded .footer {
     margin-left: var(--sidebar-expanded);
     width: calc(100% - var(--sidebar-expanded));
 }
-
 /* Tarjeta de Usuario: Vista usuarios-datos */
 
 .profile-sidebar {
@@ -241,109 +284,27 @@ body {
 
 /* footer */
 .footer {
+    position: fixed;
+    bottom: 0;
+    left: var(--sidebar-collapsed);
+    right: 0;
     background: var(--sidebar-bg);
-    color: #ffffff;
-    margin-left: var(--sidebar-collapsed);
-    width: calc(100% - var(--sidebar-collapsed));
-    transition: margin-left var(--transition), width var(--transition);
-}
-body.sidebar-expanded .main-content,
-body.sidebar-expanded .footer {
-    margin-left: var(--sidebar-expanded);
-    width: calc(100% - var(--sidebar-expanded));
+    color: #fff;
+    transition: left var(--transition), width var(--transition);
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+    z-index: 100;
 }
 
+/* Al expandir */
+body.sidebar-expanded .footer {
+    left: var(--sidebar-expanded);
+}
 .footer-title {
     color: #fff;
     font-weight: 600;
     margin-bottom: 1.5rem;
     position: relative;
-}
-
-.footer-title::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -8px;
-    width: 30px;
-    height: 2px;
-    background: #6c5ce7;
-}
-
-.footer-links {
-    list-style: none;
-    padding: 0;
-}
-
-.footer-links li {
-    margin-bottom: 1rem;
-}
-
-.footer-links a {
-    color: #b4b6bb;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.footer-links a:hover {
-    color: #ffffff;
-    padding-left: 5px;
-}
-
-.social-links a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    margin-right: 10px;
-    transition: all 0.3s ease;
-}
-
-.social-links a:hover {
-    background: #6c5ce7;
-    transform: translateY(-3px);
-}
-
-.newsletter-input {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-}
-
-.newsletter-input:focus {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: #6c5ce7;
-    color: #ffffff;
-    box-shadow: none;
-}
-
-.btn-subscribe {
-    background: #6c5ce7;
-    border: none;
-    padding: 0.5rem 1.5rem;
-    transition: all 0.3s ease;
-}
-
-.btn-subscribe:hover {
-    background: #5a4bd1;
-    transform: translateY(-2px);
-}
-
-.footer-bottom {
-    background: rgba(0, 0, 0, 0.2);
-}
-
-.footer-bottom a {
-    color: #6c5ce7;
-    text-decoration: none;
-}
-
-.footer-bottom a:hover {
-    color: #ffffff;
 }
 
 /*Estilos de prueba para las img de productos*/

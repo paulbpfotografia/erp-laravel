@@ -205,10 +205,12 @@ Route::middleware(['auth'])->group(function () {
 
     //Ruta para ver los 10 productos top
     Route::get('informes/productos/top', [ReportController::class, 'topProducts'])
-     ->middleware('role:Directivo|Admin')
-     ->name('informes.productos.top');
+        ->middleware('role:Directivo|Admin')
+        ->name('informes.productos.top');
 
-
+    Route::get('/informes/pedidos/status', [ReportController::class, 'orderStatusDistribution'])
+        ->middleware('role:Directivo|Admin')
+        ->name('informes.pedidos.status');
 
 
 

@@ -42,8 +42,14 @@ document.addEventListener("DOMContentLoaded", function () {
         ?.getContext("2d");
     if (ctxCategorias) {
         fetch("/informes/categorias")
-            .then((res) => res.json())
-            .then((data) => {
+        .then(res => res.json())
+        .then(data => {
+          const n = data.labels.length;
+          const backgroundColor = data.labels.map((_, i) => {
+            const hue = Math.round((i / n) * 360);
+            return `hsl(${hue}, 70%, 50%)`;
+          });
+                
                 new Chart(ctxCategorias, {
                     type: "doughnut",
                     data: {
@@ -52,14 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             {
                                 label: "Productos Vendidos",
                                 data: data.data,
-                                backgroundColor: [
-                                    "rgba(255, 99, 132, 0.6)",
-                                    "rgba(54, 162, 235, 0.6)",
-                                    "rgba(255, 206, 86, 0.6)",
-                                    "rgba(75, 192, 192, 0.6)",
-                                    "rgba(153, 102, 255, 0.6)",
-                                    "rgba(255, 159, 64, 0.6)",
-                                ],
+                                backgroundColor,
                                 borderColor: "#fff",
                                 borderWidth: 1,
                             },
@@ -80,9 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const topCanvas = document.getElementById("topProductsChart");
     if (topCanvas) {
         fetch("/informes/productos/top")
-            .then(res => res.json())
-            .then(json => {
-                console.log('topProducts', json.labels, json.data);
+            .then((res) => res.json())
+            .then((json) => {
+                console.log("topProducts", json.labels, json.data);
 
                 new Chart(topCanvas.getContext("2d"), {
                     type: "bar",
@@ -95,9 +94,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 backgroundColor: "rgba(255,159,64,0.6)",
                                 borderColor: "rgba(255,159,64,1)",
                                 borderWidth: 1,
-                                barThickness: 20,    // altura fija para cada barra
-                                maxBarThickness: 25  // y un tope
-                            }]
+                                barThickness: 20, // altura fija para cada barra
+                                maxBarThickness: 25, // y un tope
+                            },
+                        ],
                     },
                     options: {
                         indexAxis: "y", // barras horizontales
@@ -105,7 +105,45 @@ document.addEventListener("DOMContentLoaded", function () {
                         plugins: { legend: { display: false } },
                         responsive: true,
                         maintainAspectRatio: false,
-                    }
+                    },
+                });
+            })
+            .catch(console.error);
+    }
+
+    //Estado de Pedidos
+    const statusCanvas = document.getElementById("statusChart");
+    if (statusCanvas) {
+        fetch("/informes/pedidos/status")
+            .then((res) => res.json())
+            .then((json) => {
+                new Chart(statusCanvas.getContext("2d"), {
+                    type: "doughnut",
+                    data: {
+                        labels: json.labels,
+                        datasets: [
+                            {
+                                label: "Pedidos",
+                                data: json.data,
+                                backgroundColor: [
+                                    "rgba(255, 99, 132, 0.6)", // Pendiente
+                                    "rgba(54, 162, 235, 0.6)", // Preparado
+                                    "rgba(255, 206, 86, 0.6)", // Enviado
+                                    "rgba(75, 192, 192, 0.6)", // Entregado
+                                    // añade más colores si tienes más estados
+                                ],
+                                borderColor: "#fff",
+                                borderWidth: 1,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: "bottom" },
+                        },
+                    },
                 });
             })
             .catch(console.error);

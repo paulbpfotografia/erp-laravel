@@ -165,7 +165,7 @@
             <div class="col-12 col-lg-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Pedidos por Mes</h5>
+                        <h5 class="card-title text-center">Pedidos por Mes</h5>
                         <canvas id="miGrafico" height="200"></canvas>
                     </div>
                 </div>
@@ -175,7 +175,7 @@
             <div class="col-12 col-lg-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Categorías con más productos vendidos</h5>
+                        <h5 class="card-title text-center">Categorías con más productos vendidos</h5>
                         <canvas id="graficoCategorias" height="200"></canvas>
                     </div>
                 </div>
@@ -184,15 +184,25 @@
             <div class="col-12 col-lg-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Top 10 Productos más vendidos</h5>
-                        <div style="position: relative; height: 300px; width: 100%;">
+                        <h5 class="card-title text-center">Top 10 Productos más vendidos</h5>
+                        <div style="position: relative; height: 350px; width: 100%;">
                             <canvas id="topProductsChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
-
+            <!-- Estado de Pedidos. Entregado-Enviados... -->
+            <div class="col-12 col-lg-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Estado de pedidos</h5>
+                        <div style="position: relative; height: 350px; width: 100%;">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>

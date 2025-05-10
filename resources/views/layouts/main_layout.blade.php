@@ -22,15 +22,19 @@
 
 </head>
 
-<body class="{{ isset($hidenav) && $hidenav ? 'no-sidebar' : '' }} d-flex flex-column min-vh-100">
+<body class="wrapper d-flex flex-column min-vh-100 {{ isset($hidenav) && $hidenav ? 'no-sidebar' : '' }} ">
 
-    {{-- Aquí va el contenido principal de la página, ocupando el espacio disponible --}}
 
-    <main class="flex-fill d-flex">
-        {{-- Sidebar / Nav Lateral (si NO está $hidenav) --}}
+    {{-- 1) Barra superior fija --}}
+    @include('partials.topbar')
+
+    {{-- Sidebar / Nav Lateral (si NO está $hidenav) --}}
         @if (empty($hidenav))
-        @include('partials.nav')
+            @include('partials.nav')
         @endif
+    {{-- Aquí va el contenido principal de la página, ocupando el espacio disponible --}}
+    <main class="flex-fill d-flex">
+        
 
         {{-- Contenido principal --}}
         <div class="main-content flex-fill ">
@@ -40,10 +44,10 @@
 
     </main>
 
-    {{-- Footer: se muestra solo si no se ha definido $hidefooter --}}
+    {{-- Footer: se muestra solo si no se ha definido $hidefooter 
     @if (!isset($hidefooter) || !$hidefooter)
-    @include('partials.footer')
-    @endif
+        @include('partials.footer')
+    @endif --}}
 
 
     {{-- JavaScript con Vite --}}

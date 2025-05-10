@@ -12,7 +12,7 @@
         }
 
         body {
-            background: linear-gradient(to bottom right, #111827, #1F2937, #374151);
+            background: linear-gradient(to bottom right,rgb(34, 49, 82),rgb(73, 104, 149),rgb(62, 85, 123));
             min-height: 100vh;
             background-attachment: fixed;
             background-size: cover;

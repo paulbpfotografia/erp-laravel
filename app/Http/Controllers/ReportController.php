@@ -115,4 +115,24 @@ class ReportController extends Controller
 
         return response()->json(compact('labels', 'data'));
     }
+
+    public function orderStatusDistribution()
+    {
+        // Agrupo los pedidos por estado y cuento cuántos hay de cada uno
+        $rows = DB::table('orders')
+            ->select('status', DB::raw('COUNT(*) as total'))
+            ->groupBy('status')
+            ->get();
+
+        // Preparo etiquetas (estados capitalizados) y datos (totales)
+        $labels = $rows->pluck('status')
+            ->map(fn($s) => ucfirst($s))
+            ->toArray();
+
+        $data   = $rows->pluck('total')
+            ->map(fn($n) => (int)$n)
+            ->toArray();
+
+        return response()->json(compact('labels', 'data'));
+    }
 }
