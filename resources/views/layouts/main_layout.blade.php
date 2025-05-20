@@ -51,7 +51,7 @@
 
 
     {{-- JavaScript con Vite --}}
-    @vite(['resources/js/app.js'])
+    
 
     @if(session('message') || session('error'))
     <script>

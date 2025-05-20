@@ -67,7 +67,7 @@ class ProductController extends Controller
         // Trae las categorías para el select
         $categories = Category::all();
 
-        // Devuelve la vista que creaste: resources/views/productos/create.blade.php
+        // Devuelve la vista: resources/views/productos/create.blade.php
         return view('modulos.productos.create', compact('categories'));
     }
 
@@ -151,7 +151,7 @@ class ProductController extends Controller
         $product = Product::with([
             'details',       // para cargar la info de product_details
             'specs',         // para cargar la info de product_specs
-            'category'       // si quieres traer también la categoría
+            'category'       // traer también la categoría
         ])->findOrFail($id);
 
         return view('modulos.productos.show', compact('product'));

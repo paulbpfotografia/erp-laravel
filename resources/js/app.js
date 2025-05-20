@@ -1,5 +1,6 @@
 import './bootstrap';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+import * as bootstrap from 'bootstrap/dist/js/bootstrap.bundle';
+window.bootstrap = bootstrap;  
 
 import './sidebar.js';
 import './toast.js';

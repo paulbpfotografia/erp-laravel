@@ -14,9 +14,15 @@
                     <button type="button" class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center px-3"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         @if(Auth::user()->image)
-                        <img src="{{ asset('storage/' . Auth::user()->image) }}" class="rounded-circle me-2" width="35" height="35">
+                        <img
+                            src="{{ asset('images/' . Auth::user()->image) }}"
+                            class="rounded-circle me-2"
+                            width="35" height="35">
                         @else
-                        <img src="{{ asset('storage/imagenes_usuarios/anonimo_imagen.jpg') }}" class="rounded-circle me-2" width="35" height="35">
+                        <img
+                            src="{{ asset('images/admin.png') }}"
+                            class="rounded-circle me-2"
+                            width="35" height="35">
                         @endif
                         <span class="text-light">{{ Auth::user()->name }}</span>
                     </button>
@@ -37,7 +43,7 @@
                                 @csrf
                             </form>
                         </li>
-                        
+
 
                         {{-- Ítem: Toggle modo oscuro --}}
                         <li class="px-3 py-2">
