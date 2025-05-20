@@ -71,7 +71,8 @@ class CustomerController extends Controller
         Customer::create($data);
 
         return redirect()->route('clientes.index')
-            ->with('success', 'Cliente creado correctamente.');
+           ->with('message', 'Cliente creado correctamente.')
+                ->with('icono', 'success');
     }
 
     /**
@@ -100,7 +101,7 @@ class CustomerController extends Controller
         'categoriesData'));
     }
 
-    
+
 
 
     /**

@@ -18,33 +18,41 @@
 
     <!-- Filtros -->
     <form method="GET" class="row g-2 align-items-end mb-4">
-        <div class="col-md-4">
-            <label for="buscar" class="form-label mb-0 fw-semibold">Buscar pedido</label>
-            <input type="text" name="buscar" id="buscar" value="{{ request('buscar') }}" class="form-control" placeholder="Buscar por ID o cliente">
-        </div>
-        <div class="col-md-4">
-            <label for="estado" class="form-label mb-0 fw-semibold">Filtrar por estado</label>
-            <select name="estado" id="estado" class="form-select">
-                <option value="">Todos</option>
-                <option value="pendiente" {{ request('estado') === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                <option value="preparado" {{ request('estado') === 'preparado' ? 'selected' : '' }}>Preparado</option>
-                <option value="enviado" {{ request('estado') === 'enviado' ? 'selected' : '' }}>Enviado</option>
-                <option value="entregado" {{ request('estado') === 'entregado' ? 'selected' : '' }}>Entregado</option>
-                <option value="cancelado" {{ request('estado') === 'cancelado' ? 'selected' : '' }}>Cancelado</option>
+    <div class="col-md-4">
+        <label for="buscar" class="form-label mb-0 fw-semibold">Buscar pedido</label>
+        <input type="text"
+               name="buscar"
+               id="buscar"
+               value="{{ request('buscar') }}"
+               class="form-control"
+               placeholder="ID pedido, ID cliente o nombre cliente">
+    </div>
 
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">
-                <i class="bi bi-search me-1"></i> Filtrar
-            </button>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary w-100">
-                <i class="bi bi-x-circle me-1"></i> Limpiar
-            </a>
-        </div>
-    </form>
+    <div class="col-md-4">
+        <label for="estado" class="form-label mb-0 fw-semibold">Filtrar por estado</label>
+        <select name="estado" id="estado" class="form-select">
+            <option value="">Todos</option>
+            <option value="pendiente" {{ request('estado') === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
+            <option value="preparado" {{ request('estado') === 'preparado' ? 'selected' : '' }}>Preparado</option>
+            <option value="enviado" {{ request('estado') === 'enviado' ? 'selected' : '' }}>Enviado</option>
+            <option value="entregado" {{ request('estado') === 'entregado' ? 'selected' : '' }}>Entregado</option>
+            <option value="cancelado" {{ request('estado') === 'cancelado' ? 'selected' : '' }}>Cancelado</option>
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-search me-1"></i> Filtrar
+        </button>
+    </div>
+
+    <div class="col-md-2">
+        <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary w-100">
+            <i class="bi bi-x-circle me-1"></i> Limpiar
+        </a>
+    </div>
+</form>
+
 
     <!-- Tabla de pedidos -->
     <div class="table-responsive rounded shadow-sm border border-light-subtle">
@@ -102,14 +110,16 @@
                             @endcan --}}
 
 
-                                @can('ver pedidos')
-                                <a href="{{ route('pedidos.show', $order) }}"
-                                   class="btn btn-sm btn-outline-primary"
-                                   data-bs-toggle="tooltip"
-                                   title="Ver detalles del pedido">
-                                    <i class="bi bi-eye-fill"></i>
-                                </a>
-                                @endcan
+                               @can('ver pedidos')
+    <a href="{{ route('pedidos.show', $order) }}"
+       class="btn btn-sm btn-outline-secondary rounded-pill"
+       data-bs-toggle="tooltip"
+       title="Ver detalles del pedido">
+        <i class="bi bi-eye"></i>
+        Ver
+    </a>
+@endcan
+
                             </div>
                         </td>
                     </tr>

@@ -10,7 +10,7 @@
         <h2 class="fw-semibold text-primary-emphasis">Productos</h2>
 
         @can('crear productos')
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarProducto">
+        <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#modalAgregarProducto">
             <i class="bi bi-plus-circle me-1"></i> Crear Producto
         </button>
         @endcan
@@ -79,34 +79,34 @@
                     <td>{{ $product->category->name }}</td>
                     <td>
                         <div class="d-flex justify-content-center gap-2">
-                            @can('eliminar productos')
-                            <button type="button"
-                                class="btn btn-sm btn-danger eliminarRegistroBtn"
-                                data-id="{{ $product->id }}"
-                                data-url="{{ route('productos.destroy', $product->id) }}"
-                                data-entidad="Producto"
-                                data-bs-toggle="tooltip"
-                                title="Eliminar producto">
-                                <i class="bi bi-trash3-fill"></i>
-                            </button>
+                            @can('ver productos')
+                            <a href="{{ route('productos.show', $product) }}"
+                               class="btn btn-sm btn-outline-secondary rounded-pill"
+                               data-bs-toggle="tooltip"
+                               title="Ver detalles del producto">
+                                <i class="bi bi-eye"></i> Ver
+                            </a>
                             @endcan
 
                             @can('editar productos')
                             <a href="{{ route('productos.edit', $product) }}"
-                                class="btn btn-sm btn-warning"
-                                data-bs-toggle="tooltip"
-                                title="Editar producto">
-                                <i class="bi bi-pencil-fill"></i>
+                               class="btn btn-sm btn-outline-warning rounded-pill"
+                               data-bs-toggle="tooltip"
+                               title="Editar producto">
+                                <i class="bi bi-pencil"></i> Editar
                             </a>
                             @endcan
 
-                            @can('ver productos')
-                            <a href="{{ route('productos.show', $product) }}"
-                                class="btn btn-sm btn-outline-primary"
-                                data-bs-toggle="tooltip"
-                                title="Ver detalles del producto">
-                                <i class="bi bi-eye-fill"></i>
-                            </a>
+                            @can('eliminar productos')
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger rounded-pill eliminarRegistroBtn"
+                                    data-id="{{ $product->id }}"
+                                    data-url="{{ route('productos.destroy', $product->id) }}"
+                                    data-entidad="Producto"
+                                    data-bs-toggle="tooltip"
+                                    title="Eliminar producto">
+                                <i class="bi bi-trash3"></i> Eliminar
+                            </button>
                             @endcan
                         </div>
                     </td>
@@ -134,34 +134,33 @@
     <div class="modal fade" id="modalAgregarProducto" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content shadow-lg border-0 rounded-4">
+
                 <!-- Modal Header -->
                 <div class="modal-header bg-primary text-white rounded-top">
                     <h4 class="modal-title" id="modalProductoAgregarLabel">Registrar Producto</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
+
                 <!-- Modal Body -->
                 <div class="modal-body p-4">
                     <form action="{{ route('productos.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <!-- Nombre del Producto -->
+
                         <div class="mb-3">
                             <label for="name" class="form-label">Nombre del Producto</label>
                             <input type="text" name="name" class="form-control" required>
                         </div>
 
-                        <!-- Descripción del Producto -->
                         <div class="mb-3">
                             <label for="description" class="form-label">Descripción</label>
                             <textarea name="description" class="form-control" rows="3"></textarea>
                         </div>
 
-                        <!-- Precio del Producto -->
                         <div class="mb-3">
                             <label for="price" class="form-label">Precio</label>
                             <input type="number" name="price" class="form-control" required>
                         </div>
 
-                        <!-- Categoría -->
                         <div class="mb-3">
                             <label for="category_id" class="form-label">Categoría</label>
                             <select name="category_id" class="form-select" required>
@@ -172,35 +171,37 @@
                             </select>
                         </div>
 
-                        <!-- Detalles del producto -->
                         <div class="mb-3">
                             <label for="detail_description" class="form-label">Detalles del Producto</label>
                             <textarea name="detail_description" class="form-control" rows="3"></textarea>
                         </div>
 
-                        <!-- Especificaciones Técnicas -->
                         <div class="mb-3">
                             <label class="form-label">Especificaciones Técnicas</label>
-
                             <input type="text" name="weight" class="form-control mb-2" placeholder="Peso (kg)">
                             <input type="text" name="dimensions" class="form-control mb-2" placeholder="Dimensiones (ej: 10x20x30 cm)">
                             <input type="text" name="color" class="form-control mb-2" placeholder="Color">
                             <input type="text" name="material" class="form-control mb-2" placeholder="Material">
                         </div>
 
-                        <!-- Imagen del Producto -->
                         <div class="mb-3">
                             <label for="image" class="form-label">Imagen del Producto</label>
                             <input type="file" name="image" class="form-control">
                         </div>
 
-                        <button type="submit" class="btn btn-primary mt-3">Crear Producto</button>
+                        <button type="submit" class="btn btn-primary rounded-pill mt-3">
+                            <i class="bi bi-check-circle me-1"></i> Crear Producto
+                        </button>
                     </form>
                 </div>
+
                 <!-- Modal Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-outline-danger rounded-pill" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cerrar
+                    </button>
                 </div>
+
             </div>
         </div>
     </div>

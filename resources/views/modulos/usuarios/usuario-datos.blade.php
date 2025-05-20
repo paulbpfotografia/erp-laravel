@@ -49,12 +49,16 @@
             </div>
 
             <!-- Cambiar Estado del Usuario -->
-            <div class="d-flex justify-content-center gap-4 mb-4">
-                <form action="{{ route('usuarios.changeActive', $user->id) }}" method="POST" class="w-auto">
+            <div class="d-flex justify-content-center mb-4">
+                <form action="{{ route('usuarios.changeActive', $user->id) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     @can('activar usuarios')
-                        <button type="submit" class="btn btn-{{ $user->active ? 'danger' : 'success' }} btn-sm w-auto">
+                        <button type="submit"
+                                class="btn btn-sm rounded-pill {{ $user->active ? 'btn-outline-danger' : 'btn-outline-success' }}"
+                                data-bs-toggle="tooltip"
+                                title="{{ $user->active ? 'Deshabilitar usuario' : 'Habilitar usuario' }}">
+                            <i class="bi {{ $user->active ? 'bi-person-x' : 'bi-person-check' }}"></i>
                             {{ $user->active ? 'Deshabilitar' : 'Habilitar' }}
                         </button>
                     @endcan
@@ -62,11 +66,12 @@
             </div>
 
             <!-- Botón Volver -->
-            <div class="text-end mb-4">
-                <a href="{{ route('usuarios.index') }}" class="btn btn-outline-secondary btn-sm">
+            <div class="text-end">
+                <a href="{{ route('usuarios.index') }}" class="btn btn-sm btn-outline-secondary rounded-pill">
                     <i class="bi bi-arrow-left-circle me-1"></i> Volver
                 </a>
             </div>
+
         </div>
     </div>
 </div>

@@ -242,13 +242,13 @@ Route::middleware(['auth'])->group(function () {
 
         // Acceder a un pedido concreto
         Route::get('/logistica/{order}', [OrderLogisticsController::class, 'show'])->name('logistica.show');
-    
+
         // Marcar pedido como enviado
         Route::post('/logistica/pedidos/{order}/marcar-enviado', [OrderLogisticsController::class, 'marcarComoEnviado'])->name('logistica.pedidos.marcar-enviado');
 
         // Marcar pedido como entregado
         Route::post('/logistica/pedidos/{order}/marcar-entregado', [OrderLogisticsController::class, 'marcarComoEntregado'])->name('logistica.pedidos.marcar-entregado');
-    
+
 
         //ALMACÉN
 
