@@ -62,7 +62,6 @@
                 <button type="submit" class="btn btn-gradient py-2">Ingresar</button>
             </div>
         </form>
-        <p class="text-center text-light">¿No tienes una cuenta? <a href="{{ route('register') }}" class="link-light">Regístrate</a></p>
     </div>
 
     <!-- Bootstrap 5 JS -->
