@@ -28,11 +28,11 @@
                 <div class="col-md-6">
                     <label for="name" class="form-label">Nombre del Producto</label>
                     <input type="text"
-                           id="name"
-                           name="name"
-                           class="form-control @error('name') is-invalid @enderror"
-                           value="{{ old('name') }}"
-                           required>
+                        id="name"
+                        name="name"
+                        class="form-control @error('name') is-invalid @enderror"
+                        value="{{ old('name') }}"
+                        required>
                     @error('name')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -42,12 +42,12 @@
                 <div class="col-md-6">
                     <label for="price" class="form-label">Precio (€)</label>
                     <input type="number"
-                           step="0.01"
-                           id="price"
-                           name="price"
-                           class="form-control @error('price') is-invalid @enderror"
-                           value="{{ old('price') }}"
-                           required>
+                        step="0.01"
+                        id="price"
+                        name="price"
+                        class="form-control @error('price') is-invalid @enderror"
+                        value="{{ old('price') }}"
+                        required>
                     @error('price')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -57,9 +57,9 @@
                 <div class="col-12">
                     <label for="description" class="form-label">Descripción</label>
                     <textarea id="description"
-                              name="description"
-                              class="form-control @error('description') is-invalid @enderror"
-                              rows="3">{{ old('description') }}</textarea>
+                        name="description"
+                        class="form-control @error('description') is-invalid @enderror"
+                        rows="3">{{ old('description') }}</textarea>
                     @error('description')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -69,9 +69,9 @@
                 <div class="col-12">
                     <label for="detail_description" class="form-label">Detalles del Producto</label>
                     <textarea id="detail_description"
-                              name="detail_description"
-                              class="form-control @error('detail_description') is-invalid @enderror"
-                              rows="3">{{ old('detail_description') }}</textarea>
+                        name="detail_description"
+                        class="form-control @error('detail_description') is-invalid @enderror"
+                        rows="3">{{ old('detail_description') }}</textarea>
                     @error('detail_description')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -81,15 +81,15 @@
                 <div class="col-md-6">
                     <label for="category_id" class="form-label">Categoría</label>
                     <select id="category_id"
-                            name="category_id"
-                            class="form-select @error('category_id') is-invalid @enderror"
-                            required>
+                        name="category_id"
+                        class="form-select @error('category_id') is-invalid @enderror"
+                        required>
                         <option value="" disabled selected>Seleccione categoría</option>
                         @foreach($categories as $category)
-                            <option value="{{ $category->id }}"
-                                {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
+                        <option value="{{ $category->id }}"
+                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
                         @endforeach
                     </select>
                     @error('category_id')
@@ -97,14 +97,49 @@
                     @enderror
                 </div>
 
+                {{-- Cliente envió correo --}}
+                <div class="mb-3">
+                    <label class="form-label">Enviar notificación a:</label>
+
+                    {{-- Opción "Todos" --}}
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox"
+                            id="customer_all" name="customers[]" value="all"
+                            {{ in_array('all', old('customers', [])) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="customer_all">
+                            Todos los clientes
+                        </label>
+                    </div>
+
+                    {{-- Caja con scroll --}}
+                    <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+                        @foreach(\App\Models\Customer::orderBy('name')->get() as $customer)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                name="customers[]" value="{{ $customer->id }}"
+                                id="customer_{{ $customer->id }}"
+                                {{ in_array($customer->id, old('customers', [])) ? 'checked' : '' }}>
+                            <label class="form-check-label small" for="customer_{{ $customer->id }}">
+                                <strong>{{ $customer->name }}</strong><br>
+                                <span class="text-muted">{{ $customer->email }}</span>
+                            </label>
+                        </div>
+                        @endforeach
+                    </div>
+
+                    @error('customers')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 {{-- Peso --}}
                 <div class="col-md-6">
                     <label for="weight" class="form-label">Peso (kg)</label>
                     <input type="text"
-                           id="weight"
-                           name="weight"
-                           class="form-control @error('weight') is-invalid @enderror"
-                           value="{{ old('weight') }}">
+                        id="weight"
+                        name="weight"
+                        class="form-control @error('weight') is-invalid @enderror"
+                        value="{{ old('weight') }}">
                     @error('weight')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -114,10 +149,10 @@
                 <div class="col-md-6">
                     <label for="dimensions" class="form-label">Dimensiones (ej: 10x20x30 cm)</label>
                     <input type="text"
-                           id="dimensions"
-                           name="dimensions"
-                           class="form-control @error('dimensions') is-invalid @enderror"
-                           value="{{ old('dimensions') }}">
+                        id="dimensions"
+                        name="dimensions"
+                        class="form-control @error('dimensions') is-invalid @enderror"
+                        value="{{ old('dimensions') }}">
                     @error('dimensions')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -127,10 +162,10 @@
                 <div class="col-md-6">
                     <label for="color" class="form-label">Color</label>
                     <input type="text"
-                           id="color"
-                           name="color"
-                           class="form-control @error('color') is-invalid @enderror"
-                           value="{{ old('color') }}">
+                        id="color"
+                        name="color"
+                        class="form-control @error('color') is-invalid @enderror"
+                        value="{{ old('color') }}">
                     @error('color')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -140,10 +175,10 @@
                 <div class="col-md-6">
                     <label for="material" class="form-label">Material</label>
                     <input type="text"
-                           id="material"
-                           name="material"
-                           class="form-control @error('material') is-invalid @enderror"
-                           value="{{ old('material') }}">
+                        id="material"
+                        name="material"
+                        class="form-control @error('material') is-invalid @enderror"
+                        value="{{ old('material') }}">
                     @error('material')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -153,9 +188,9 @@
                 <div class="col-md-6">
                     <label for="image" class="form-label">Imagen del Producto</label>
                     <input type="file"
-                           id="image"
-                           name="image"
-                           class="form-control @error('image') is-invalid @enderror">
+                        id="image"
+                        name="image"
+                        class="form-control @error('image') is-invalid @enderror">
                     @error('image')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -172,4 +207,3 @@
     </div>
 </div>
 @endsection
-

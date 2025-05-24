@@ -6,6 +6,8 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\InvoiceMail;
+use Illuminate\Support\Facades\Mail;
 
 class OrderLogisticsController extends Controller
 {
@@ -14,148 +16,148 @@ class OrderLogisticsController extends Controller
         $this->middleware('role:Logistica|Admin');
     }
 
-public function indexAll(Request $request)
-{
-    $this->authorize('ver pedidos');
+    public function indexAll(Request $request)
+    {
+        $this->authorize('ver pedidos');
 
-    $query = Order::with('customer');
+        $query = Order::with('customer');
 
-    // Filtro por estado
-    if ($request->filled('estado')) {
-        $query->where('status', $request->estado);
-    }
+        // Filtro por estado
+        if ($request->filled('estado')) {
+            $query->where('status', $request->estado);
+        }
 
-    // Filtro por ID pedido, ID cliente o nombre del cliente
-    if ($request->filled('buscar')) {
-        $buscar = $request->buscar;
+        // Filtro por ID pedido, ID cliente o nombre del cliente
+        if ($request->filled('buscar')) {
+            $buscar = $request->buscar;
 
-        $query->where(function ($q) use ($buscar) {
-            if (is_numeric($buscar)) {
-                $q->where('id', $buscar)
-                  ->orWhere('customer_id', $buscar);
-            }
+            $query->where(function ($q) use ($buscar) {
+                if (is_numeric($buscar)) {
+                    $q->where('id', $buscar)
+                        ->orWhere('customer_id', $buscar);
+                }
 
-            $q->orWhereHas('customer', function ($q2) use ($buscar) {
-                $q2->where('name', 'like', '%' . $buscar . '%');
+                $q->orWhereHas('customer', function ($q2) use ($buscar) {
+                    $q2->where('name', 'like', '%' . $buscar . '%');
+                });
             });
-        });
+        }
+
+
+        $orders = $query->orderByDesc('order_date')
+            ->paginate(50)
+            ->withQueryString();
+
+        return view('modulos.logistica.pedidos.logistica-todos', compact('orders'));
     }
 
 
-    $orders = $query->orderByDesc('order_date')
-                    ->paginate(50)
-                    ->withQueryString();
+    public function indexPendientes(Request $request)
+    {
+        $this->authorize('ver pedidos');
 
-    return view('modulos.logistica.pedidos.logistica-todos', compact('orders'));
-}
+        $query = Order::with('customer')->where('status', 'pendiente');
 
+        if ($request->filled('buscar')) {
+            $buscar = $request->buscar;
 
-      public function indexPendientes(Request $request)
-{
-    $this->authorize('ver pedidos');
+            $query->where(function ($q) use ($buscar) {
+                if (is_numeric($buscar)) {
+                    $q->where('id', $buscar)
+                        ->orWhere('customer_id', $buscar);
+                }
 
-    $query = Order::with('customer')->where('status', 'pendiente');
-
-    if ($request->filled('buscar')) {
-        $buscar = $request->buscar;
-
-        $query->where(function ($q) use ($buscar) {
-            if (is_numeric($buscar)) {
-                $q->where('id', $buscar)
-                  ->orWhere('customer_id', $buscar);
-            }
-
-            $q->orWhereHas('customer', function ($q2) use ($buscar) {
-                $q2->where('name', 'like', '%' . $buscar . '%');
+                $q->orWhereHas('customer', function ($q2) use ($buscar) {
+                    $q2->where('name', 'like', '%' . $buscar . '%');
+                });
             });
-        });
+        }
+
+        $orders = $query->orderByDesc('order_date')->paginate(50)->withQueryString();
+
+        return view('modulos.logistica.pedidos.logistica-pendientes', compact('orders'));
     }
 
-    $orders = $query->orderByDesc('order_date')->paginate(50)->withQueryString();
 
-    return view('modulos.logistica.pedidos.logistica-pendientes', compact('orders'));
-}
+    public function indexEnviados(Request $request)
+    {
+        $this->authorize('ver pedidos');
 
+        $query = Order::with('customer')->where('status', 'enviado');
 
-       public function indexEnviados(Request $request)
-{
-    $this->authorize('ver pedidos');
+        if ($request->filled('buscar')) {
+            $buscar = $request->buscar;
 
-    $query = Order::with('customer')->where('status', 'enviado');
+            $query->where(function ($q) use ($buscar) {
+                if (is_numeric($buscar)) {
+                    $q->where('id', $buscar)
+                        ->orWhere('customer_id', $buscar);
+                }
 
-    if ($request->filled('buscar')) {
-        $buscar = $request->buscar;
-
-        $query->where(function ($q) use ($buscar) {
-            if (is_numeric($buscar)) {
-                $q->where('id', $buscar)
-                  ->orWhere('customer_id', $buscar);
-            }
-
-            $q->orWhereHas('customer', function ($q2) use ($buscar) {
-                $q2->where('name', 'like', '%' . $buscar . '%');
+                $q->orWhereHas('customer', function ($q2) use ($buscar) {
+                    $q2->where('name', 'like', '%' . $buscar . '%');
+                });
             });
-        });
+        }
+
+        $orders = $query->orderByDesc('order_date')->paginate(50)->withQueryString();
+
+        return view('modulos.logistica.pedidos.logistica-enviados', compact('orders'));
     }
 
-    $orders = $query->orderByDesc('order_date')->paginate(50)->withQueryString();
 
-    return view('modulos.logistica.pedidos.logistica-enviados', compact('orders'));
-}
+    public function indexEntregados(Request $request)
+    {
+        $this->authorize('ver pedidos');
 
+        $query = Order::with('customer')->where('status', 'entregado');
 
-        public function indexEntregados(Request $request)
-{
-    $this->authorize('ver pedidos');
+        if ($request->filled('buscar')) {
+            $buscar = $request->buscar;
 
-    $query = Order::with('customer')->where('status', 'entregado');
+            $query->where(function ($q) use ($buscar) {
+                if (is_numeric($buscar)) {
+                    $q->where('id', $buscar)
+                        ->orWhere('customer_id', $buscar);
+                }
 
-    if ($request->filled('buscar')) {
-        $buscar = $request->buscar;
-
-        $query->where(function ($q) use ($buscar) {
-            if (is_numeric($buscar)) {
-                $q->where('id', $buscar)
-                  ->orWhere('customer_id', $buscar);
-            }
-
-            $q->orWhereHas('customer', function ($q2) use ($buscar) {
-                $q2->where('name', 'like', '%' . $buscar . '%');
+                $q->orWhereHas('customer', function ($q2) use ($buscar) {
+                    $q2->where('name', 'like', '%' . $buscar . '%');
+                });
             });
-        });
+        }
+
+        $orders = $query->orderByDesc('order_date')->paginate(50)->withQueryString();
+
+        return view('modulos.logistica.pedidos.logistica-entregados', compact('orders'));
     }
 
-    $orders = $query->orderByDesc('order_date')->paginate(50)->withQueryString();
 
-    return view('modulos.logistica.pedidos.logistica-entregados', compact('orders'));
-}
+    public function indexPreparados(Request $request)
+    {
+        $this->authorize('ver pedidos');
 
+        $query = Order::with('customer')->where('status', 'preparado');
 
-     public function indexPreparados(Request $request)
-{
-    $this->authorize('ver pedidos');
+        if ($request->filled('buscar')) {
+            $buscar = $request->buscar;
 
-    $query = Order::with('customer')->where('status', 'preparado');
+            $query->where(function ($q) use ($buscar) {
+                if (is_numeric($buscar)) {
+                    $q->where('id', $buscar)
+                        ->orWhere('customer_id', $buscar);
+                }
 
-    if ($request->filled('buscar')) {
-        $buscar = $request->buscar;
-
-        $query->where(function ($q) use ($buscar) {
-            if (is_numeric($buscar)) {
-                $q->where('id', $buscar)
-                  ->orWhere('customer_id', $buscar);
-            }
-
-            $q->orWhereHas('customer', function ($q2) use ($buscar) {
-                $q2->where('name', 'like', '%' . $buscar . '%');
+                $q->orWhereHas('customer', function ($q2) use ($buscar) {
+                    $q2->where('name', 'like', '%' . $buscar . '%');
+                });
             });
-        });
+        }
+
+        $orders = $query->orderByDesc('order_date')->paginate(50)->withQueryString();
+
+        return view('modulos.logistica.pedidos.logistica-preparados', compact('orders'));
     }
-
-    $orders = $query->orderByDesc('order_date')->paginate(50)->withQueryString();
-
-    return view('modulos.logistica.pedidos.logistica-preparados', compact('orders'));
-}
 
 
 
@@ -252,9 +254,9 @@ public function indexAll(Request $request)
     }
 
 
-        //Metodo para marcar como enviado
+    //Metodo para marcar como enviado
 
-        public function marcarComoEnviado(Order $order)
+    public function marcarComoEnviado(Order $order)
     {
         if ($order->status === 'preparado') {
             $order->status = 'enviado';
@@ -262,15 +264,13 @@ public function indexAll(Request $request)
         }
 
         return redirect()->back()->with('message', 'El pedido ha sido marcado como enviado.')
-        ->with('icono', 'success');
-
-
-
+            ->with('icono', 'success');
     }
 
     //Metodo para marcar como entregado
-            public function marcarComoEntregado(Order $order)
-        {  if ($order->status === 'enviado') {
+    public function marcarComoEntregado(Order $order)
+    {
+        if ($order->status === 'enviado') {
             $order->status = 'entregado';
             $order->save();
 
@@ -281,16 +281,16 @@ public function indexAll(Request $request)
             $pdf = Pdf::loadView('modulos.pedidos.documentos.factura', compact('order'));
             $filename = 'facturas/pedido_' . $order->id . '.pdf';
             Storage::disk('public')->put($filename, $pdf->output());
+
+            //Enviar factura por correo al cliente
+            $customerEmail = $order ->customer->email;
+            if($customerEmail){
+                Mail::to($customerEmail)->send(new InvoiceMail($order, $filename));
+                
+            }
+
         }
-            return redirect()->back()->with('message', 'El pedido ha sido marcado como entregado.')
+        return redirect()->back()->with('message', 'El pedido ha sido marcado como entregado.')
             ->with('icono', 'success');
-        }
-
-
-
-
-
-
-
-
+    }
 }

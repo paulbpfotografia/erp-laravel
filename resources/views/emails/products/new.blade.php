@@ -5,7 +5,7 @@ Tenemos un nuevo producto que podría interesarte:
 
 **Nombre:** {{ $product->name }}
 
-**Descripción:** {{ $product->details->description ?? 'Sin detalles disponible.' }}
+**Descripción:** {{ $product->description ?? 'Sin detalles disponible.' }}
 
 **Precio:** ${{ number_format($product->price, 2) }}
 
