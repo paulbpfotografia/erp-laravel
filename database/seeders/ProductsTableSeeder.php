@@ -13,8 +13,6 @@ class ProductsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // Vaciar la tabla antes de insertar
-        DB::table('products')->truncate();
         
         DB::table('products')->insert([
             ['name' => 'Iny', 'description' => 'Nuevo modelo de sofá cama.', 'price' => 799.99, 'category_id' => 1, 'supplier_id' => 6, 'iva' => 21.00, 'image' => 'images/products/sofas/product_1.webp'],
