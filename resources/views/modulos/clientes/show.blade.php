@@ -8,15 +8,16 @@
     {{-- Panel detallado --}}
     <div class="bg-white p-4 rounded shadow-sm border border-light-subtle">
 
-        {{-- 1) Encabezado: título + botón Volver --}}
+            {{-- 1) Encabezado: título + botón Volver --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="text-primary-emphasis fw-semibold mb-0">
-                <i class="bi bi-eye-fill me-2"></i> Detalle de Cliente
+                <i class="bi bi-eye me-2"></i> Detalle de Cliente
             </h4>
-            <a href="{{ route('clientes.index') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('clientes.index') }}" class="btn btn-sm btn-outline-secondary rounded-pill">
                 <i class="bi bi-arrow-left me-1"></i> Volver
             </a>
         </div>
+
 
         {{-- 2) Tabla de detalles --}}
         <div class="table-responsive">
@@ -101,18 +102,18 @@
         <div class="mt-4 d-flex gap-2">
             @can('editar clientes')
             <a href="{{ route('clientes.edit', $customer) }}"
-                class="btn btn-warning">
-                <i class="bi bi-pencil-fill me-1"></i> Editar
+            class="btn btn-sm btn-outline-warning rounded-pill">
+                <i class="bi bi-pencil"></i> Editar
             </a>
             @endcan
 
             @can('eliminar clientes')
             <button type="button"
-                class="btn btn-danger eliminarRegistroBtn"
-                data-id="{{ $customer->id }}"
-                data-url="{{ route('clientes.destroy', $customer) }}"
-                data-entidad="Cliente">
-                <i class="bi bi-trash3-fill me-1"></i> Eliminar
+                    class="btn btn-sm btn-outline-danger rounded-pill eliminarRegistroBtn"
+                    data-id="{{ $customer->id }}"
+                    data-url="{{ route('clientes.destroy', $customer) }}"
+                    data-entidad="Cliente">
+                <i class="bi bi-trash3"></i> Eliminar
             </button>
             @endcan
         </div>

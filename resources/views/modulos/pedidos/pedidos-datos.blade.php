@@ -27,7 +27,7 @@
 
                     @can('editar pedidos')
                         @if(in_array($order->status, ['pendiente', 'preparado']))
-                            <a href="{{ route('pedidos.edit', $order) }}" class="btn btn-warning">
+                            <a href="{{ route('pedidos.edit', $order) }}" class="btn btn-sm btn-warning rounded-pill">
                                 <i class="bi bi-pencil-fill me-1"></i> Editar pedido
                             </a>
                         @endif
@@ -109,13 +109,13 @@
                             <i class="bi bi-folder-fill me-2"></i> Documentación del pedido
                         </h6>
 
-                        <div class="d-flex gap-3">
+                        <div class="d-flex gap-3 flex-wrap">
                             @php
                                 $albaranPath = 'albaranes/pedido_' . $order->id . '.pdf';
                             @endphp
 
                             @if(Storage::disk('public')->exists($albaranPath))
-                                <a href="{{ route('pedidos.albaran', $order) }}" class="btn btn-outline-primary" >
+                                <a href="{{ route('pedidos.albaran', $order) }}" class="btn btn-sm btn-outline-primary rounded-pill">
                                     <i class="bi bi-file-earmark-pdf-fill me-1"></i> Descargar albarán
                                 </a>
                             @endif
@@ -126,7 +126,7 @@
                                 @endphp
 
                                 @if(Storage::disk('public')->exists($facturaPath))
-                                    <a href="{{ route('pedidos.factura', $order) }}" class="btn btn-outline-dark">
+                                    <a href="{{ route('pedidos.factura', $order) }}" class="btn btn-sm btn-outline-dark rounded-pill">
                                         <i class="bi bi-file-earmark-text-fill me-1"></i> Descargar factura
                                     </a>
                                 @endif
@@ -138,7 +138,7 @@
 
             <!-- Botón volver -->
             <div class="mt-5 text-end">
-                <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary">
+                <a href="{{ route('pedidos.index') }}" class="btn btn-sm btn-outline-secondary rounded-pill">
                     <i class="bi bi-arrow-left-circle me-1"></i> Volver
                 </a>
             </div>

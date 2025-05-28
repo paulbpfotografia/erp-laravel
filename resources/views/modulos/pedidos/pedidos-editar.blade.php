@@ -11,7 +11,7 @@
             <h4 class="text-primary-emphasis fw-semibold mb-0">
                 <i class="bi bi-pencil-square me-2"></i> Editar Pedido #{{ $order->id }}
             </h4>
-            <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('pedidos.index') }}" class="btn btn-sm btn-outline-secondary rounded-pill">
                 <i class="bi bi-arrow-left me-1"></i> Volver
             </a>
         </div>
@@ -99,7 +99,7 @@
 
             <!-- Botón de guardar -->
             <div class="text-end mt-4">
-                <button type="submit" class="btn btn-success px-4 py-2">
+                <button type="submit" class="btn btn-sm btn-success rounded-pill px-4">
                     <i class="bi bi-check-circle me-1"></i> Guardar Cambios
                 </button>
             </div>
@@ -112,7 +112,7 @@
                       onsubmit="return confirm('¿Estás seguro de que deseas cancelar este pedido?')">
                     @csrf
                     @method('PUT')
-                    <button type="submit" class="btn btn-outline-danger">
+                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
                         <i class="bi bi-x-circle-fill me-1"></i> Cancelar pedido
                     </button>
                 </form>

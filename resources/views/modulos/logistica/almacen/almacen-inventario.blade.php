@@ -67,7 +67,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-muted">No hay productos que coincidan con el filtro.</td>
+                        <td colspan="4" class="text-muted">No hay productos que coincidan con lo que buscas.</td>
                     </tr>
                 @endforelse
             </tbody>

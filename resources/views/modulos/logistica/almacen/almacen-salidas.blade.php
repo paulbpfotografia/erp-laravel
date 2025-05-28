@@ -66,7 +66,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted py-3">No se encontraron salidas con los filtros aplicados.</td>
+                        <td colspan="5" class="text-center text-muted py-3">No se encontraron salidas.</td>
                     </tr>
                 @endforelse
             </tbody>
