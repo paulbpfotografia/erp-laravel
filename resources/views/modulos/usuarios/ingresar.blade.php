@@ -7,12 +7,16 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        html,body {
+        html, body {
             overscroll-behavior: none;
         }
-
         body {
-            background: linear-gradient(to bottom right,rgb(34, 49, 82),rgb(73, 104, 149),rgb(62, 85, 123));
+            background: linear-gradient(
+                to bottom right,
+                rgb(34, 49, 82),
+                rgb(73, 104, 149),
+                rgb(62, 85, 123)
+            );
             min-height: 100vh;
             background-attachment: fixed;
             background-size: cover;
@@ -48,16 +52,46 @@
     <div class="card card-login p-4 shadow-lg" style="width: 100%; max-width: 400px;">
         <h3 class="text-center text-white mb-3">Iniciar Sesión</h3>
         <p class="text-center text-light mb-4">Ingresa tus credenciales para acceder</p>
+
+        {{-- Mostrar mensaje de error en rojo si las credenciales no son correctas --}}
+        @if($errors->has('message'))
+            <div class="alert alert-danger text-center">
+                {{ $errors->first('message') }}
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">Correo Electrónico</label>
-                <input type="email" id="email" name="email" class="form-control" required autofocus>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-control @error('email') is-invalid @enderror"
+                    value="{{ old('email') }}"
+                    required
+                    autofocus
+                >
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
+
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="password" id="password" name="password" class="form-control" required>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control @error('password') is-invalid @enderror"
+                    required
+                >
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
+
             <div class="d-grid mb-3">
                 <button type="submit" class="btn btn-gradient py-2">Ingresar</button>
             </div>
